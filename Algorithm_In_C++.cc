@@ -4,6 +4,10 @@ using namespace std;
 #include <ctime>
 #include <cstdlib>
 
+//ToDo
+/*
+Remove Noun2 in favour of re looking at Noun list 1 - while re randomising
+*/
 
 int main()
 {
