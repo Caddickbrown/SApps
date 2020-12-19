@@ -19,7 +19,7 @@ int main()
 //Item
     int vari3 = 6;
     int RandIndex3 = rand() % vari3;
-    string itemarray[vari3]={"video","painting","illustration","song","story","picture"};
+    string itemarray[vari3]={"a video","a painting","an illustration","a song","a story","a picture"};
 //Nouns
     int vari4 = 1505;
     int RandIndex4 = rand() % vari4;
@@ -32,6 +32,6 @@ int main()
     string emotionarray[vari6]={"happiness","sadness","joy","fear","anger","envy"};
 
 //Print
-    cout<<"You have " << ln+rand() % static_cast<int>(un-ln+1) << " " << timeunitarray[RandIndex1] << " to " << verbage[RandIndex2] << " a " << itemarray[RandIndex3] << ". Your keywords are " << nounarray[RandIndex4]  << ", " << nounarray[RandIndex5]  << ", and " << emotionarray[RandIndex6] << ". Good Luck!";
+    cout<<"You have " << ln+rand() % static_cast<int>(un-ln+1) << " " << timeunitarray[RandIndex1] << " to " << verbage[RandIndex2] << " " << itemarray[RandIndex3] << ". Your keywords are " << nounarray[RandIndex4]  << ", " << nounarray[RandIndex5]  << ", and " << emotionarray[RandIndex6] << ". Good Luck!";
     return 0;
 }
