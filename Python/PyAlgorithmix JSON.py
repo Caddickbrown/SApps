@@ -7,7 +7,7 @@ input("\n" + "Hit Enter to Generate a New List")
 # Loop
 while (1 == 1):
 
-# Pull data and assign index numbers
+    # Pull data and assign index numbers
     path=os.getcwd() # Define filepath
     with open(os.path.abspath(os.path.join(path, os.pardir))+"/list.JSON") as f:
         data = json.load(f)
@@ -26,7 +26,6 @@ while (1 == 1):
     nounselectone = data["nouns"][random_index_nounone]
     nounselecttwo = data["nouns"][random_index_nountwo]
 
-    
     # Print
     print("\n" + "You have", random.randint(0,60), timeselect, "to", verbselect, itemselect + ". Your keywords are", nounselectone + ",", nounselecttwo + ", and", emotionselect + ". Good Luck!")
     input("\n" + "Hit Enter to Generate a New List")
