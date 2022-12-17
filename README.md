@@ -1,4 +1,4 @@
-# Algorithmic
+# Algorithmix
 
 This is a mock application that is essentially an "Idea generator".
 
