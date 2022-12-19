@@ -84,3 +84,19 @@ var rawdata = fs.readFileSync('/../list.json');
 alert(json);
 
 //const x = console.log(jsonlist["timeunit"][Math.floor(Math.random()*jsonContent["featured"].length)]);
+
+
+
+
+$.get('/../list.json')
+  .done(data => {
+    console.log(data);
+    const parseData = JSON.parse(data);
+    console.log(parseData.timevalues);
+  });
+
+fetch('/../list.json')
+  .then(data => data.json())
+  .then(data => {
+    console.log(data);
+ });
