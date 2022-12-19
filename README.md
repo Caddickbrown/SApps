@@ -14,4 +14,4 @@ It is designed to be a little random, and to not entirely make sense. The idea b
 Originally created as this was the first language available to me, it could be used for embedding into a physical device.
 
 ## Python
-There are two versions of the file here. Both work and basically do the same thing. One is entirely self contained, one has a more easily updatable JSON file that can be used with it.
+There are three versions of the file here. All work and basically do the same thing. One is entirely self contained, one has a more easily updatable JSON file that can be used with it, and the final one is a slightly less readable, but smaller file.

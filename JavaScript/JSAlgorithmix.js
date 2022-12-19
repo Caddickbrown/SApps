@@ -19,3 +19,10 @@ var randomItem = array[Math.random() * array.length | 0];
 
 //Print
 document.write("You have ",ln+rand() % static_cast<int>(un-ln+1)," ",timeunitarray[RandIndex1]," to ",verbage[RandIndex2]," ",itemarray[RandIndex3],". Your keywords are ",nouns,[RandIndex4],", ",nouns[RandIndex5],", and ",emotion[RandIndex6],". Good Luck!");
+
+// Import
+// Setup
+// Loop
+// Pull Data and Assign Index Numbers
+// Generate Words
+// Print
