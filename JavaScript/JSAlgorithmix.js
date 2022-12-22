@@ -1,3 +1,16 @@
+
+
+
+const obj = JSON.parse("/../List.JSON");
+
+//const x = console.log(obj.timeunits);
+
+
+var x = "World!";
+
+
+
+/*
 // Declare variables
 var timeunit = 1; //Time Unit
 var verbage = 2; //Verbs
@@ -15,20 +28,31 @@ var un= 60; //Upper limit for time
     ["Banana","B"]
 ];
 var randomItem = array[Math.random() * array.length | 0];
-*/
 
+
+/*
 const greetings = ['Howdy', 'Bonjour', 'Hello', 'Dude']
 
 const greeting = greetings[  
   Math.floor(Math.random() * greetings.length)
 ]
-
-var x = "Hello ";
 var y = "World!";
 
+const data = require("./data.json");
 
 
 
+/*
+$.get('/../list.json')
+  .done(data => {
+    console.log(data);
+    const parseData = JSON.parse(data);
+    console.log(parseData.timevalues);
+    var x = parseData;
+  });
+
+var x = parseData;
+*/
 //Print
 //const x = `hello ${emotion}`;
 
@@ -40,7 +64,7 @@ var y = "World!";
 // Print
 
 
-
+/*
 
 var jsonContent = {
   "featured": [
@@ -88,13 +112,9 @@ alert(json);
 
 
 
-$.get('/../list.json')
-  .done(data => {
-    console.log(data);
-    const parseData = JSON.parse(data);
-    console.log(parseData.timevalues);
-  });
 
+
+  /*
 fetch('/../list.json')
   .then(data => data.json())
   .then(data => {
@@ -104,3 +124,4 @@ fetch('/../list.json')
   dataObject = {};
   console.log(error);
   })
+  */
