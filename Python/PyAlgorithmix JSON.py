@@ -10,6 +10,7 @@ while (1 == 1):
     # Pull data and assign index numbers
     path=os.getcwd() # Define filepath
     with open(os.path.abspath(os.path.join(path, os.pardir))+"/list.JSON") as f:
+    #with open(os.path.abspath(os.path.join(path, os.pardir))+"./list.JSON") as f:
         data = json.load(f)
         random_index_time = random.randint(0, len(data["timeunit"])-1)
         random_index_verb = random.randint(0, len(data["verbage"])-1)
