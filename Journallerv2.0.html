@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Journal Entry Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333; /* Default text color */
+            background-color: #f1f1f1; /* Very light grey background color */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for dark mode */
+        }
+        body.dark-mode {
+            color: #fff; /* Text color in dark mode */
+            background-color: #222; /* Slightly darker background color for dark mode */
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            background-color: #fff; /* Default background color for form fields */
+        }
+        /* Custom styles for form fields in dark mode */
+        body.dark-mode input, body.dark-mode textarea {
+            background-color: #444; /* Dark mode background color for form fields */
+            color: #fff; /* Text color in dark mode */
+        }
+        .journal-entry {
+            resize: vertical; /* Allows vertical resizing */
+        }
+        .export-options {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .export-options h2 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .btn-container {
+            text-align: center;
+        }
+        .btn-container button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff; /* Default blue color for buttons */
+            color: #fff; /* Default text color for buttons */
+            font-size: 16px;
+            cursor: pointer;
+        }
+        /* Custom styles for buttons in dark mode */
+        body.dark-mode .btn-container button {
+            background-color: #444; /* Dark mode background color for buttons */
+            color: #fff; /* Text color in dark mode for buttons */
+        }
+        .btn-container button:hover {
+            background-color: #0056b3; /* Slightly darker blue on hover for buttons */
+        }
+        /* Custom styles for dark mode toggle button */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .dark-mode-toggle button {
+            padding: 5px 10px;
+            background-color: #444; /* Darker color for dark mode toggle button */
+            color: #fff; /* Text color for dark mode toggle button */
+            border: none;
+            border-radius: 20px; /* Rounded square */
+            cursor: pointer;
+        }
+        .dark-mode-toggle button:hover {
+            background-color: #666; /* Slightly lighter color on hover for dark mode toggle button */
+        }
+    </style>
+</head>
+<body>
+    <div class="dark-mode-toggle">
+        <button onclick="toggleDarkMode()" id="darkModeButton">Dark Mode</button>
+    </div>
+    <div class="container">
+        <form id="journalForm">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" value="">
+            
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title">
+            
+            <label for="journal">Journal Entry:</label>
+            <textarea id="journal" name="journal" class="journal-entry" rows="20"></textarea>
+
+            <div class="export-options">
+                <h2>Export Options</h2>
+                <div class="btn-container">
+                    <button onclick="exportAsMarkdown()">Markdown</button>
+                    <button onclick="exportAsCSV()">CSV</button>
+                    <button onclick="exportAsJSON()">JSON</button>
+                    <button onclick="copyToClipboard()">Clipboard</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="journal-prompt">
+            <h2>Journal Prompt</h2>
+            <p id="prompt"></p>
+            <textarea id="response" class="journal-entry" rows="10"></textarea>
+        </div>
+
+        <div class="export-options">
+            <h2>Export Options</h2>
+            <div class="btn-container">
+                <button onclick="exportPromptAsMarkdown()">Prompt as Markdown</button>
+                <button onclick="exportPromptAsCSV()">Prompt as CSV</button>
+                <button onclick="exportPromptAsJSON()">Prompt as JSON</button>
+                <button onclick="copyPromptToClipboard()">Prompt to Clipboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script>
+        // Pre-fill the date field with today's date
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("date").value = today;
+
+        function getFormData() {
+            const formData = new FormData(document.getElementById("journalForm"));
+
+            // Get form values
+            const date = formData.get("date");
+            const title = formData.get("title");
+            const journal = formData.get("journal");
+
+            return { date, title, journal };
+        }
+
+        function getFilename(extension) {
+            const { date, title } = getFormData();
+            return `${date}-${title}.${extension}`;
+        }
+
+        function saveBlob(blob, filename) {
+            // Use FileSaver.js to prompt the user for download location
+            window.saveAs(blob, filename);
+        }
+
+        function exportAsMarkdown() {
+            const { title, journal } = getFormData();
+            const markdownData = `Date: ${today}\n## ${title}\n\n${journal}`;
+            const blob = new Blob([markdownData], { type: "text/markdown;charset=utf-8;" });
+            const filename = getFilename("md");
+            saveBlob(blob, filename);
+        }
+
+        function exportAsCSV() {
+            const { date, title, journal } = getFormData();
+            const csvData = `"Date","Title","Journal Entry"\n"${date}","${title}","${journal}"`;
+            const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+            const filename = getFilename("csv");
+            saveBlob(blob, filename);
+        }
+
+        function exportAsJSON() {
+            const { date, title, journal } = getFormData();
+            const jsonData = JSON.stringify({ date, title, journal }, null, 2);
+            const blob = new Blob([jsonData], { type: "application/json" });
+            const filename = getFilename("json");
+            saveBlob(blob, filename);
+        }
+
+        function copyToClipboard() {
+            const { title, journal } = getFormData();
+            const content = `Date: ${today}\n## ${title}\n\n${journal}`;
+
+            const dummyTextArea = document.createElement('textarea');
+            dummyTextArea.value = content;
+            document.body.appendChild(dummyTextArea);
+            dummyTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummyTextArea);
+
+            alert("Copied Markdown data to clipboard!");
+        }
+
+        // Array of journal prompts
+        const journalPrompts = [
+            "Describe a place that holds special meaning for you.",
+            "Write about a challenging experience that taught you an important life lesson.",
+            "If you could have any superpower, what would it be and why?",
+            "Write about a book, movie, or artwork that had a profound impact on you and why.",
+            "What are three things you are grateful for today?",
+            "If you could travel anywhere in the world, where would you go and what would you do?",
+            "Write about a goal you want to achieve and the steps you will take to reach it.",
+            "Describe a time when you overcame a fear and how it made you feel.",
+            "If you could meet and have a conversation with any historical figure, who would it be and why?",
+            "Write about a difficult decision you had to make and how it turned out.",
+        ];
+
+        // Function to get a random journal prompt
+        function getRandomPrompt() {
+            const randomIndex = Math.floor(Math.random() * journalPrompts.length);
+            return journalPrompts[randomIndex];
+        }
+
+        // Function to display a random prompt
+        function displayRandomPrompt() {
+            const promptElement = document.getElementById("prompt");
+            const randomPrompt = getRandomPrompt();
+            promptElement.textContent = randomPrompt;
+        }
+
+        // Display initial random prompt
+        displayRandomPrompt();
+
+        // Function to get the response to the journal prompt
+        function getResponse() {
+            const response = document.getElementById("response").value;
+            return response;
+        }
+
+        // Function to export the response as Markdown
+        function exportResponseAsMarkdown() {
+            const response = getResponse();
+            const markdownData = `Date: ${today}\n\n${response}`;
+            const blob = new Blob([markdownData], { type: "text/markdown;charset=utf-8;" });
+            const filename = getFilename("md");
+            saveBlob(blob, filename);
+        }
+
+        // Function to export the response as CSV
+        function exportResponseAsCSV() {
+            const response = getResponse();
+            const csvData = `"Date","Response"\n"${today}","${response}"`;
+            const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+            const filename = getFilename("csv");
+            saveBlob(blob, filename);
+        }
+
+        // Function to export the response as JSON
+        function exportResponseAsJSON() {
+            const response = getResponse();
+            const jsonData = JSON.stringify({ date: today, response }, null, 2);
+            const blob = new Blob([jsonData], { type: "application/json" });
+            const filename = getFilename("json");
+            saveBlob(blob, filename);
+        }
+
+        // Function to copy the response to clipboard
+        function copyResponseToClipboard() {
+            const response = getResponse();
+
+            const dummyTextArea = document.createElement('textarea');
+            dummyTextArea.value = response;
+            document.body.appendChild(dummyTextArea);
+            dummyTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummyTextArea);
+
+            alert("Copied response to clipboard!");
+        }
+
+        function toggleDarkMode() {
+            const body = document.body;
+            const darkModeButton = document.getElementById("darkModeButton");
+
+            if (body.classList.contains("dark-mode")) {
+                body.classList.remove("dark-mode");
+                darkModeButton.textContent = "Dark Mode";
+            } else {
+                body.classList.add("dark-mode");
+                darkModeButton.textContent = "Light Mode";
+            }
+        }
+    </script>
+</body>
+</html>
