@@ -1,15 +1,23 @@
-##Journaller
+# Journaller
 
-A Simple, HTML Based, Journalling App - that exports to the following.
+A Simple, HTML Based, Journal Entry Generator/Editor - designed to be fully featured in a single page.
+
+## Features
+- Date/Titles
+- Various Export Options
+
+### Export Options
 - CSV
 - JSON
 - Markdown
 - Clipboard (In Markdown)
 
-Plan for v2.0
-- Add Prompt Functionality
+## Future
+### v2.0 Features
+- Journal Prompts
 - More Colour
 
-Further Functionality
+### Planned Functionality
 - Themes
 - Cleaner Look
+- Colours as variables
