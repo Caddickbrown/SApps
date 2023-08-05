@@ -1,0 +1,1 @@
+An attempt to make a quick and accessible way to get a journal prompt on command.
