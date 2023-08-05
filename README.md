@@ -5,6 +5,7 @@ A Simple, HTML Based, Journal Entry Generator/Editor - designed to be fully feat
 ## Features
 - Date/Titles
 - Various Export Options
+- Dark/Light Mode
 
 ### Export Options
 - CSV
@@ -19,5 +20,5 @@ A Simple, HTML Based, Journal Entry Generator/Editor - designed to be fully feat
 
 ### Planned Functionality
 - Themes
+    - Colours as variables
 - Cleaner Look
-- Colours as variables
