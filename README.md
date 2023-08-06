@@ -6,6 +6,8 @@ A Simple, HTML Based, Journal Entry Generator/Editor - designed to be fully feat
 - Date/Titles
 - Various Export Options
 - Dark/Light Mode
+- Journal Prompts
+- Clean Design
 
 ### Export Options
 - CSV
@@ -13,19 +15,41 @@ A Simple, HTML Based, Journal Entry Generator/Editor - designed to be fully feat
 - Markdown
 - Clipboard (In Markdown)
 
-## Future
+### v1.0 Features
+- [x] Date/Titles
+- [x] Various Export Options
+- [x] Dark/Light Mode
+
 ### v2.0 Features
-- Journal Prompts
-- More Colour
-- Tags Field
-- Colours as Variables
+- [x] Journal Prompts
+- [x] More Colour
+- [x] Colours as Variables
+- [x] Comments Cleanup
+- [x] Current Time included in export name
+- [x] Textbox Font updated
+- [x] Footer Added
+- [x] Textbox Border Added
+
+## Future
+### v3.0 Features
+- [ ] Tags Field
+- [ ] CSS Tidy
+- [ ] Better Colours
+- [ ] Dynamic Resize Textbox
 
 ### Planned Functionality
 - Themes
-    - Colours as variables
 - Cleaner Look
 - Dynamically Generated Form
     - Not really sure how this would work realistically
     - Headers?
     - Benefit would be to me not typing out the titles and where they go later on
 - Image Attacher
+- Mood Option
+    - With Tags?
+- Separate Prompt section in main form with extra section exported?
+- Daily Gratitude Section
+- More Prompts
+- Dark Mode Button Icon Rather than text
+- Fonts as Variable
+- More Fonts
