@@ -1,5 +1,4 @@
 # WT
-## Aim
 WT is a small HTML based project to create a form that can have it's data exported to CSV.
 
 It can be configured by editing the variables at the start of the Javascript Section, and will expand to however many fields you require.
@@ -7,6 +6,12 @@ It can be configured by editing the variables at the start of the Javascript Sec
 It is designed to be completely self-reliant and customisable. It does not require any external libraries or frameworks. It is also designed to be as lightweight as possible.
 
 It currently only supports number fields, but I will be adding more field types in the future.
+
+## v1.0 Functionality
+- [x] Customisable number of fields from internal JS
+- [x] Customisable Theme from internal CSS
+- [x] Export to CSV
+
 
 ## Configuration
 To configure the form, edit the variables at the start of the Javascript section.
@@ -18,6 +23,12 @@ To configure the form, edit the variables at the start of the Javascript section
 
 ### Themeing
 Should you want to change the theme, you can do so by editing the CSS variables in the `:root` section.
+
+## Future
+### Planned Functionality
+- Customisable fields from within the page
+- Dark Mode
+- 
 
 ## Contributing
 If you have any suggestions or improvements, please feel free to submit a pull request. I will review it as soon as possible.
