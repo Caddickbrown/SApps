@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title id="pageName"></title>
+  <h1 id="pageName"></h1>
+  <style>
+    :root {
+      --main-background-color: #6163c2;
+      --form-background-color: #ffffff;
+      --form-text-color: #000000;
+      --header-text-color: #ffffff;
+      --form-border-color: #cccccc;
+      --button-background-color: #4caf50;
+      --button-text-color: #ffffff;
+    }
+    body {
+      background-color: var(--main-background-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: system-ui, sans-serif;
+    }
+    body a:link, a:visited {
+      color: var(--header-text-color);
+      transition : color 0.5s ease;
+    }
+    body a:hover {
+      color: var(--button-background-color);
+    }
+    #formContainer {
+      background-color: var(--form-background-color);
+      padding: 20px;
+      padding-right: 50px;
+      width: 60%;
+      border-radius: 10px;
+    }
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding-left: 10px;
+      margin-right: 10px;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-style: italic;
+      color: var(--header-text-color);
+    }
+    label, input {
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid var(--form-border-color);
+      border-radius: 4px;
+    }
+    .csvButton {
+      display: block;
+      text-align: center;
+      margin: 5px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: none;
+      background-color: var(--button-background-color);
+      color: var(--button-text-color);
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .csvButtonContainer {
+    	text-align:center;
+    	margin-top:20px;
+    }
+    footer {
+      text-align: right;
+      font-size: 0.8em;
+      vertical-align: middle;
+      position:fixed;
+      bottom:0;
+      width: 95%;
+      color: var(--header-text-color);
+    }
+   </style>
+</head>
+<body>
+
+	<div id="formContainer"></div>
+
+	<script>
+    // Variables
+    var appName = "WT";
+    var fileName = String('WTExport');
+	  var fields = [
+       'Title 1'
+      ,'Title 2'
+    ];
+    var versionNumber = "v1.0";
+
+    document.querySelectorAll("#pageName").forEach(function(element) {
+      element.innerHTML = appName;
+    });
+
+    let inputCount = 0;
+  	let inputsArray = [];
+
+	  function generateInputs() {
+    const formContainer = document.getElementById('formContainer');
+    formContainer.innerHTML = '';
+
+    for (let i = 0; i < fields.length; i++) {
+      const label = document.createElement('label');
+      label.for = `input${i}`;
+      label.innerText = fields[i];
+      formContainer.appendChild(label);
+
+      const newInput = document.createElement('input');
+      newInput.type = 'number';
+      newInput.name = `input${i}`;
+      newInput.id = `input${i}`;
+      newInput.required = true;
+  
+    	// Store input values in inputsArray
+  	  newInput.addEventListener('blur', () => {
+	      const inputValue = Number(newInput.value);
+	    
+	      if (!isNaN(inputValue)) {
+	        inputsArray[i] ??= { title: fields[i], values: [] };
+          if (inputsArray[i].values.length === 0) {
+	          inputsArray[i].values[0] = inputValue;
+	        } else {
+	          inputsArray[i].values[0] ||= inputValue;
+	        }
+        } else if (newInput.value === '') { // If input is empty, set it to default value of 0
+	        inputsArray[i].values[0] ||= 0;
+	      }
+	    });
+	  
+	    formContainer.appendChild(newInput);
+  	  formContainer.appendChild(document.createElement('br')); // Add a line break
+	    inputCount++;
+    }
+
+    const csvButtonContainer = document.createElement('div');
+    csvButtonContainer.className = "csvButtonContainer";
+    formContainer.appendChild(csvButtonContainer);
+  
+    const csvButton = document.createElement('button');
+    csvButton.className = "csvButton";
+    csvButton.innerHTML = "CSV";
+    csvButton.onclick = exportToCsv;
+    csvButtonContainer.appendChild(csvButton);
+    }
+
+	  generateInputs();
+
+	  function exportToCsv() {
+      
+
+  let csvContent = '';
+
+  // Add header row
+  const inputElements = document.querySelectorAll('input[name^="input"]');
+  for (let i = 0; i < inputElements.length; i++) {
+    if (inputsArray[i]) {
+      csvContent += `${inputsArray[i].title},`;
+    } else {
+      csvContent += `Title ${i + 1},`; // Add a default header for remaining inputs without values
+    }
+  }
+  csvContent += '\n';
+
+  // Add values of each input
+  for (let i = 0; i < inputElements.length; i++) {
+    if (inputsArray[i]) { // Check if inputsArray entry exists for the input
+      const values = inputsArray[i].values;
+      const inputValue = values[0] || 0; // Default empty fields to 0
+      csvContent += `${inputValue},`;
+    } else {
+      csvContent += '0,'; // Add a field with value 0 for remaining inputs without values
+    }
+  }
+  
+   csvContent += '\n';
+
+   // Remove trailing comma from the last field of the header and values row
+   csvContent = csvContent.slice(0, -2);
+
+   const link = document.createElement("a");
+
+   // Get current date
+   const currentDate = new Date().toISOString().slice(0, 10);
+
+   link.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent));
+
+   // Set download filename to current date
+   link.setAttribute("download", `${currentDate}-${fileName}.csv`);
+
+   document.body.appendChild(link);
+
+   link.click();
+
+   document.body.removeChild(link);
+  }
+  </script>
+</body>
+<footer>
+  <p id="versionNumber"></p>
+  <p>Find this project on <a href="https://github.com/Caddickbrown/WT>">GitHub</a> - Created by <a href="https://caddickbrown.com>">Caddick & Brown</a></p>
+
+  <script>
+    document.querySelectorAll("#versionNumber").forEach(function(element) {
+      element.innerHTML = versionNumber;
+    });
+  </script>
+
+</footer>
+</html>
