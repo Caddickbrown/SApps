@@ -7,7 +7,7 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 
 ## Usage
 1. Download the latest release
-2. Open `index.html` in your browser of choice
+2. Open `Journaller vx.0.html` in your browser of choice
 3. Fill out the form
 4. Choose your export option
 5. Enjoy your exported file!
@@ -65,6 +65,9 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - [ ] More Prompts
 - [ ] Dark Mode Button Icon Rather than text
 - [ ] Image Attacher
+- [ ] CSS Fix (Some errors)
+- [ ] Version Number as a Variable
+- [ ] Page Name as a Variable
 
 ### v5.0 Features
 - [ ] Cleaner Look
