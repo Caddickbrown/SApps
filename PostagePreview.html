@@ -1,0 +1,113 @@
+<!--This is a version that shows a preview of the outputted file-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Markdown to HTML Converter</title>
+</head>
+<body>
+  <h1>Markdown to HTML Converter</h1>
+  <form>
+    <textarea id="markdownInput" rows="10" cols="80" oninput="updateHTMLContent()"></textarea>
+    <br>
+    <button type="button" onclick="exportHTML()">Export HTML</button>
+  </form>
+  <h2>Preview</h2>
+  <div id="htmlOutput"></div>
+  
+  <script>
+    function markdownToHTML(markdown) {
+      // Convert Headers: # Heading => <h1>Heading</h1>
+      markdown = markdown.replace(/(^#{1,6}\s*)(.+)/gm, (match, hashes, headingText) => {
+        const headerLevel = hashes.length - 1;
+        return `<h${headerLevel}>${headingText}</h${headerLevel}>`;
+      });
+  
+      // Convert Bold: **text** => <strong>text</strong>
+      markdown = markdown.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+      // Convert Italic: _text_ => <em>text</em>
+      markdown = markdown.replace(/_(.*?)_/g, '<em>$1</em>');
+      markdown = markdown.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  
+      // Convert Lists: - item => <ul><li>item</li></ul>
+      markdown = markdown.replace(/^\- (.+)/gm, '<ul><li>$1</li></ul>');
+  
+      // Convert Line Breaks: \n => <br>
+      markdown = markdown.replace(/\n/g, '\n<br>\n');
+  
+      return markdown;
+    }
+  
+    function updateHTMLContent() {
+      // Get the input from the textarea
+      const markdownInput = document.getElementById('markdownInput').value;
+  
+      // Convert Markdown to HTML using the custom function
+      const htmlOutput = markdownToHTML(markdownInput);
+  
+      // Construct the full HTML content
+      const fullHtmlContent = `<!DOCTYPE html>
+  <html>
+  <head>
+    <title>Converted HTML</title>
+    <style>
+      :root {
+        --background-color: #4bc67c;
+        --default-text-color: #fff;
+      }
+      body {
+        font-family: system-ui, sans-serif;
+        color: var(--default-text-color);
+        background-color: var(--background-color);
+        transition: background-color 0.3s ease, color 0.3s ease;
+        margin-bottom: 5em;
+      }
+      footer {
+        text-align: right;
+        font-size: 0.8em;
+        vertical-align: middle;
+        position: fixed;
+        bottom: 0;
+        width: 95%;
+      }
+    </style>
+  </head>
+  <body>
+    ${htmlOutput}
+  </body>
+  <footer>
+    <p>Created with <a href="https://github.com/Caddickbrown/Postage">Postage</a></p>
+  </footer>
+  </html>`;
+  
+      // Display the converted HTML
+      document.getElementById('htmlOutput').innerHTML = fullHtmlContent;
+    }
+  
+    function exportHTML() {
+      // Get the full HTML content
+      const fullHtmlContent = document.getElementById('htmlOutput').innerHTML;
+  
+      // Create a Blob with the full HTML content
+      const blob = new Blob([fullHtmlContent], { type: 'text/html' });
+  
+      // Create a temporary anchor element to trigger the download
+      const a = document.createElement('a');
+      a.download = 'converted.html';
+      a.href = URL.createObjectURL(blob);
+  
+      // Append the anchor element to the document and click it programmatically
+      document.body.appendChild(a);
+      a.click();
+  
+      // Clean up by removing the temporary anchor element
+      document.body.removeChild(a);
+    }
+  </script>
+</body>
+<footer>
+  <p>v0.5</p>
+  <p>Find this page on <a href="https://github.com/Caddickbrown/Postage">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
+</footer>
+</html>

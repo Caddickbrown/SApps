@@ -1,51 +1,157 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Postage App</title>
+  <title>Markdown to HTML Converter</title>
+  <style>
+    :root {
+      --background-color: #f0f0f0;
+      --default-text-color: #414141;
+      --colourful-color: #4bc67c;
+      --form-background-color: #ffffff;
+    }
+    body {
+      font-family: system-ui, sans-serif;
+      color: var(--default-text-color);
+      background-color: var(--background-color);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      margin-bottom: 5em;
+      justify-content: center;
+      width: 60%;
+    }
+    body a:link, body a:visited {
+      color: var(--default-text-color);
+      text-decoration: underline;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    body a:hover {
+      color: var(--colourful-color);
+      text-decoration: none;
+    }
+    textarea {
+      background-color: var(--form-background-color);
+      padding: 1em;
+      border-radius: 5px;
+    }
+    footer {
+      text-align: right;
+      font-size: 0.8em;
+      vertical-align: middle;
+      position: fixed;
+      bottom: 0;
+      width: 95%;
+    }
+  </style>
 </head>
 <body>
-  <form id="markdownForm">
-    <textarea id="markdownInput" rows="10" cols="50"></textarea>
-    <br />
-    <button type="submit">Generate HTML</button>
+  <h1>Markdown to HTML Converter</h1>
+  <form>
+    <textarea id="markdownInput" rows="10" cols="80" oninput="updateHTMLContent()"></textarea>
+    <br>
+    <button type="button" onclick="exportHTML()">Export HTML</button>
   </form>
 
   <script>
+    var versionNumber = "v1.0";
 
-    function convertMarkdownToHTML(markdown) {
-        // Convert markdown to HTML manually
-        var html = markdown.replace(/####/g, "</h1><h4>")
-                        .replace(/###/g, "</h4><h3>")
-                        .replace(/##/g, "</h3><h2>")
-                        .replace(/#/g, "</h2><h1>")
-                        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                        .replace(/\*(.*?)\*/g, "<em>$1</em>")
-                        .replace(/\n/g, "<br />\n");
+    function markdownToHTML(markdown) {
+      // Convert Headers: # Heading => <h1>Heading</h1>
+      markdown = markdown.replace(/(^#{1,6}\s*)(.+)/gm, (match, hashes, headingText) => {
+        const headerLevel = hashes.length - 1;
+        return `<h${headerLevel}>${headingText}</h${headerLevel}>`;
+      });
 
-        html = html.slice(5);
+      // Convert Bold: **text** => <strong>text</strong>
+      markdown = markdown.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-        return html;
+      // Convert Italic: _text_ => <em>text</em>
+      markdown = markdown.replace(/_(.*?)_/g, '<em>$1</em>');
+      markdown = markdown.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+      // Convert Lists: - item => <ul><li>item</li></ul>
+      markdown = markdown.replace(/^\- (.+)/gm, '<ul><li>$1</li></ul>');
+
+      // Convert Line Breaks: \n => <br>
+      markdown = markdown.replace(/\n/g, '\n<br>\n');
+
+      return markdown;
     }
 
-    document.getElementById("markdownForm").addEventListener("submit", function(event) {
-      event.preventDefault();
+    function updateHTMLContent() {
+      // Get the input from the textarea
+      const markdownInput = document.getElementById('markdownInput').value;
 
-      var markdownInput = document.getElementById("markdownInput").value;
+      // Convert Markdown to HTML using the custom function
+      convertedHTML = markdownToHTML(markdownInput);
+    }
 
-      var htmlOutput = convertMarkdownToHTML(markdownInput);
+    function exportHTML() {
+      // Construct the full HTML content
+      const fullHtmlContent = `<!DOCTYPE html>
+      <html>
+      <head>
+        <title>Converted HTML</title>
+        <style>
+          :root {
+            --background-color: #f0f0f0;
+            --default-text-color: #414141;
+            --colourful-color: #4bc67c;
+          }
+          body {
+            font-family: system-ui, sans-serif;
+            color: var(--default-text-color);
+            background-color: var(--background-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-bottom: 5em;
+            justify-content: center;
+            width: 60%;
+          }
+          body a:link, body a:visited {
+            color: var(--default-text-color);
+            text-decoration: underline;
+          }
+          body a:hover {
+            color: var(--colourful-color);
+            text-decoration: none;
+          }
+          footer {
+            text-align: right;
+            font-size: 0.8em;
+            vertical-align: middle;
+            position: fixed;
+            bottom: 0;
+            width: 95%;
+          }
+        </style>
+      </head>
+      <body>
+        ${convertedHTML}
+      </body>
+      <footer>
+        <p>Created with <a href="https://github.com/Caddickbrown/Postage">Postage</a> ${versionNumber} by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
+      </footer>
+      </html>`;
 
-      // Create a new Blob object with the HTML content
-      var blob = new Blob([htmlOutput], { type: "text/html;charset=utf-8" });
+      // Create a Blob with the full HTML content
+      const blob = new Blob([fullHtmlContent], { type: 'text/html' });
 
-      // Create a temporary link element to download the HTML file
-      var downloadLink = document.createElement("a");
-      downloadLink.href = URL.createObjectURL(blob);
-      downloadLink.download = "output.html";
+      // Create a temporary anchor element to trigger the download
+      const a = document.createElement('a');
+      a.download = 'converted.html';
+      a.href = URL.createObjectURL(blob);
 
-      // Trigger the click event on the link to initiate the download
-      downloadLink.click();
-    });
+      // Append the anchor element to the document and click it programmatically
+      document.body.appendChild(a);
+      a.click();
+
+      // Clean up by removing the temporary anchor element
+      document.body.removeChild(a);
+    }
+
+    let convertedHTML = ''; // Store the converted HTML here
   </script>
-
 </body>
+<footer>
+  <p id="versionNumber"></p>
+  <p>Find this project on <a href="https://github.com/Caddickbrown/Postage>">GitHub</a> - Created by <a href="https://caddickbrown.com>">Caddick & Brown</a></p>
+  <script>document.querySelectorAll("#versionNumber").forEach(function(element) {element.innerHTML = versionNumber;});</script>
 </html>
