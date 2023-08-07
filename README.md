@@ -16,7 +16,6 @@ It currently only supports number fields, but I will be adding more field types 
 ## Configuration
 To configure the form, edit the variables at the start of the Javascript section.
 
-### Information
 - The "App Name" is defined in the `appName` variable. Functionally this doesn't do anything, but you can change it to suit your needs.
 - The Exported File Name is defined in the `FileName` variable. This is the name of the file that will be downloaded when the user clicks the "Export" button.
 - The form fields are defined in the `fields` array.
@@ -27,8 +26,9 @@ Should you want to change the theme, you can do so by editing the CSS variables 
 ## Future
 ### Planned Functionality
 - Customisable fields from within the page
+- Field Types
+- Remove Fields from within the page
 - Dark Mode
-- 
 
 ## Contributing
 If you have any suggestions or improvements, please feel free to submit a pull request. I will review it as soon as possible.
