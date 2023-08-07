@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Postage App</title>
+</head>
+<body>
+  <form id="markdownForm">
+    <textarea id="markdownInput" rows="10" cols="50"></textarea>
+    <br />
+    <button type="submit">Generate HTML</button>
+  </form>
+
+  <script>
+
+    function convertMarkdownToHTML(markdown) {
+        // Convert markdown to HTML manually
+        var html = markdown.replace(/####/g, "</h1><h4>")
+                        .replace(/###/g, "</h4><h3>")
+                        .replace(/##/g, "</h3><h2>")
+                        .replace(/#/g, "</h2><h1>")
+                        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                        .replace(/\*(.*?)\*/g, "<em>$1</em>")
+                        .replace(/\n/g, "<br />\n");
+
+        html = html.slice(5);
+
+        return html;
+    }
+
+    document.getElementById("markdownForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      var markdownInput = document.getElementById("markdownInput").value;
+
+      var htmlOutput = convertMarkdownToHTML(markdownInput);
+
+      // Create a new Blob object with the HTML content
+      var blob = new Blob([htmlOutput], { type: "text/html;charset=utf-8" });
+
+      // Create a temporary link element to download the HTML file
+      var downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = "output.html";
+
+      // Trigger the click event on the link to initiate the download
+      downloadLink.click();
+    });
+  </script>
+
+</body>
+</html>
