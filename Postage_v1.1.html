@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Markdown to HTML Converter</title>
+  <title id="pageName"></title>
+  <h1 id="pageName"></h1>
   <style>
     :root {
       --background-color: #f0f0f0;
@@ -13,10 +14,12 @@
       font-family: system-ui, sans-serif;
       color: var(--default-text-color);
       background-color: var(--background-color);
-      transition: background-color 0.3s ease, color 0.3s ease;
-      margin-bottom: 5em;
+      display: flex;
       justify-content: center;
-      width: 60%;
+      /*align-items: center;*/
+      margin-top: 5em;
+      height: 100vh;
+      font-family: system-ui, sans-serif;
     }
     body a:link, body a:visited {
       color: var(--default-text-color);
@@ -29,8 +32,25 @@
     }
     textarea {
       background-color: var(--form-background-color);
-      padding: 1em;
       border-radius: 5px;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-style: italic;
+      padding: 20px;
+      width: 60%;
+      
+    }
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding-left: 10px;
+      margin-right: 10px;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-style: italic;
+      color: var(--header-text-color);
+    }
+    form {
+      color: var(--header-text-color);
     }
     footer {
       text-align: right;
@@ -43,7 +63,6 @@
   </style>
 </head>
 <body>
-  <h1>Markdown to HTML Converter</h1>
   <form>
     <textarea id="markdownInput" rows="10" cols="80" oninput="updateHTMLContent()"></textarea>
     <br>
@@ -51,7 +70,12 @@
   </form>
 
   <script>
-    var versionNumber = "v1.0";
+    var versionNumber = "v1.1";
+    var appName = "Postage";
+
+    document.querySelectorAll("#pageName").forEach(function(element) {
+      element.innerHTML = appName;
+    });
 
     function markdownToHTML(markdown) {
       // Convert Headers: # Heading => <h1>Heading</h1>

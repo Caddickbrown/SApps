@@ -1,16 +1,16 @@
 # Postage
-
-## Description
-Postage is a SInple-Page HTML App app that generates an HTML page from a Markdown-based input form.
+Postage is a Simple-Page HTML App app that generates an HTML page from a Markdown-based input form.
 
 The user enters markdown text into an input box and the app generates an HTML page from the input.
+
+The export uses a basic template, but this will be customisable in the future. The app is designed to be as lightweight as possible.
 
 ## Background
 I wanted a quick way to create a simple HTML page from a template and markdown input. I couldn't find anything that fit my needs, so I made my own.
 
 ## Usage
 1. Download the latest release.
-2. Open `Postage vx.0.html` in your browser of choice.
+2. Open `Postage_vx.x.html` in your browser of choice.
 3. Fill out the form.
 4. Click the export button.
 5. Enjoy your exported file!
@@ -21,19 +21,23 @@ I wanted a quick way to create a simple HTML page from a template and markdown i
 - Converts *italics* and _italics_ (Asterisk and Underscore)
 - Converts lists
 - Converts line breaks
+- Export to HTML
+- Variable App Name
 
 ## Future
-
 ### Planned Functionality
-- Themes
 - Cleaner Look
 - Dark Mode
 - Default Theme
+- Custom Themes
+- CSS as a Variable (Copies down to the export)
 
 #### Planned Conversion Capabilities
+- Convert __bold__ (Underscore)
+- Convert ***bold and italic***
 - Convert ~~strikethrough~~
 - Convert `code`
-- Convert [links](
+- Convert [links]()
 - Convert > blockquotes
 - Convert images
 - Convert horizontal rules
@@ -44,7 +48,6 @@ I wanted a quick way to create a simple HTML page from a template and markdown i
 - Convert fenced code blocks
 - Convert blockquotes
 - Convert ordered lists
-- Convert unordered lists
 - Convert task lists and to-dos
 - Convert footnotes
 - Convert definition lists
@@ -55,13 +58,6 @@ I wanted a quick way to create a simple HTML page from a template and markdown i
 
 ### Export Options
 - HTML
-
-### v1.0 Features
-- [x] Converts Headings (h1-h6)
-- [x] Converts **bold**
-- [x] Converts *italics* and _italics_ (Asterisk and Underscore)
-- [x] Converts lists
-- [x] Converts line breaks
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
@@ -76,3 +72,19 @@ If you have any ideas for features, or find any bugs, please open an issue or a 
 
 Should you want to donate, you can do so [here](https://www.buymeacoffee.com/caddickbrown).
 Thank you!
+
+## License
+This project is licensed under the MIT License.
+
+## Change Log
+### v1.1 Features
+- [x] Adjusted Styling
+- [x] Added Variable App Name
+
+### v1.0 Features
+- [x] Converts Headings (h1-h6)
+- [x] Converts **bold**
+- [x] Converts *italics* and _italics_ (Asterisk and Underscore)
+- [x] Converts unordered lists
+- [x] Converts line breaks
+- [x] Export to HTML
