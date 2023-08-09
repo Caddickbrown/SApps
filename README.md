@@ -24,7 +24,7 @@ I wanted a quick way to get a journal prompt on command, from a file that doesn'
 ## Features
 - Randomly generates a prompt from a list
 - Copy to clipboard button
-- Over 550 prompts
+- 550+ prompts!
 
 ## Future
 ### v3.0
