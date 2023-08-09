@@ -5,26 +5,20 @@
 
 Journal Prompter is a simple HTML file that generates a random journal prompt on command.
 
-The user clicks a button and the app generates a random prompt from a list of prompts. The app is designed to be as lightweight as possible.
-
-The hope was that it would be a self contained file with everything in place and doesn't need to link to anything else. There is some formatting in there as well though - I added a font, but it’s more of an optional extra.
-
-Functionally it seems to work well, I even added a copy button for easy transferring to a journal or other file.
-
 ## Background
-I wanted a quick way to get a journal prompt on command, from a file that doesn't require installation, and that could work on any computer - even from a USB Drive. I couldn't find anything that fit my needs, so I made my own.
+I wanted a quick way to get a journal prompt on command, from a file that doesn't require installation, and that could work on any computer - even from a USB Drive.
 
 ## Usage
 1. Download the latest release.
 2. Open `JP_vx.x.html` in your browser of choice.
-3. Click the button to get a prompt
-4. Click the copy button to copy the prompt to your clipboard
-5. Paste the prompt into your journal or other file
+3. Click the button to get a prompt.
+4. Click the copy button to copy the prompt to your clipboard.
+5. Paste the prompt into your journal or other file.
 
 ## Features
 - Randomly generates a prompt from a list
-- Copy to clipboard button
-- 550+ prompts!
+- Copy to clipboard
+- 550+ prompts
 - No installation required
 - Works on any computer
 - Works from a USB Drive
@@ -34,9 +28,11 @@ I wanted a quick way to get a journal prompt on command, from a file that doesn'
 - [ ] Cleaner Style
 - [ ] Dark/Light Mode
 - [ ] Aesthetic Standardisation
+- [ ] Version Number as a Variable
+- [ ] Colours as Variables
 
 ### Planned Functionality
-- Cleaner Look
+- Cleaner Aeresthetics
 - Dark/Light Mode Toggle
 - Custom Themes
 - Custom Prompts
@@ -50,7 +46,7 @@ I try to reduce the dependencies as much as possible, but some may be necessary 
 Should I find a way to remove them, I will, but for development speed they may be required in the interim.
 
 ### Current Dependencies
-- TBC
+- Merchant Font (To be removed)
 
 ## Contributing
 If you have any ideas for features, or find any bugs, please open an issue or a pull request. I will try to respond as soon as possible.
