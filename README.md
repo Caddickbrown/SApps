@@ -77,11 +77,11 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
-### v1.1 Features
+### v1.1
 - [x] Adjusted Styling
 - [x] Added Variable App Name
 
-### v1.0 Features
+### v1.0
 - [x] Converts Headings (h1-h6)
 - [x] Converts **bold**
 - [x] Converts *italics* and _italics_ (Asterisk and Underscore)
