@@ -37,11 +37,23 @@ To configure the form, edit the variables at the start of the Javascript section
 Should you want to change the theme, you can do so by editing the CSS variables in the `:root` section.
 
 ## Future
+## v2.0
+- [ ] Cleaner Aesthetics
+- [ ] Dark Mode
+- [ ] Customisable fields from within the page
+
 ### Planned Functionality
-- Customisable fields from within the page
 - Field Types
 - Remove Fields from within the page
-- Dark Mode
+- Themes
+
+## Dependencies
+I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
+
+Should I find a way to remove them, I will, but for development speed they may be required in the interim.
+
+### Current Dependencies
+- None
 
 ## Contributing
 If you have any ideas for features, or find any bugs, please open an issue or a pull request. I will try to respond as soon as possible.
@@ -53,7 +65,7 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
-## v1.0 Functionality
+## v1.0
 - [x] Customisable Field Names
 - [x] Customisable number of fields from internal JS
 - [x] Customisable Theme from internal CSS
