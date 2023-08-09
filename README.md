@@ -3,21 +3,22 @@
 A Simple, HTML Based, Journal Entry Generator/Editor - designed to be fully featured in a single page.
 
 ## Background
-I wanted to start journaling, but I didn't want to use a physical journal. I wanted to be able to export my entries to a format that I could use in other applications. I also wanted to be able to use it on my phone, so I needed it to be web based. I couldn't find anything that fit my needs, so I made my own.
+I wanted to start journaling, but I didn't want to use a physical journal. I wanted to be able to export my entries to a format that I could use in other applications. I also wanted to be able to use it on any computer, even from a USB Drive.
 
 ## Usage
-1. Download the latest release
-2. Open `Journaller vx.0.html` in your browser of choice
-3. Fill out the form
-4. Choose your export option
-5. Enjoy your exported file!
+1. Download the latest release.
+2. Open `Journaller vx.x.html` in your browser of choice.
+3. Fill out the form.
+4. Choose your export option.
+5. Enjoy your exported file(s)!
 
 ## Features
-- Date/Titles
+- Date/Titles/Tags
 - Various Export Options
 - Dark/Light Mode
 - Journal Prompts
 - Clean Design
+- 45+ Prompts
 
 ### Export Options
 - CSV
@@ -26,26 +27,61 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - Zip Folder (All of the above)
 - Clipboard (In Markdown)
 
-### v1.0 Features
-- [x] Date/Titles
-- [x] Export to Markdown
-- [x] Export to CSV
-- [x] Export to JSON
-- [x] Export to Clipboard
-- [x] Dark/Light Mode
+## Future
+### v4.0
+- [ ] Daily Gratitude Section
+- [x] More Prompts
+- [x] Dark Mode Button Icon Rather than text
+- [ ] Image Attacher
+- [ ] CSS Fix (Some errors)
+- [x] Version Number as a Variable
+- [ ] Page Name as a Variable
+- [ ] Romoval of FileSaver.js as dependency
 
-### v2.0 Features
-- [x] Journal Prompts
-- [x] More Colour
-- [x] Colours as Variables
-- [x] Comments Cleanup
-- [x] Current Time included in export name
-- [x] Textbox Font updated
-- [x] Footer Added
-- [x] Textbox Border Added
-- [x] Spaced out Markdown Export
+### v5.0
+- [ ] Cleaner Aesthetics
+- [ ] Save As Fix?
+- [ ] Fonts as Variable
+- [ ] Themes
 
-### v3.0 Features
+### Planned Functionality
+- Themes
+- Dynamically Generated Form
+    - Not really sure how this would work realistically
+    - Headers?
+    - Benefit would be to me not typing out the titles and where they go later on
+- Image Attacher
+- Mood Option
+    - With Tags?
+- Separate Prompt section in main form with extra section exported?
+- Daily Gratitude Section
+- More Prompts
+- Dark Mode Button Icon Rather than text
+- Font Options
+- Easily Configuable Default Theme
+
+## Dependencies
+I try to reduce the dependencies as much as possible, but some are necessary for the functionality of the application.
+
+Should I find a way to remove them, I will, but for development speed they may be required in the interim.
+
+### Current Dependencies
+- FileSaver.js
+- JSZip.js
+- Google Material Symbols Outline Font
+- Playfair Display Font
+
+## Contributing
+If you have any ideas for features, or find any bugs, please open an issue or a pull request. I will try to respond as soon as possible.
+
+Should you want to donate, you can do so [here](https://www.buymeacoffee.com/caddickbrown).
+Thank you!
+
+## License
+This project is licensed under the MIT License.
+
+## Change Log
+### v3.0
 - [x] Fixed Dark Mode button hover behavior
 - [x] Added Export to Zip
 - [x] Tags Field
@@ -59,52 +95,21 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - [x] Adjusted Export Button Placement
 - [x] Adjusted Textbox Size
 
-## Future
-### v4.0 Features
-- [ ] Daily Gratitude Section
-- [ ] More Prompts
-- [ ] Dark Mode Button Icon Rather than text
-- [ ] Image Attacher
-- [ ] CSS Fix (Some errors)
-- [ ] Version Number as a Variable
-- [ ] Page Name as a Variable
+### v2.0
+- [x] Journal Prompts
+- [x] More Colour
+- [x] Colours as Variables
+- [x] Comments Cleanup
+- [x] Current Time included in export name
+- [x] Textbox Font updated
+- [x] Footer Added
+- [x] Textbox Border Added
+- [x] Spaced out Markdown Export
 
-### v5.0 Features
-- [ ] Cleaner Look
-- [ ] Fonts as Variable
-- [ ] Themes
-
-### Planned Functionality
-- Themes
-- Cleaner Look
-- Dynamically Generated Form
-    - Not really sure how this would work realistically
-    - Headers?
-    - Benefit would be to me not typing out the titles and where they go later on
-- Image Attacher
-- Mood Option
-    - With Tags?
-- Separate Prompt section in main form with extra section exported?
-- Daily Gratitude Section
-- More Prompts
-- Dark Mode Button Icon Rather than text
-- Fonts as Variable
-- More Fonts
-- Easily Configuable Default Theme
-
-## Dependencies
-I try to reduce the dependencies as much as possible, but some are necessary for the functionality of the application.
-
-Should I find a way to remove them, I will, but for development speed they may be required in the interim.
-
-### Current Dependencies
-- FileSaver.js
-- JSZip.js
-- Google Material Symbols Outline
-- Playfair Display Font
-
-## Contributing
-If you have any ideas for features, or find any bugs, please open an issue or a pull request. I will try to respond as soon as possible.
-
-Should you want to donate, you can do so [here](https://www.buymeacoffee.com/caddickbrown).
-Thank you!
+### v1.0
+- [x] Date/Titles
+- [x] Export to Markdown
+- [x] Export to CSV
+- [x] Export to JSON
+- [x] Export to Clipboard
+- [x] Dark/Light Mode

@@ -26,6 +26,17 @@
             --dark-mode-toggle-button-background-color: #fff;
             --dark-mode-toggle-button-hover-background-color: #e6e6e6;
         }
+        .sun-icon::before {
+            content: "light_mode"; /* Icon name for sun */
+            font-family: 'Material Symbols Outlined', sans-serif;
+            font-size: 24px;
+        }
+
+        .moon-icon::before {
+            content: "dark_mode"; /* Icon name for moon */
+            font-family: 'Material Symbols Outlined', sans-serif;
+            font-size: 24px;
+        }
     
         /* Affix h1 to the top left */
         h1 {
@@ -135,14 +146,17 @@
             right: 10px;
         }
         .dark-mode-toggle button {
-            padding: 5px 10px;
+            padding: 5px 5px;
+            height: 37px;
+            width: 37px;
             background-color: var(--toggle-button-background-color);
             color: var(--background-color);
             border: none;
-            border-radius: 20px;
+            border-radius: 24px;
             cursor: pointer;
             transition: background-color 0.3s ease, color 0.3s ease;
             transition: color 0.3s ease, color 0.3s ease;
+            vertical-align: middle;
         }
         .dark-mode-toggle button:hover {
             background-color: var(--toggle-button-hover-background-color);
@@ -193,6 +207,12 @@
             background-color: var(--dark-mode-button-background-color);
             color: var(--button-text-color);
         }
+        /* Add the .material-icons-outlined class definition */
+        .material-icons-outlined {
+            font-family: 'Material Icons Outlined', sans-serif;
+            font-size: 27px;
+            vertical-align: middle;
+        }
 
     </style>
 </head>
@@ -200,7 +220,11 @@
 
 <body>
     <div class="dark-mode-toggle">
-        <button onclick="toggleDarkMode()" id="darkModeButton">Dark Mode</button>
+        <button id="dark-mode-toggle" class="dark_mode" onclick="toggleDarkMode()">
+            <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+        
+    
     </div>
     <div class="container">
         <form id="journalForm">
@@ -236,6 +260,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
     <script>
+        var versionNumber = "v4.0";
+
         // Pre-fill the date field with today's date
         const today = new Date().toISOString().split("T")[0];
         document.getElementById("date").value = today;
@@ -379,6 +405,43 @@
             "Describe a time when you overcame a fear and how it made you feel.",
             "If you could meet and have a conversation with any historical figure, who would it be and why?",
             "Write about a difficult decision you had to make and how it turned out.",
+            "What is your favorite childhood memory?",
+            "What is your favorite way to spend a day off?",
+            "What is your favorite quote and why?",
+            "What is your favorite song and why?",
+            "What is your favorite movie and why?",
+            "What is your favorite book and why?",
+            "What is your favorite holiday and why?",
+            "What is your favorite season and why?",
+            "What is your favorite food and why?",
+            "What is your favorite hobby and why?",
+            "Reflect on a recent challenge you faced. How did you overcome it, and what did you learn from the experience?",
+            "Write about a book or article you've read recently that left an impact on you. How did it change your perspective or thoughts?",
+            "Describe a place you've always wanted to visit. What draws you to this place, and what do you imagine you'd experience there?",
+            "Write about a time when you felt proud of yourself. What did you accomplish, and how did it make you feel?",
+            "What is your favorite way to relax and unwind?",
+            "Write a letter to your future self, offering advice, encouragement, and reflections on your current life.",
+            "What is your favorite way to spend time with friends and family?",
+            "Explore a childhood memory that still resonates with you. What emotions and lessons does it bring to mind?",
+            "Write about a time when you felt like an outsider. How did you handle the situation, and what did you learn from it?",
+            "What is your favorite way to spend time alone?",
+            "Write about a time when you felt like you failed at something. How did you handle the situation, and what did you learn from it?",
+            "What is your favorite way to exercise and stay active?",
+            "Imagine you have the power to change one thing about the world. What would it be, and why?",
+            "Describe your ideal day from morning to night. How would you spend your time, and who would you be with?",
+            "Reflect on a relationship in your life that has had a significant impact on you. What have you learned from this relationship?",
+            "List five things you're grateful for today. How do these things enhance your life and overall well-being?",
+            "Write about a goal or dream you've been putting off pursuing. What's holding you back, and what steps can you take to move closer to it?",
+            "Explore a personal value that is important to you. How does it influence your decisions and interactions with others?",
+            "Describe a moment when you felt completely in your element and confident. What were you doing, and why did you feel that way?",
+            "Reflect on a mistake you've made and what you've learned from it. How has this experience contributed to your growth?",
+            "Write about a hobby or activity that brings you joy. What do you love about it, and how does it impact your well-being?",
+            "Imagine you're having a conversation with someone you admire, whether living or from history. What would you discuss, and what insights do you think they might share?",
+            "Describe a time when you had to step out of your comfort zone. How did it feel, and what did you gain from pushing your boundaries?",
+            "Reflect on a recent news story or current event that has caught your attention. How does it relate to your personal values and beliefs?",
+            "Write about a fear or insecurity you've been grappling with. What strategies can you develop to overcome or manage these feelings?",
+            "Explore a cultural tradition or practice from a different part of the world. How does it differ from your own, and what can you learn from it?",
+            "Describe a scenario where you exhibited resilience in the face of adversity. How did you maintain a positive mindset and keep moving forward?",
         ];
 
         // Function to get a random journal prompt
@@ -398,17 +461,17 @@
         displayRandomPrompt();
 
         function toggleDarkMode() {
-            const body = document.body;
-            const darkModeButton = document.getElementById("darkModeButton");
+        const body = document.body;
+        const darkModeButton = document.getElementById("dark-mode-toggle");
 
-            if (body.classList.contains("dark-mode")) {
-                body.classList.remove("dark-mode");
-                darkModeButton.textContent = "Dark Mode";
-            } else {
-                body.classList.add("dark-mode");
-                darkModeButton.textContent = "Light Mode";
-            }
+        if (body.classList.contains("dark-mode")) {
+            body.classList.remove("dark-mode");
+            darkModeButton.innerHTML = '<span class="material-symbols-outlined">dark_mode</span>';
+        } else {
+            body.classList.add("dark-mode");
+            darkModeButton.innerHTML = '<span class="material-symbols-outlined">light_mode</span>';
         }
+    }
 
         // Box resizing
         // Function to dynamically resize the textarea based on its content
@@ -426,7 +489,14 @@
     </script>
 </body>
 <footer>
-    <p>v3.0</p>
+    <p id="versionNumber"></p>
     <p>Find this page on <a href="https://github.com/Caddickbrown/Journaller">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>   
+
+  <script>
+    document.querySelectorAll("#versionNumber").forEach(function(element) {
+      element.innerHTML = versionNumber;
+    });
+  </script>
+
 </footer>
 </html>
