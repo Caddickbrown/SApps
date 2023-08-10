@@ -37,15 +37,23 @@ To configure the form, edit the variables at the start of the Javascript section
 Should you want to change the theme, you can do so by editing the CSS variables in the `:root` section.
 
 ## Future
-## v2.0
-- [ ] Cleaner Aesthetics
-- [ ] Dark Mode
+### v2.0
+- [x] Dark Mode
 - [ ] Customisable fields from within the page
+- [ ] Standardised Theming
+- [x] Default Theme Preparation
+
+### v3.0
+- [ ] Cleaner Aesthetics
+- [ ] Field Types
+- [ ] Remove Fields from within the page
+
+### v4.0
+- [ ] Themes
+- [ ] Default Theming Options
 
 ### Planned Functionality
-- Field Types
-- Remove Fields from within the page
-- Themes
+- TBC
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
