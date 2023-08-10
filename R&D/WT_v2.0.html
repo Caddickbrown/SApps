@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title id="pageName"></title>
+  <h1 id="pageName"></h1>
+  <style>
+        :root {
+            /* Light Mode */
+            --default-text-color: #333;
+            --background-color: #f1f1f1;
+            --form-field-background-color: #fff;
+            --button-background-color: #4bc67c;
+            --button-hover-background-color: #348b57;
+            --button-text-color: #fff;
+            --toggle-button-background-color: #444;
+            --toggle-button-hover-background-color: #515151;
+
+            /* Dark Mode */
+            --dark-mode-text-color: #fff;
+            --dark-mode-background-color: #222;
+            --dark-mode-form-field-background-color: #333;
+            --dark-mode-button-background-color: #58319f;
+            --dark-mode-button-hover-background-color: #6d45b8;
+            --dark-mode-toggle-button-background-color: #fff;
+            --dark-mode-toggle-button-hover-background-color: #e6e6e6;
+        }
+    
+        /* Affix h1 to the top left */
+        h1 {
+            top: 10px;
+            margin-left: 3%;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 3em;
+        }
+
+        /* Body */
+        body {
+            font-family: system-ui, sans-serif;
+            color: var(--default-text-color);
+            background-color: var(--background-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-bottom: 5em;
+        }
+        body.dark-mode {
+            color: var(--dark-mode-text-color);
+            background-color: var(--dark-mode-background-color);
+        }
+        body a:link, body a:visited {
+            color: var(--default-text-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode a:link, body.dark-mode a:visited {
+            color: var(--dark-mode-text-color);
+        }
+        body a:hover {
+            color: var(--button-background-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode a:hover {
+            color: var(--button-background-color);
+        }
+
+        /* Form */
+        .container {
+            width: 60%;
+            margin: 0 auto;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        input, textarea {
+            font-family: system-ui, sans-serif;
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            background-color: var(--form-field-background-color);
+            border: 1px solid var(--button-background-color);
+            border-radius: 4px;
+            outline: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode input, body.dark-mode textarea {
+            background-color: var(--dark-mode-form-field-background-color);
+            color: var(--dark-mode-text-color);
+            border: 1px solid var(--dark-mode-button-background-color);
+            border-radius: 4px;
+        }
+        .journal-entry {
+            resize: vertical;
+        }
+        .export-options {
+            text-align: center;
+        }
+        .export-options h2 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        /* Buttons */
+        .btn-container {
+            text-align: center;
+        }
+        .btn-container button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            font-size: 16px;
+            cursor: pointer;
+        }
+        body.dark-mode .btn-container button {
+            background-color: var(--dark-mode-button-background-color);
+        }
+        .btn-container button:hover {
+            background-color: var(--button-hover-background-color);
+        }
+        body.dark-mode .btn-container button:hover {
+            background-color: var(--dark-mode-button-hover-background-color);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .dark-mode-toggle button {
+            padding: 5px 10px;
+            background-color: var(--toggle-button-background-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        .dark-mode-toggle button:hover {
+            background-color: var(--toggle-button-hover-background-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode .dark-mode-toggle button {
+            background-color: var(--dark-mode-toggle-button-background-color);
+            color: var(--dark-mode-background-color);
+        }
+        body.dark-mode .dark-mode-toggle button:hover {
+            background-color: var(--dark-mode-toggle-button-hover-background-color);
+        }
+
+        /* Footer */
+        footer {
+            text-align: right;
+            font-size: 0.8em;
+            vertical-align: middle;
+            position: fixed;
+            bottom: 0;
+            width: 95%;
+        }
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 4px 1em;
+            padding-left: 8px;
+            margin: 4px;
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: none;
+            border-radius: 4px;
+            position: relative;
+        }
+        .tag b {
+            font-weight: bold;
+            align-content: left;
+        }
+        .tag .material-icons-outlined {
+            font-size: 14px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+        body.dark-mode .tag {
+            background-color: var(--dark-mode-button-background-color);
+            color: var(--button-text-color);
+        }
+        .whole-form {
+            width: 60%;
+            margin: 0 auto;
+        }
+
+  </style>
+</head>
+<body>
+  <div class="dark-mode-toggle">
+    <button onclick="toggleDarkMode()" id="darkModeButton">Dark Mode</button>
+  </div>
+  <div class="whole-form">
+    <label for="tags">Tags</label>
+    <input type="text" id="tags" name="tags" placeholder="Type up to 5 tags here...">
+    <div class="tags-container"></div>
+    <div id="formContainer"></div>
+  </div>
+
+  <script>
+    var appName = "WT";
+    var fileName = "WTExport";
+    var versionNumber = "v2.0";
+    var defaultTheme = "light";
+    //var defaultTheme = "dark";
+
+    document.querySelectorAll("#pageName").forEach(function(element) {
+      element.innerHTML = appName;
+    });
+
+    const tagsInput = document.querySelector('#tags');
+    const tagsContainer = document.querySelector('.tags-container');
+    let tagsList = [];
+    let inputsArray = [];
+
+    function addTag(tag) {
+      tagsList.push(tag);
+      renderTags();
+    }
+
+    function removeTag(index) {
+      tagsList.splice(index, 1);
+      renderTags();
+    }
+
+    function renderTags() {
+      tagsContainer.innerHTML = '';
+      tagsList.forEach((tag, index) => {
+        const tagElement = document.createElement('span');
+        tagElement.classList.add('tag');
+        tagElement.innerHTML = `<b>${tag}</b> <span class="material-icons-outlined remove-btn">x</span>`;
+        tagElement.querySelector('.remove-btn').addEventListener('click', () => removeTag(index));
+        tagsContainer.appendChild(tagElement);
+      });
+    }
+
+    function submitTag() {
+      const tagText = tagsInput.value.trim();
+      if (tagText !== '') {
+        addTag(tagText);
+        addInputField(tagText);
+        tagsInput.value = '';
+      }
+    }
+
+    tagsInput.addEventListener('keydown', (e) => {
+      if (e.key === ' ') {
+        e.preventDefault();
+        submitTag();
+      }
+    });
+
+    function addInputField(tag) {
+      const formContainer = document.getElementById('formContainer');
+      const label = document.createElement('label');
+      label.for = tag;
+      label.innerText = tag;
+      formContainer.appendChild(label);
+
+      const newInput = document.createElement('input');
+      newInput.type = 'number';
+      newInput.name = tag;
+      newInput.id = tag;
+      newInput.required = true;
+
+      newInput.addEventListener('blur', () => {
+        const inputValue = Number(newInput.value);
+
+        if (!isNaN(inputValue)) {
+          inputsArray[tag] ||= { title: tag, values: [] };
+          if (inputsArray[tag].values.length === 0) {
+            inputsArray[tag].values[0] = inputValue;
+            document.getElementById('exportButton').style.display = 'block';
+          } else {
+            inputsArray[tag].values[0] ||= inputValue;
+          }
+        } else if (newInput.value === '') {
+          inputsArray[tag].values[0] ||= 0;
+        }
+      });
+
+      formContainer.appendChild(newInput);
+      formContainer.appendChild(document.createElement('br'));
+    }
+
+    function toggleDarkMode() {
+      const body = document.body;
+      const darkModeButton = document.getElementById("darkModeButton");
+
+      if (body.classList.contains("dark-mode")) {
+        body.classList.remove("dark-mode");
+        darkModeButton.textContent = "Dark Mode";
+      } else {
+        body.classList.add("dark-mode");
+        darkModeButton.textContent = "Light Mode";
+      }
+    }
+
+	  function generateInputs() {
+      const formContainer = document.getElementById('formContainer');
+      formContainer.innerHTML = '';
+
+      for (let i = 0; i < tagsList.length; i++) {
+        const tag = tagsList[i];
+        const label = document.createElement('label');
+        label.for = `input${i}`;
+        label.innerText = tag;
+        formContainer.appendChild(label);
+
+        const newInput = document.createElement('input');
+        newInput.name = `input${i}`;
+        newInput.id = `input${i}`;
+        newInput.required = true;
+
+        newInput.addEventListener('blur', () => {
+          const inputValue = Number(newInput.value);
+
+          if (!isNaN(inputValue)) {
+            inputsArray[tag] ??= { title: tag, values: [] };
+            if (inputsArray[tag].values.length === 0) {
+              inputsArray[tag].values[0] = inputValue;
+              document.getElementById('exportButton').style.display = 'block';
+            } else {
+              inputsArray[tag].values[0] ||= inputValue;
+            }
+          } else if (newInput.value === '') {
+            inputsArray[tag].values[0] ||= 0;
+          }
+        });
+
+        formContainer.appendChild(newInput);
+        formContainer.appendChild(document.createElement('br'));
+      }
+
+      const csvButtonContainer = document.createElement('div');
+      csvButtonContainer.className = "csvButtonContainer";
+      formContainer.appendChild(csvButtonContainer);
+
+      const csvButton = document.createElement('button');
+      csvButton.className = "csvButton";
+      csvButton.innerHTML = "CSV";
+      csvButton.onclick = exportToCsv;
+      csvButtonContainer.appendChild(csvButton);
+    }
+
+    generateInputs();
+
+	  function exportToCsv() {
+  let csvContent = '';
+
+  // Add header row with tag titles
+  for (let i = 0; i < tagsList.length; i++) {
+    const tag = tagsList[i];
+    csvContent += `${tag},`;
+  }
+  csvContent += '\n';
+
+  // Add values of each input
+  for (let i = 0; i < tagsList.length; i++) {
+    const tag = tagsList[i];
+    if (inputsArray[tag]) { // Check if inputsArray entry exists for the tag
+      const values = inputsArray[tag].values;
+      const inputValue = values[0] || 0; // Default empty fields to 0
+      csvContent += `${inputValue},`;
+    } else {
+      csvContent += '0,'; // Add a field with value 0 for remaining tags without values
+    }
+  }
+
+  // Remove trailing comma from the last field of the header and values row
+  csvContent = csvContent.slice(0, -1);
+
+  const link = document.createElement("a");
+
+  // Get current date
+  const currentDate = new Date().toISOString().slice(0, 10);
+
+  link.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent));
+
+  // Set download filename to current date
+  link.setAttribute("download", `${currentDate}-${fileName}.csv`);
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+}
+
+  </script>
+</body>
+<footer>
+  <p id="versionNumber"></p>
+  <p>Find this project on <a href="https://github.com/Caddickbrown/WT">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
+
+  <script>
+    document.querySelectorAll("#versionNumber").forEach(function(element) {
+      element.innerHTML = versionNumber;
+    });
+  </script>
+
+</footer>
+</html>
