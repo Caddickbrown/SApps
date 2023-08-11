@@ -1,5 +1,5 @@
 # Postage
-Postage is a Simple-Page HTML App app that generates an HTML page from a Markdown-based input form.
+Postage is a Single-Page HTML App that generates an HTML page from a Markdown-based input form.
 
 The user enters markdown text into an input box and the app generates an HTML page from the input.
 
@@ -24,6 +24,13 @@ I wanted a quick way to create a simple HTML page from a template and markdown i
 - Export to HTML
 - Variable App Name
 
+### v2.0
+- [ ] Default Theme Preparation
+- [ ] Convert __bold__ (Underscore)
+- [ ] Convert ~~strikethrough~~
+- [ ] Convert [links]()
+- [ ] Convert `code`
+
 ## Future
 ### Planned Functionality
 - Cleaner Look
@@ -33,11 +40,7 @@ I wanted a quick way to create a simple HTML page from a template and markdown i
 - CSS as a Variable (Copies down to the export)
 
 #### Planned Conversion Capabilities
-- Convert __bold__ (Underscore)
 - Convert ***bold and italic***
-- Convert ~~strikethrough~~
-- Convert `code`
-- Convert [links]()
 - Convert > blockquotes
 - Convert images
 - Convert horizontal rules
