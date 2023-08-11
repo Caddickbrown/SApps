@@ -1,16 +1,12 @@
-# Journal Prompter
-
->[!note]
->This project needs standardising with other current projects.
-
-Journal Prompter is a simple HTML file that generates a random journal prompt on command.
+# JPrompter
+JPrompter is a simple HTML file that generates a random journal prompt on command.
 
 ## Background
 I wanted a quick way to get a journal prompt on command, from a file that doesn't require installation, and that could work on any computer - even from a USB Drive.
 
 ## Usage
 1. Download the latest release.
-2. Open `JP_vx.x.html` in your browser of choice.
+2. Open `JPrompter_vx.x.html` in your browser of choice.
 3. Click the button to get a prompt.
 4. Click the copy button to copy the prompt to your clipboard.
 5. Paste the prompt into your journal or other file.
@@ -22,20 +18,14 @@ I wanted a quick way to get a journal prompt on command, from a file that doesn'
 - No installation required
 - Works on any computer
 - Works from a USB Drive
+- Dark/Light Mode
 
 ## Future
-### v3.0
-- [ ] Cleaner Style
-- [ ] Dark/Light Mode
-- [ ] Aesthetic Standardisation
-- [ ] Version Number as a Variable
-- [ ] Colours as Variables
-
 ### Planned Functionality
 - Cleaner Aeresthetics
-- Dark/Light Mode Toggle
 - Custom Themes
 - Custom Prompts
+- More Prompts
 
 ### Export Options
 - Copy to Clipboard
@@ -46,7 +36,10 @@ I try to reduce the dependencies as much as possible, but some may be necessary 
 Should I find a way to remove them, I will, but for development speed they may be required in the interim.
 
 ### Current Dependencies
-- Merchant Font (To be removed)
+- None
+
+### Previous Dependencies
+- Merchant Font
 
 ## Contributing
 If you have any ideas for features, or find any bugs, please open an issue or a pull request. I will try to respond as soon as possible.
@@ -58,6 +51,16 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+### v3.0
+- [x] Aesthetic Standardisation
+- [x] App Rename
+- [x] Dark/Light Mode
+- [x] Colours as Variables
+- [x] Page Name as Variable
+- [x] Version Number as Variable
+- [x] Default Theme Preparation
+- [x] Font Dependency Removal
+
 ### v2.0
 - [x] Visual Changes
 - [x] Bigger Buttons
