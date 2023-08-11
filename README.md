@@ -1,5 +1,5 @@
-# SAppTemplate
-A Template Repo for Single Page Apps.
+# OSlogan
+A Single Page HTML, Solgan Generator
 
 ## Background
 
@@ -16,6 +16,13 @@ A Template Repo for Single Page Apps.
 - Standardised Footer
 
 ## Future
+### v1.0
+- [x] Initial Release
+- [ ] 10 Mixable prompts
+- [ ] Add a "Copy to Clipboard" button
+- [ ] Add a "Download as PNG" button
+
+
 ### Planned Functionality
 - 
 
