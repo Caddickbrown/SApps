@@ -26,10 +26,17 @@ I wanted a quick way to create a simple HTML page from a template and markdown i
 
 ### v2.0
 - [ ] Default Theme Preparation
-- [ ] Convert __bold__ (Underscore)
-- [ ] Convert ~~strikethrough~~
-- [ ] Convert [links]()
-- [ ] Convert `code`
+- [x] Convert __bold__ (Underscore)
+- [x] Convert ~~strikethrough~~
+- [x] Convert [links]()
+- [x] Convert images
+- [x] Convert `code`
+- [x] Convert horizontal rules
+- [ ] Convert blockquotes
+- [ ] Convert code blocks
+- [ ] Convert tables
+- [ ] Convert task lists and to-dos
+- [ ] Convert ordered lists
 
 ## Future
 ### Planned Functionality
@@ -41,17 +48,7 @@ I wanted a quick way to create a simple HTML page from a template and markdown i
 
 #### Planned Conversion Capabilities
 - Convert ***bold and italic***
-- Convert > blockquotes
-- Convert images
-- Convert horizontal rules
-- Convert tables
 - Convert inline HTML
-- Convert paragraphs
-- Convert code blocks
-- Convert fenced code blocks
-- Convert blockquotes
-- Convert ordered lists
-- Convert task lists and to-dos
 - Convert footnotes
 - Convert definition lists
 - Convert abbreviations
