@@ -26,6 +26,7 @@ I wanted a quick way to get a journal prompt on command, from a file that doesn'
 - Custom Themes
 - Custom Prompts
 - More Prompts
+- Write a Journal Entry Button/Export
 
 ### Export Options
 - Copy to Clipboard
