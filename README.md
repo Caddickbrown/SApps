@@ -45,6 +45,8 @@ I wanted a quick way to create a simple HTML page from a template and markdown i
 - Default Theme
 - Custom Themes
 - CSS as a Variable (Copies down to the export)
+- Word Counter
+- Image Uploader
 
 #### Planned Conversion Capabilities
 - Convert ***bold and italic***
