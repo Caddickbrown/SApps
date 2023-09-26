@@ -21,8 +21,11 @@ I wanted a quick way to get a journal prompt on command, from a file that doesn'
 - Dark/Light Mode
 
 ## Future
+### v4.0
+- [x] Default Light/Dark Mode
+
 ### Planned Functionality
-- Cleaner Aeresthetics
+- Cleaner Aesthetics
 - Custom Themes
 - Custom Prompts
 - More Prompts
