@@ -12,10 +12,13 @@ A Template Repo for Single Page Apps.
 - Colours as Variables
 - Page Name as Variable
 - Version Number as Variable
-- Default Theme Preparation
+- Default Light/Dark Mode
 - Standardised Footer
 
 ## Future
+### v2.0
+- [x] Default Light/Dark Mode
+
 ### Planned Functionality
 - 
 
