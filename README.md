@@ -59,10 +59,12 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - Dark Mode Button Icon Rather than text
 - Font Options
 - Easily Configuable Default Theme
-- [ ] Removal of JSZip.js as dependency
-- [ ] Removal of Google Material Symbols Outline Font as dependency
-- [ ] Removal of Playfair Display Font as dependency
-- [ ] HTML Export
+- Removal of JSZip.js as dependency
+- Removal of Google Material Symbols Outline Font as dependency
+- Removal of Playfair Display Font as dependency
+- HTML Export
+- PDF Export
+- Word Counter
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some are necessary for the functionality of the application.
