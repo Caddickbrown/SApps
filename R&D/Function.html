@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image to Base64 Converter</title>
+</head>
+<body>
+    <h1>Image to Base64 Converter</h1>
+    
+    <input type="file" id="imageInput" accept="image/*">
+    <br><br>
+    
+    <button onclick="convertToBase64()">Convert to Base64</button>
+    <br><br>
+    
+    <div id="base64Result"></div>
+
+    <script>
+        function convertToBase64() {
+            const input = document.getElementById('imageInput');
+            const resultContainer = document.getElementById('base64Result');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const base64String = e.target.result.split(',')[1]; // Get the base64 part of the data URL
+                    resultContainer.innerHTML = '<strong>Base64:</strong><br>' + base64String;
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                resultContainer.innerHTML = 'Please select an image file.';
+            }
+        }
+    </script>
+</body>
+</html>
