@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Journal App</title>
+    <style>
+        /* Add your CSS styles here */
+        #text-entry {
+            height: 400px;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Journal App</h1>
+    <textarea id="text-entry" rows="10" cols="50"></textarea>
+    <br>
+    <input type="file" id="image-input" accept="image/*" multiple> <!-- Allow multiple file selection -->
+    <button id="export-html">Export to HTML</button>
+    
+    <script>
+        /*
+        This is the main code for the journaling app.
+        */
+
+        // Function to convert an image to Base64
+        function convertImageToBase64(file, callback) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var base64Image = e.target.result;
+                callback(base64Image);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Function to add image(s) to the text area when files are selected
+        document.getElementById("image-input").addEventListener("change", function () {
+            var imageInput = document.getElementById("image-input");
+            var files = imageInput.files;
+            if (files.length > 0) {
+                for (var i = 0; i < files.length; i++) {
+                    convertImageToBase64(files[i], function (base64Image) {
+                        var img = document.createElement("img");
+                        img.src = base64Image;
+                        document.getElementById("text-entry").appendChild(img);
+                    });
+                }
+            }
+        });
+
+        // Function to export the text and images to HTML
+        document.getElementById("export-html").addEventListener("click", function () {
+            var text = document.getElementById("text-entry").value;
+            var images = document.getElementById("text-entry").querySelectorAll("img");
+            var imageSources = [];
+            images.forEach(function (img) {
+                imageSources.push(img.src);
+            });
+
+            var htmlContent = "<html><head><title>Journal Entry</title></head><body>";
+            htmlContent += "<div>" + text + "</div>";
+            imageSources.forEach(function (src) {
+                htmlContent += "<img src='" + src + "' />";
+            });
+            htmlContent += "</body></html>";
+
+            var a = document.createElement("a");
+            var blob = new Blob([htmlContent], { type: "text/html" });
+            a.href = URL.createObjectURL(blob);
+            a.download = "journal.html";
+            a.click();
+        });
+    </script>
+</body>
+</html>
