@@ -213,8 +213,10 @@
     var appName = "WT";
     var fileName = "WTExport";
     var versionNumber = "v2.0";
-    var defaultTheme = "light";
-    //var defaultTheme = "dark";
+    var defaultTheme = 
+        "light"
+        //"dark"
+        ;
 
     document.querySelectorAll("#pageName").forEach(function(element) {
       element.innerHTML = appName;
@@ -293,6 +295,10 @@
 
       formContainer.appendChild(newInput);
       formContainer.appendChild(document.createElement('br'));
+    }
+
+    if (defaultTheme === "dark") {
+        toggleDarkMode();
     }
 
     function toggleDarkMode() {
