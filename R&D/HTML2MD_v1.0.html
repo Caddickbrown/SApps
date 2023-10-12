@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML to Markdown Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 50px;
+        }
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .btn {
+            border: 2px solid gray;
+            color: gray;
+            background-color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+        .processing-btn {
+            margin-top: 20px;
+        }
+        .output-container {
+            margin-top: 50px;
+            width: 80%;
+            max-width: 800px;
+            border: 1px solid gray;
+            padding: 10px;
+            background-color: #f5f5f5;
+            overflow: auto;
+        }
+        .export-btns {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .export-btn {
+            margin: 0 10px;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #5ac066;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            opacity: 0; /* Initially transparent */
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <h1>HTML to Markdown Converter</h1>
+    <div class="container">
+        <div class="upload-btn-wrapper">
+            <button class="btn">Upload HTML File</button>
+            <input type="file" id="html-file-input" accept=".html">
+        </div>
+        <button class="btn processing-btn" id="process-btn">Process</button>
+        <div class="output-container">
+            <textarea id="markdown-output" rows="10" readonly></textarea>
+        </div>
+        <div class="export-btns">
+            <button class="btn export-btn" id="copy-btn">Copy to Clipboard</button>
+            <button class="btn export-btn" id="export-btn">Export as Markdown</button>
+        </div>
+    </div>
+    <div class="notification" id="processing-notification">Processing HTML to Markdown...</div>
+    <div class="notification" id="processing-success-notification">Processed!</div>
+    <div class="notification" id="notification">Markdown copied to clipboard!</div>
+    <script>
+        /**
+         * Converts HTML code to Markdown.
+         * @param {string} html - The HTML code to convert.
+         * @returns {string} The Markdown representation of the HTML code.
+         */
+        function convertToMarkdown(html) {
+            // Remove DOCTYPE, header, footer, and CSS
+            html = html.replace(/<!DOCTYPE[\s\S]*?<body>/i, '');
+            html = html.replace(/<\/body>[\s\S]*?<\/html>/i, '');
+            html = html.replace(/<style[\s\S]*?<\/style>/gi, '');
+            // Replace HTML tags with Markdown syntax
+            html = html.replace(/<h1>(.*?)<\/h1>/g, '# $1');
+            html = html.replace(/<h2>(.*?)<\/h2>/g, '## $1');
+            html = html.replace(/<h3>(.*?)<\/h3>/g, '### $1');
+            html = html.replace(/<h4>(.*?)<\/h4>/g, '#### $1');
+            html = html.replace(/<h5>(.*?)<\/h5>/g, '##### $1');
+            html = html.replace(/<h6>(.*?)<\/h6>/g, '###### $1');
+            html = html.replace(/<p>(.*?)<\/p>/g, '$1');
+            html = html.replace(/<strong>(.*?)<\/strong>/g, '**$1**');
+            html = html.replace(/<em>(.*?)<\/em>/g, '*$1*');
+            html = html.replace(/<ul>(.*?)<\/ul>/g, '$1');
+            html = html.replace(/<li>(.*?)<\/li>/g, '- $1');
+            html = html.replace(/<a href="(.*?)">(.*?)<\/a>/g, '[$2]($1)');
+            html = html.replace(/<br>/g, '\n');
+            return html;
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+    const htmlFileInput = document.getElementById('html-file-input');
+    const processBtn = document.getElementById('process-btn');
+    const markdownOutput = document.getElementById('markdown-output');
+    const copyBtn = document.getElementById('copy-btn');
+    const exportBtn = document.getElementById('export-btn');
+    const notification = document.getElementById('notification');
+    const processingNotification = document.getElementById('processing-notification');
+    const processingSuccessNotification = document.getElementById('processing-success-notification');
+
+    // Hide the success notification initially
+    notification.style.display = 'none';
+
+    processBtn.addEventListener('click', function() {
+        const file = htmlFileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+
+            // Show the processing notification
+            processingNotification.style.opacity = '1';
+
+            reader.onload = function(e) {
+                const html = e.target.result;
+                const markdown = convertToMarkdown(html);
+
+                // This does delay the conversion slightly, but feels better.
+                setTimeout(function() {
+                processingNotification.style.opacity = '0';
+
+                markdownOutput.value = markdown;
+
+                processingSuccessNotification.style.opacity = '1';
+                    setTimeout(function() {
+                    processingSuccessNotification.style.opacity = '0';
+                    }, 2000);
+                }, 2000);
+
+            };
+
+            reader.readAsText(file);
+
+            // Display the selected file name
+            markdownOutput.setAttribute('data-file-name', file.name);
+        } else {
+            alert('Please select an HTML file to process.');
+        }
+    });
+
+        copyBtn.addEventListener('click', function() {
+            markdownOutput.select();
+            document.execCommand('copy');
+            notification.style.opacity = '1';
+            setTimeout(function() {
+                notification.style.opacity = '0';
+            }, 2000);
+        });
+
+        exportBtn.addEventListener('click', function() {
+            const markdown = markdownOutput.value;
+            const fileName = markdownOutput.getAttribute('data-file-name');
+            if (fileName) {
+                const element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(markdown));
+                element.setAttribute('download', fileName.replace('.html', '.md'));
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            } else {
+                alert('Please process an HTML file first.');
+            }
+        });
+    });
+    </script>
+</body>
+</html>
