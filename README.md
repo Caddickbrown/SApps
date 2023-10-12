@@ -18,9 +18,14 @@ A Template Repo for Single Page Apps.
 ## Future
 ### v2.0
 - [x] Default Light/Dark Mode
+- [ ] Notification Pop Up
+- [ ] Standardised "Default" Script Sections/Functions
+- [ ] Standardised "Default" CSS Sections/Functions
+- [ ] Standardised "Custom" Script Sections/Functions
+- [ ] Standardised "Custom" CSS Sections/Functions
 
 ### Planned Functionality
-- 
+- Multiple Themes
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
