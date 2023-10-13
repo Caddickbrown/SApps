@@ -18,6 +18,7 @@ A Template Repo for Single Page Apps.
 ## Future
 ### v2.0
 - [x] Default Light/Dark Mode
+- [x] Template version added
 - [ ] Notification Pop Up
 - [ ] Standardised "Default" Script Sections/Functions
 - [ ] Standardised "Default" CSS Sections/Functions

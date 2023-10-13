@@ -1,9 +1,9 @@
 # WT
-WT is a small HTML based project to create a form that can have it's data exported to CSV.
+WT is a small HTML based project to create a form that can have its data exported to CSV.
 
 It can be configured by editing the variables at the start of the Javascript Section, and will expand to however many fields you require.
 
-It is designed to be completely self-reliant and customisable. The app is designed to be as lightweight as possible.
+It is designed to be completely self-reliant and customisable.
 
 It currently only supports number fields, but I will be adding more field types in the future.
 
