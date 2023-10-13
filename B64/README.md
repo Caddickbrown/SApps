@@ -1,5 +1,5 @@
-# SAppTemplate
-A Template Repo for Single Page Apps.
+# B64
+B64 is a single page app that converts images into base64 strings.
 
 ## Background
 
@@ -9,18 +9,18 @@ A Template Repo for Single Page Apps.
 
 ## Features
 - Dark/Light Mode
-- Colours as Variables
-- Page Name as Variable
-- Version Number as Variable
-- Default Light/Dark Mode
-- Standardised Footer
 
 ## Future
+### v1.0
+- [x] Initial Release
+- [x] Basic Functionality
+- [x] Copy to Clipboard Button
+
 ### v2.0
-- [x] Default Light/Dark Mode
+- 
 
 ### Planned Functionality
-- 
+- HTML Code Copy
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
@@ -43,5 +43,3 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
-### v1.0
-- [x] Initial Release
