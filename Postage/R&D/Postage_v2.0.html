@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title id="pageName"></title>
+  <h1 id="pageName"></h1>
+  <style>
+    :root {
+      --background-color: #f0f0f0;
+      --default-text-color: #414141;
+      --colourful-color: #4bc67c;
+      --form-background-color: #ffffff;
+    }
+    body {
+      font-family: system-ui, sans-serif;
+      color: var(--default-text-color);
+      background-color: var(--background-color);
+      display: flex;
+      justify-content: center;
+      /*align-items: center;*/
+      margin-top: 5em;
+      height: 100vh;
+      font-family: system-ui, sans-serif;
+    }
+    body a:link, body a:visited {
+      color: var(--default-text-color);
+      text-decoration: underline;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    body a:hover {
+      color: var(--colourful-color);
+      text-decoration: none;
+    }
+    textarea {
+      background-color: var(--form-background-color);
+      border-radius: 5px;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-style: italic;
+      padding: 20px;
+      width: 60%;
+      
+    }
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding-left: 10px;
+      margin-right: 10px;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-style: italic;
+      color: var(--header-text-color);
+    }
+    del {
+      text-decoration: line-through;
+    }
+    form {
+      color: var(--header-text-color);
+      width: 100%;
+    }
+    footer {
+      text-align: right;
+      font-size: 0.8em;
+      vertical-align: middle;
+      position: fixed;
+      bottom: 0;
+      width: 95%;
+    }
+  </style>
+</head>
+<body>
+  <form>
+    <textarea id="markdownInput" rows="10" cols="80" oninput="updateHTMLContent()"></textarea>
+    <br>
+    <button type="button" onclick="exportHTML()">Export HTML</button>
+  </form>
+
+  <script>
+    var versionNumber = "v1.1";
+    var appName = "Postage";
+
+    document.querySelectorAll("#pageName").forEach(function(element) {
+      element.innerHTML = appName;
+    });
+
+    function markdownToHTML(markdown) {
+      // Convert Headers: # Heading => <h1>Heading</h1>
+      markdown = markdown.replace(/(^#{1,6}\s*)(.+)/gm, (match, hashes, headingText) => {
+        const headerLevel = hashes.length - 1;
+        return `<h${headerLevel}>${headingText}</h${headerLevel}>`;
+      });
+
+      // Convert Bold: **text** => <strong>text</strong>
+      markdown = markdown.replace(/__(.*?)__/g, '<strong>$1</strong>');
+      markdown = markdown.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+      // Convert Italic: _text_ => <em>text</em>
+      markdown = markdown.replace(/_(.*?)_/g, '<em>$1</em>');
+      markdown = markdown.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+      // Convert Lists: - item => <ul><li>item</li></ul>
+      markdown = markdown.replace(/^\- (.+)/gm, '<ul><li>$1</li></ul>');
+
+      // Convert Line Breaks: \n => <br>
+      markdown = markdown.replace(/\n/g, '\n<br>\n');
+
+      // Convert Strikethrough: ~~text~~ => <del>text</del>
+      markdown = markdown.replace(/~~(.*?)~~/g, '<del>$1</del>');
+
+      // Convert Links: [text](url) => <a href="url">text</a>
+      markdown = markdown.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+
+      // Convert Images: ![alt text](url) => <img src="url" alt="alt text">
+      markdown = markdown.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">');
+
+      // Convert Blockquotes: > text => <blockquote>text</blockquote>
+      markdown = markdown.replace(/^\> (.+)/gm, '<blockquote>$1</blockquote>');
+
+      // Convert Code Blocks: ```language => <pre><code class="language"> => ``` => </code></pre>
+      markdown = markdown.replace(/```(.+)/g, '<pre><code class="language-$1">');
+
+      // Convert Code: `text` => <code>text</code>
+      markdown = markdown.replace(/`(.*?)`/g, '<code>$1</code>');
+
+      // Convert Horizontal Rules: --- => <hr>
+      markdown = markdown.replace(/^---$/gm, '<hr>');
+
+      // Convert Tables: | header | header | => <table><thead><tr><th>header</th><th>header</th></tr></thead><tbody>
+      // => <tr><td>cell</td><td>cell</td></tr></tbody></table>
+      markdown = markdown.replace(/^\|(.+)\|$/gm, (match, tableContent) => {
+        const rows = tableContent.split('|').map(row => row.trim());
+        const headerColumns = rows[0];
+        const bodyRows = rows.slice(1);
+
+        const tableHead = `<thead><tr>${headerColumns.split(' ').map(column => `<th>${column}</th>`).join('')}</tr></thead>`;
+        const tableBody = `<tbody>${bodyRows.map(row => `<tr>${row.split(' ').map(column => `<td>${column}</td>`).join('')}</tr>`).join('')}</tbody>`;
+
+        return `<table>${tableHead}${tableBody}</table>`;
+      });
+
+      // Convert To-Do Lists: - [ ] item => <ul><li><input type="checkbox"> item</li></ul>
+      markdown = markdown.replace(/^\- \[(x| )\] (.+)/gm, '<ul><li><input type="checkbox" disabled $1 === "x" ? "checked" : "" /> $2</li></ul>');
+
+      // Convert Lists: - item => <ul><li>item</li></ul>
+      markdown = markdown.replace(/^\- (.+)/gm, '<ul><li>$1</li></ul>');
+
+      // Convert Ordered Lists: 1. item => <ol><li>item</li></ol>
+      markdown = markdown.replace(/^\d\. (.+)/gm, '<ol><li>$1</li></ol>');
+      
+      return markdown;
+    }
+
+    function updateHTMLContent() {
+      // Get the input from the textarea
+      const markdownInput = document.getElementById('markdownInput').value;
+
+      // Convert Markdown to HTML using the custom function
+      convertedHTML = markdownToHTML(markdownInput);
+    }
+
+    function exportHTML() {
+      // Construct the full HTML content
+      const fullHtmlContent = `<!DOCTYPE html>
+      <html>
+      <head>
+        <title>Converted HTML</title>
+        <style>
+          :root {
+            --background-color: #f0f0f0;
+            --default-text-color: #414141;
+            --colourful-color: #4bc67c;
+          }
+          body {
+            font-family: system-ui, sans-serif;
+            color: var(--default-text-color);
+            background-color: var(--background-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-bottom: 5em;
+            justify-content: center;
+            width: 60%;
+          }
+          body a:link, body a:visited {
+            color: var(--default-text-color);
+            text-decoration: underline;
+          }
+          body a:hover {
+            color: var(--colourful-color);
+            text-decoration: none;
+          }
+          footer {
+            text-align: right;
+            font-size: 0.8em;
+            vertical-align: middle;
+            position: fixed;
+            bottom: 0;
+            width: 95%;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="dark-mode-toggle">
+          <button onclick="toggleDarkMode()" id="darkModeButton">Dark Mode</button>
+        </div>
+        ${convertedHTML}
+      
+        </body>
+
+      <footer>
+        <p>Created with <a href="https://github.com/Caddickbrown/Postage">Postage</a> ${versionNumber} by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
+      </footer>
+      </html>`;
+
+      // Create a Blob with the full HTML content
+      const blob = new Blob([fullHtmlContent], { type: 'text/html' });
+
+      // Create a temporary anchor element to trigger the download
+      const a = document.createElement('a');
+      a.download = 'converted.html';
+      a.href = URL.createObjectURL(blob);
+
+      // Append the anchor element to the document and click it programmatically
+      document.body.appendChild(a);
+      a.click();
+
+      // Clean up by removing the temporary anchor element
+      document.body.removeChild(a);
+    }
+
+    let convertedHTML = ''; // Store the converted HTML here
+  </script>
+</body>
+<footer>
+  <p id="versionNumber"></p>
+  <p>Find this project on <a href="https://github.com/Caddickbrown/Postage>">GitHub</a> - Created by <a href="https://caddickbrown.com>">Caddick & Brown</a></p>
+  <script>document.querySelectorAll("#versionNumber").forEach(function(element) {element.innerHTML = versionNumber;});</script>
+</html>
