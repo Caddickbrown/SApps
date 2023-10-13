@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Journal Entry Form</title>
+    <style>
+        :root {
+            /* Light Mode */
+            --default-text-color: #333;
+            --background-color: #f1f1f1;
+            --form-field-background-color: #fff;
+            --button-background-color: #4bc67c;
+            --button-hover-background-color: #348b57;
+            --button-text-color: #fff;
+            --toggle-button-text-color: #fff;
+            --toggle-button-background-color: #444;
+            --toggle-button-hover-background-color: #444;
+
+            /* Dark Mode */
+            --dark-mode-text-color: #fff;
+            --dark-mode-background-color: #222;
+            --dark-mode-form-field-background-color: #444;
+            --dark-mode-button-background-color: #612d7c;
+            --dark-mode-button-hover-background-color: #853eab;
+            --dark-mode-button-text-color: #fff;
+            --dark-mode-toggle-button-text-color: #222;
+            --dark-mode-toggle-button-background-color: #fff;
+            --dark-mode-toggle-button-hover-background-color: #e6e6e6;
+        }
+        body {
+            font-family: system-ui, sans-serif;
+            color: var(--default-text-color);
+            background-color: var(--background-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode {
+            color: var(--dark-mode-text-color);
+            background-color: var(--dark-mode-background-color);
+        }
+        body a:link, body a:visited {
+            color: var(--default-text-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode a:link, body.dark-mode a:visited {
+            color: var(--dark-mode-text-color);
+        }
+        body a:hover {
+            color: var(--button-background-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode a:hover {
+            color: var(--button-background-color);
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        input, textarea {
+            font-family: system-ui, sans-serif;
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            background-color: var(--background-color);
+            border: 1px solid var(--button-background-color);
+            border-radius: 4px;
+            outline: none;
+        }
+        body.dark-mode input, body.dark-mode textarea {
+            background-color: var(--dark-mode-form-field-background-color);
+            color: var(--dark-mode-text-color);
+        }
+        .journal-entry {
+            resize: vertical;
+        }
+        .export-options {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .export-options h2 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .btn-container {
+            text-align: center;
+        }
+        .btn-container button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            font-size: 16px;
+            cursor: pointer;
+        }
+        body.dark-mode .btn-container button {
+            background-color: var(--dark-mode-button-background-color);
+        }
+        .btn-container button:hover {
+            background-color: var(--button-hover-background-color);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .dark-mode-toggle button {
+            padding: 5px 10px;
+            background-color: var(--toggle-button-background-color);
+            color: var(--toggle-button-text-color);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .dark-mode-toggle button:hover {
+            background-color: var(--toggle-button-hover-background-color);
+        }
+        footer {
+            text-align: right;
+            font-size: 0.8em;
+            vertical-align: middle;
+            position: fixed;
+            bottom: 0;
+            width: 95%;
+        }
+        body.dark-mode input, body.dark-mode textarea {
+            border: 1px solid var(--dark-mode-button-background-color);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dark-mode-toggle">
+        <button onclick="toggleDarkMode()" id="darkModeButton">Dark Mode</button>
+    </div>
+    <div class="container">
+        <form id="journalForm">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" value="">
+            
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title">
+            
+            <label for="journal">Journal Entry:</label>
+            <textarea id="journal" name="journal" class="journal-entry" rows="20"></textarea>
+            <h3>Stuck for what to write about?</h3>
+            <p id="prompt"></p>
+        </form>
+
+        <div class="export-options">
+            <h2>Export Options</h2>
+            <div class="btn-container">
+                <button onclick="exportAsMarkdown()">MD</button>
+                <button onclick="exportAsCSV()">CSV</button>
+                <button onclick="exportAsJSON()">JSON</button>
+                <button onclick="copyToClipboard()">Clipboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script>
+        // Pre-fill the date field with today's date
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("date").value = today;
+
+        function getFormData() {
+            const formData = new FormData(document.getElementById("journalForm"));
+
+            // Get form values
+            const date = formData.get("date");
+            const title = formData.get("title");
+            const journal = formData.get("journal");
+
+            return { date, title, journal };
+        }
+        function getFilename(extension) {
+            const { date, title } = getFormData();
+            const currentDate = new Date();
+            const timeString = currentDate.toTimeString().slice(0, 5).replace(':', '');
+            return `${date}-${timeString}-${title}.${extension}`;
+        }
+
+        function saveBlob(blob, filename) {
+            // Use FileSaver.js to prompt the user for download location
+            window.saveAs(blob, filename);
+        }
+
+        function exportAsMarkdown() {
+            const { title, journal } = getFormData();
+            const markdownData = `# ${today}\n## ${title}\n${journal}\n`;
+            const blob = new Blob([markdownData], { type: "text/markdown;charset=utf-8;" });
+            const filename = getFilename("md");
+            saveBlob(blob, filename);
+        }
+
+        function exportAsCSV() {
+            const { date, title, journal } = getFormData();
+            const csvData = `"Date","Title","Journal Entry"\n"${date}","${title}","${journal}"`;
+            const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+            const filename = getFilename("csv");
+            saveBlob(blob, filename);
+        }
+
+        function exportAsJSON() {
+            const { date, title, journal } = getFormData();
+            const jsonData = JSON.stringify({ date, title, journal }, null, 2);
+            const blob = new Blob([jsonData], { type: "application/json" });
+            const filename = getFilename("json");
+            saveBlob(blob, filename);
+        }
+
+        function copyToClipboard() {
+            const { title, journal } = getFormData();
+            const content = `# ${today}\n## ${title}\n${journal}\n`;
+
+            const dummyTextArea = document.createElement('textarea');
+            dummyTextArea.value = content;
+            document.body.appendChild(dummyTextArea);
+            dummyTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummyTextArea);
+
+        }
+        // Array of journal prompts
+        const journalPrompts = [
+            "Describe a place that holds special meaning for you.",
+            "Write about a challenging experience that taught you an important life lesson.",
+            "If you could have any superpower, what would it be and why?",
+            "Write about a book, movie, or artwork that had a profound impact on you and why.",
+            "What are three things you are grateful for today?",
+            "If you could travel anywhere in the world, where would you go and what would you do?",
+            "Write about a goal you want to achieve and the steps you will take to reach it.",
+            "Describe a time when you overcame a fear and how it made you feel.",
+            "If you could meet and have a conversation with any historical figure, who would it be and why?",
+            "Write about a difficult decision you had to make and how it turned out.",
+        ];
+
+        // Function to get a random journal prompt
+        function getRandomPrompt() {
+            const randomIndex = Math.floor(Math.random() * journalPrompts.length);
+            return journalPrompts[randomIndex];
+        }
+
+        // Function to display a random prompt
+        function displayRandomPrompt() {
+            const promptElement = document.getElementById("prompt");
+            const randomPrompt = getRandomPrompt();
+            promptElement.textContent = randomPrompt;
+        }
+
+        // Display initial random prompt
+        displayRandomPrompt();
+
+        // Function to get the response to the journal prompt
+        function getResponse() {
+            const response = document.getElementById("response").value;
+            return response;
+        }
+        function toggleDarkMode() {
+            const body = document.body;
+            const darkModeButton = document.getElementById("darkModeButton");
+
+            if (body.classList.contains("dark-mode")) {
+                body.classList.remove("dark-mode");
+                darkModeButton.textContent = "Dark Mode";
+            } else {
+                body.classList.add("dark-mode");
+                darkModeButton.textContent = "Light Mode";
+            }
+        }
+    </script>
+</body>
+<footer>
+    <p>Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>   
+</footer>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Journal Entry Form</title>
+    <h1>Journaller</h1>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap');
+        :root {
+            /* Light Mode */
+            --default-text-color: #333;
+            --background-color: #f1f1f1;
+            --form-field-background-color: #fff;
+            --button-background-color: #4bc67c;
+            --button-hover-background-color: #348b57;
+            --button-text-color: #fff;
+            --toggle-button-background-color: #444;
+            --toggle-button-hover-background-color: #515151;
+
+            /* Dark Mode */
+            --dark-mode-text-color: #fff;
+            --dark-mode-background-color: #222;
+            --dark-mode-form-field-background-color: #333;
+            --dark-mode-button-background-color: #58319f;
+            --dark-mode-button-hover-background-color: #6d45b8;
+            --dark-mode-toggle-button-background-color: #fff;
+            --dark-mode-toggle-button-hover-background-color: #e6e6e6;
+        }
+    
+        /* Affix h1 to the top left */
+        h1 {
+            top: 10px;
+            margin-left: 3%;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 3em;
+        }
+
+        /* Body */
+        body {
+            font-family: system-ui, sans-serif;
+            color: var(--default-text-color);
+            background-color: var(--background-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-bottom: 5em;
+        }
+        body.dark-mode {
+            color: var(--dark-mode-text-color);
+            background-color: var(--dark-mode-background-color);
+        }
+        body a:link, body a:visited {
+            color: var(--default-text-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode a:link, body.dark-mode a:visited {
+            color: var(--dark-mode-text-color);
+        }
+        body a:hover {
+            color: var(--button-background-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode a:hover {
+            color: var(--button-background-color);
+        }
+
+        /* Form */
+        .container {
+            width: 60%;
+            margin: 0 auto;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        input, textarea {
+            font-family: system-ui, sans-serif;
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            background-color: var(--form-field-background-color);
+            border: 1px solid var(--button-background-color);
+            border-radius: 4px;
+            outline: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode input, body.dark-mode textarea {
+            background-color: var(--dark-mode-form-field-background-color);
+            color: var(--dark-mode-text-color);
+            border: 1px solid var(--dark-mode-button-background-color);
+            border-radius: 4px;
+        }
+        .journal-entry {
+            resize: vertical;
+        }
+        .export-options {
+            text-align: center;
+        }
+        .export-options h2 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        /* Buttons */
+        .btn-container {
+            text-align: center;
+        }
+        .btn-container button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            font-size: 16px;
+            cursor: pointer;
+        }
+        body.dark-mode .btn-container button {
+            background-color: var(--dark-mode-button-background-color);
+        }
+        .btn-container button:hover {
+            background-color: var(--button-hover-background-color);
+        }
+        body.dark-mode .btn-container button:hover {
+            background-color: var(--dark-mode-button-hover-background-color);
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .dark-mode-toggle button {
+            padding: 5px 10px;
+            background-color: var(--toggle-button-background-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        .dark-mode-toggle button:hover {
+            background-color: var(--toggle-button-hover-background-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode .dark-mode-toggle button {
+            background-color: var(--dark-mode-toggle-button-background-color);
+            color: var(--dark-mode-background-color);
+        }
+        body.dark-mode .dark-mode-toggle button:hover {
+            background-color: var(--dark-mode-toggle-button-hover-background-color);
+        }
+
+        /* Footer */
+        footer {
+            text-align: right;
+            font-size: 0.8em;
+            vertical-align: middle;
+            position: fixed;
+            bottom: 0;
+            width: 95%;
+        }
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 4px 1em;
+            padding-left: 8px;
+            margin: 4px;
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: none;
+            border-radius: 4px;
+            position: relative;
+        }
+        .tag b {
+            font-weight: bold;
+            align-content: left;
+        }
+        .tag .material-icons-outlined {
+            font-size: 14px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+        body.dark-mode .tag {
+            background-color: var(--dark-mode-button-background-color);
+            color: var(--button-text-color);
+        }
+
+    </style>
+</head>
+
+
+<body>
+    <div class="dark-mode-toggle">
+        <button onclick="toggleDarkMode()" id="darkModeButton">Dark Mode</button>
+    </div>
+    <div class="container">
+        <form id="journalForm">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" value="">
+            
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title">
+            
+            <label for="tags">Tags</label>
+            <input type="text" id="tags" name="tags" placeholder="Type upto 5 tags here...">
+            <div class="tags-container"></div>
+
+            <label for="journal">Journal Entry</label>
+            <textarea id="journal" name="journal" class="journal-entry" rows="10"></textarea>
+            <h3>Stuck for what to write about?</h3>                <p id="prompt"></p>
+        </form>
+
+        <div class="export-options">
+            <h2>Export Options</h2>
+            <div class="btn-container">                    <button onclick="exportAsMarkdown()">MD</button>
+                <button onclick="exportAsCSV()">CSV</button>
+                <button onclick="exportAsJSON()">JSON</button>
+                <br>
+                <button onclick="copyToClipboard()">Clipboard</button>
+                <button onclick="exportAll()">Export All to Zip</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Javascript-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <script>
+        // Pre-fill the date field with today's date
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("date").value = today;
+
+        function getFormData() {
+            const formData = new FormData(document.getElementById("journalForm"));
+
+            // Get form values
+            const date = formData.get("date");
+            const title = formData.get("title");
+            const journal = formData.get("journal");
+
+            return { date, title, journal };
+        }
+        function getFilename(extension) {
+            const { date, title } = getFormData();
+            const currentDate = new Date();
+            const timeString = currentDate.toTimeString().slice(0, 5).replace(':', '');
+            return `${date}-${timeString}-${title}.${extension}`;
+        }
+
+        function saveBlob(blob, filename) {
+            // Use FileSaver.js to prompt the user for download location
+            window.saveAs(blob, filename);
+        }
+
+        // Tags
+        const tagsInput = document.querySelector('#tags');
+        const tagsContainer = document.querySelector('.tags-container');
+        const MAX_TAGS = 5;
+        let tagsList = [];
+
+        function addTag(tag) {
+            tagsList.push(tag);
+            renderTags();
+        }
+        function removeTag(index) {
+            tagsList.splice(index, 1);
+            renderTags();
+        }
+        function renderTags() {
+            tagsContainer.innerHTML = '';
+            tagsList.slice(0, MAX_TAGS).forEach((tag, index) => {
+            const tagElement = document.createElement('span');
+            tagElement.classList.add('tag');
+            tagElement.innerHTML = `<b>#${tag}</b> <span class="material-icons-outlined remove-btn">x</span>`;
+            tagElement.querySelector('.remove-btn').addEventListener('click', () => removeTag(index));
+            tagsContainer.appendChild(tagElement);
+        });
+            // Display the input box if the number of tags is less than 5
+            if (tagsList.length < MAX_TAGS) {
+                tagsInput.style.display = 'inline-block';
+            } else {
+                tagsInput.style.display = 'none';
+            }
+        }
+        function submitTag() {
+            const tagText = tagsInput.value.trim();
+            if (tagText !== '') {
+                addTag(tagText);
+                tagsInput.value = ''; // Clear the input box after submitting the tag
+            }
+        }
+        tagsInput.addEventListener('keydown', (e) => {
+            // Check if space key is pressed
+            if (e.key === ' ') {
+                e.preventDefault(); // Prevent the default behavior of the space key
+            submitTag(); // Submit the tag
+            }
+        });
+        // Helper function to convert tags to a string with '#' prefix
+        function getTagsString() {
+            return tagsList.map(tag => `#${tag}`).join(' ');
+        }
+        function getFormDataWithTags() {
+            const { date, title, journal } = getFormData();
+            const tags = getTagsString();
+            return { date, title, tags, journal };
+        }
+
+        //Exports
+        function exportAsMarkdown() {
+            const { date, title, journal } = getFormData();
+            const tags = getTagsString();
+            const markdownData = `# ${date}\n## ${title}\n\n${tags}\n\n---\n${journal}\n`;
+            const blob = new Blob([markdownData], { type: "text/markdown;charset=utf-8;" });
+            const filename = getFilename("md");
+            saveBlob(blob, filename);
+        }
+        function exportAsCSV() {
+            const { date, title, tags, journal } = getFormDataWithTags();
+            const csvData = `"Date","Title","Tags","Journal Entry"\n"${date}","${title}","${tags}","${journal}"`;
+            const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+            const filename = getFilename("csv");
+            saveBlob(blob, filename);
+        }
+        function exportAsJSON() {
+            const formData = getFormDataWithTags();
+            const jsonData = JSON.stringify(formData, null, 2);
+            const blob = new Blob([jsonData], { type: "application/json" });
+            const filename = getFilename("json");
+            saveBlob(blob, filename);
+        }
+        function copyToClipboard() {
+            const { title, journal } = getFormData();
+            const tags = getTagsString();
+            const content = `# ${today}\n## ${title}\n${tags}\n---\n${journal}\n`; // Include tags in the content
+            const dummyTextArea = document.createElement('textarea');
+            dummyTextArea.value = content;
+            document.body.appendChild(dummyTextArea);
+            dummyTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummyTextArea);
+        }
+        function exportAll() {
+            const zip = new JSZip();
+            const formData = getFormDataWithTags();
+            const { date, title, tags, journal } = formData;
+            const markdownData = `# ${date}\n## ${title}\n\n${tags}\n\n---\n${journal}\n`;
+            const csvData = `"Date","Title","Tags","Journal Entry"\n"${date}","${title}","${tags}","${journal}"`;
+            const jsonData = JSON.stringify(formData, null, 2);
+
+            zip.file(getFilename("md"), markdownData);
+            zip.file(getFilename("csv"), csvData);
+            zip.file(getFilename("json"), jsonData);
+            zip.generateAsync({ type: "blob" })
+                .then(function (blob) {
+            saveBlob(blob, getFilename("zip"));
+            });
+        }
+
+        // Array of journal prompts
+        const journalPrompts = [
+            "Describe a place that holds special meaning for you.",
+            "Write about a challenging experience that taught you an important life lesson.",
+            "If you could have any superpower, what would it be and why?",
+            "Write about a book, movie, or artwork that had a profound impact on you and why.",
+            "What are three things you are grateful for today?",
+            "If you could travel anywhere in the world, where would you go and what would you do?",
+            "Write about a goal you want to achieve and the steps you will take to reach it.",
+            "Describe a time when you overcame a fear and how it made you feel.",
+            "If you could meet and have a conversation with any historical figure, who would it be and why?",
+            "Write about a difficult decision you had to make and how it turned out.",
+        ];
+
+        // Function to get a random journal prompt
+        function getRandomPrompt() {
+            const randomIndex = Math.floor(Math.random() * journalPrompts.length);
+            return journalPrompts[randomIndex];
+        }
+
+        // Function to display a random prompt
+        function displayRandomPrompt() {
+            const promptElement = document.getElementById("prompt");
+            const randomPrompt = getRandomPrompt();
+            promptElement.textContent = randomPrompt;
+        }
+
+        // Display initial random prompt
+        displayRandomPrompt();
+
+        function toggleDarkMode() {
+            const body = document.body;
+            const darkModeButton = document.getElementById("darkModeButton");
+
+            if (body.classList.contains("dark-mode")) {
+                body.classList.remove("dark-mode");
+                darkModeButton.textContent = "Dark Mode";
+            } else {
+                body.classList.add("dark-mode");
+                darkModeButton.textContent = "Light Mode";
+            }
+        }
+
+        // Box resizing
+        // Function to dynamically resize the textarea based on its content
+        function resizeTextarea() {
+            const textarea = document.getElementById("journal");
+            textarea.style.height = "auto"; // Reset the height to auto to recalculate the scroll height
+            textarea.style.height = textarea.scrollHeight + "px"; // Set the height to the scroll height
+        }
+
+        // Call the resizeTextarea function when the page loads and whenever the textarea's content changes
+        document.addEventListener("DOMContentLoaded", resizeTextarea);
+        document.getElementById("journal").addEventListener("input", resizeTextarea);
+
+
+    </script>
+</body>
+<footer>
+    <p>v3.0</p>
+    <p>Find this page on <a href="https://github.com/Caddickbrown/Journaller">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>   
+</footer>
+</html>
