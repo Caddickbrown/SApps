@@ -48,6 +48,11 @@ OSlogan generates a random slogan on command. These were originally designed to 
 ### HTML2MD
 HTML2MD converts an HTML page to Markdown.
 
+### Algorithmix
+Algorithmix is slightly different to the other SApps. It was originally an idea to make a random creative prompt generator. Thiswas tightly crontrolled but vague enough for you to make it creative. It was designed to be used for writing, drawing, or any other creative endeavour. This project has been brought into the SApps project though as it would work well in this format.
+
+It does contain the "App" in Python and C++ though as this was an older application prior to the SApp project.
+
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
 
