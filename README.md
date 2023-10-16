@@ -67,3 +67,23 @@ Thank you!
 
 ## License
 This project is licensed under the MIT License.
+
+See the [LICENSE](LICENSE) file for details.
+
+## Contact
+You can contact me at [daniel@caddickbrown.com](mailto:daniel@caddickbrown.com) or via my website at [caddickbrown.com](https://caddickbrown.com).
+
+## Changelog
+### [1.0.0]
+- Initial Release
+
+### [1.1.0] - 2023-10-16
+#### Added
+- Changelog
+- Contact Details
+
+#### Changed
+- Updated SApp READMEs to include SApp Names for clarity.
+
+
+
