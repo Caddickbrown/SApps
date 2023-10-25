@@ -44,6 +44,10 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - [ ] Fonts as Variable
 - [ ] Themes
 
+
+### v6.0
+- [ ] HTML Startup and Folder
+
 ### Planned Functionality
 - Themes
 - Dynamically Generated Form
