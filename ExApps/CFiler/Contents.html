@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contents</title>
+    <style>
+        :root {
+            --background-color: #f0f0f0;
+            --default-text-color: #414141;
+            --colourful-color: #4bc67c;
+        }
+        body {
+            font-family: system-ui, sans-serif;
+            color: var(--default-text-color);
+            background-color: var(--background-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-bottom: 5em;
+            justify-content: center;
+            width: 60%;
+            display: flex;
+        }
+        body a:link, body a:visited {
+            color: var(--default-text-color);
+            text-decoration: underline;
+        }
+        body a:hover {
+            color: var(--colourful-color);
+            text-decoration: none;
+        }
+        footer {
+            text-align: right;
+            font-size: 0.8em;
+            vertical-align: middle;
+            position: fixed;
+            bottom: 0;
+            width: 95%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Contents</h1>
+    <ul id="fileList">
+        <li><a href="Library/TestFile05 copy.html">TestFile05 copy</a></li>
+        <li><a href="Library/TestFile04 copy 2.html">TestFile04 copy 2</a></li>
+        <li><a href="Library/TestFile03 copy 4.html">TestFile03 copy 4</a></li>
+        <li><a href="Library/TestFile02 copy 3.html">TestFile02 copy 3</a></li>
+        <li><a href="Library/TestFile01.html">TestFile01</a></li>
+    </ul>
+    <footer>
+        <p>Updated: 2023-10-28 11:49</p>
+        <p>Version: 1.0.0 - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
+    </footer>
+</body>
+</html>

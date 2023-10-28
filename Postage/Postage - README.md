@@ -47,6 +47,7 @@ I wanted a quick way to create a simple HTML page from a template and markdown i
 - CSS as a Variable (Copies down to the export)
 - Word Counter
 - Image Uploader
+- Bring export inline with SApp Template
 
 #### Planned Conversion Capabilities
 - Convert ***bold and italic***

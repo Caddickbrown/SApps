@@ -53,6 +53,9 @@ Algorithmix is slightly different to the other SApps. It was originally an idea 
 
 It does contain the "App" in Python and C++ though as this was an older application prior to the SApp project.
 
+### ExApps
+ExApps are a collection of Apps that don't fit the single page philosophy. They are however tangentially related to the main project. Details of any ExApps can be found in the ExApps folder.
+
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
 
@@ -74,8 +77,9 @@ See the [LICENSE](LICENSE) file for details.
 You can contact me at [daniel@caddickbrown.com](mailto:daniel@caddickbrown.com) or via my website at [caddickbrown.com](https://caddickbrown.com).
 
 ## Changelog
-### [1.0.0]
-- Initial Release
+### [1.2.0] - 2023-10-27
+#### Added
+- ExApps
 
 ### [1.1.0] - 2023-10-16
 #### Added
@@ -86,4 +90,6 @@ You can contact me at [daniel@caddickbrown.com](mailto:daniel@caddickbrown.com) 
 - Updated SApp READMEs to include SApp Names for clarity.
 
 
+### [1.0.0]
+- Initial Release
 

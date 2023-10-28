@@ -17,6 +17,7 @@ A Template Repo for Single Page Apps.
 
 ## Future
 ### v2.0
+- [ ] Remove Version number in File Names
 - [x] Default Light/Dark Mode
 - [x] Template version added
 - [ ] Notification Pop Up
