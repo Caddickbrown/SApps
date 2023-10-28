@@ -13,7 +13,6 @@
         --button-hover-background-color: #348b57;
         --button-text-color: #fff;
         --toggle-button-background-color: #444;
-        --toggle-button-hover-background-color: #515151;
 
         /* Dark Mode */
         --dark-mode-text-color: #fff;
@@ -22,7 +21,6 @@
         --dark-mode-button-background-color: #58319f;
         --dark-mode-button-hover-background-color: #6d45b8;
         --dark-mode-toggle-button-background-color: #fff;
-        --dark-mode-toggle-button-hover-background-color: #e6e6e6;
     }
 
     /* Affix h1 to the top left */
@@ -86,6 +84,9 @@
         outline: none;
         transition: background-color 0.3s ease, color 0.3s ease;
         transition: color 0.3s ease, color 0.3s ease;
+        resize: vertical;
+        overflow: auto;
+        width: 100%;
     }
     body.dark-mode input, body.dark-mode textarea {
         background-color: var(--dark-mode-form-field-background-color);
@@ -143,7 +144,7 @@
         transition: color 0.3s ease, color 0.3s ease;
     }
     .dark-mode-toggle button:hover {
-        background-color: var(--toggle-button-hover-background-color);
+        background-color: var(--dark-mode-button-background-color);
         transition: background-color 0.3s ease, color 0.3s ease;
     }
     body.dark-mode .dark-mode-toggle button {
@@ -151,7 +152,7 @@
         color: var(--dark-mode-background-color);
     }
     body.dark-mode .dark-mode-toggle button:hover {
-        background-color: var(--dark-mode-toggle-button-hover-background-color);
+        background-color: var(--button-background-color);
     }
 
     /* Footer */
@@ -195,6 +196,21 @@
         width: 60%;
         margin: 0 auto;
     }
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: var(--button-background-color);
+        color: var(--button-text-color);
+        padding: 10px;
+        border-radius: 8px;
+        opacity: 0; /* Initially transparent */
+        transition: opacity 0.5s;
+    }
+    .dark-mode .notification {
+        background-color: var(--dark-mode-button-background-color);
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
 </style>
 </head>
@@ -203,18 +219,31 @@
     <button onclick="toggleDarkMode()" id="darkModeButton">Dark Mode</button>
   </div>
   <div>
-
+    <div class="notification" id="notification">Template Notification</div>
   </div>
+
+
+  <!-- Javascript-->
 
   <script>
     var appName = "SAppTemplate";
-    var versionNumber = "v2.0";
-    var templateVersionNumber = "v2.0"; //SAppTemplate version
+    var versionNumber = "v2.0.0";
+    var templateVersionNumber = "v2.0.0"; //SAppTemplate version
     var defaultTheme = 
         //"light"
         "dark"
         ;
+
+    const notificationBtn = document.getElementById('notif-btn');
     
+    notificationBtn.addEventListener('click', function() {
+            // Insert Javascript Code
+            notification.style.opacity = '1';
+            setTimeout(function() {
+                notification.style.opacity = '0';
+            }, 2000);
+        });
+
     document.querySelectorAll("#pageName").forEach(function(element) {
       element.innerHTML = appName;
     });

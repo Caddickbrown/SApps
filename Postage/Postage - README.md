@@ -25,11 +25,11 @@ I wanted a quick way to create a simple HTML page from a template and markdown i
 - Variable App Name
 
 ### v2.0
-- [ ] Default Theme Preparation
+- [x] Default Theme Preparation
 - [x] Convert __bold__ (Underscore)
 - [x] Convert ~~strikethrough~~
 - [x] Convert [links]()
-- [x] Convert images
+- [x] Convert image links
 - [x] Convert `code`
 - [x] Convert horizontal rules
 - [ ] Convert blockquotes
@@ -37,6 +37,7 @@ I wanted a quick way to create a simple HTML page from a template and markdown i
 - [ ] Convert tables
 - [ ] Convert task lists and to-dos
 - [ ] Convert ordered lists
+- [ ] SApp Template v2.0.0
 
 ## Future
 ### Planned Functionality
