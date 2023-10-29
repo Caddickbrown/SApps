@@ -3,6 +3,7 @@
 <head>
   <title id="pageName"></title>
   <h1 id="pageName"></h1>
+  <!--Default CSS-->
   <style>
     :root {
         /* Light Mode */
@@ -211,42 +212,30 @@
         background-color: var(--dark-mode-button-background-color);
         transition: background-color 0.3s ease, color 0.3s ease;
     }
+  </style>
 
-</style>
+<!--Custom CSS-->
+  <style>
+
+  </style>
 </head>
+
 <body>
-  <div class="dark-mode-toggle">
-    <button onclick="toggleDarkMode()" id="darkModeButton">Dark Mode</button>
-  </div>
-  <div>
-    <div class="notification" id="notification">Template Notification</div>
-  </div>
+    <div class="dark-mode-toggle">
+        <button onclick="toggleDarkMode()" id="darkModeButton">Dark Mode</button>
+    </div>
+<div class="btn-container">
+    <button id="notif-btn">Template Button</button>
+</div>
 
-
-  <!-- Javascript-->
-
+  <!--Javascript-->
+  <!--Default-->
   <script>
-    var appName = "SAppTemplate";
-    var versionNumber = "v2.0.0";
     var templateVersionNumber = "v2.0.0"; //SAppTemplate version
     var defaultTheme = 
         //"light"
         "dark"
         ;
-
-    const notificationBtn = document.getElementById('notif-btn');
-    
-    notificationBtn.addEventListener('click', function() {
-            // Insert Javascript Code
-            notification.style.opacity = '1';
-            setTimeout(function() {
-                notification.style.opacity = '0';
-            }, 2000);
-        });
-
-    document.querySelectorAll("#pageName").forEach(function(element) {
-      element.innerHTML = appName;
-    });
 
     if (defaultTheme === "dark") {
         toggleDarkMode();
@@ -264,10 +253,30 @@
         darkModeButton.textContent = "Light Mode";
       }
     }
+    const notificationBtn = document.getElementById('notif-btn');
+    
+    notificationBtn.addEventListener('click', function() {
+            // Insert Javascript Code
+            notification.style.opacity = '1';
+            setTimeout(function() {
+                notification.style.opacity = '0';
+            }, 2000);
+        });
+</script>
 
+<!--Custom-->
+<script>
+    var appName = "SAppTemplate";
+    var versionNumber = "v2.0.0";
 
-  </script>
+    document.querySelectorAll("#pageName").forEach(function(element) {element.innerHTML = appName;});
+</script>
+<!--Notifications-->
+<div>
+    <div class="notification" id="notification">Template Notification</div>
+</div>
 </body>
+
 <footer>
   <p id="versionNumber"></p>
   <p>Find this project on <a href="https://github.com/Caddickbrown/SAppTemplate">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>

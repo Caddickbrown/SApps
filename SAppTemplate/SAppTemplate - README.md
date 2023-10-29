@@ -20,17 +20,6 @@ The SApp Template Version also tells me something about what functionality the S
 - Standardised Footer
 
 ## Future
-### v2.0.0
-- [x] Remove Version number in Main File Name
-- [x] Version Number now has 3 digits to account for Bug Fixes, Minor, and Major Updates
-- [x] Default Light/Dark Mode
-- [x] Template version added
-- [x] Notification Pop Up Functionality
-- [x] Adjusted Dark/Light Mode Toggle Hover Colours
-- [ ] Standardised "Default" CSS Sections/Functions
-- [ ] Standardised "Custom" CSS Sections/Functions
-- [ ] Standardised "Default" Script Sections/Functions
-- [ ] Standardised "Custom" Script Sections/Functions
 
 ### Planned Functionality
 - Multiple Themes
@@ -59,5 +48,31 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+
+### [2.0.0] - 2023-10-29
+
+#### Added
+
+- Default Light/Dark Mode
+- Template Version added
+- Notification Pop Up Functionality
+- Template Button
+- Standardised "Default" CSS Sections/Functions
+- Standardised "Custom" CSS Sections/Functions
+- Standardised "Default" Script Sections/Functions
+- Standardised "Custom" Script Sections/Functions
+
+#### Changed
+
+- Version Number now has 3 digits to account for Bug Fixes, Minor, and Major Updates
+- Dark/Light Mode Variables Simplified
+- Dark/Light Mode Toggle Hover Colours
+- R&D Version now named with R&D in the name
+
+#### Removed
+
+- CSS Toggle Button Hover Colour Variables
+- Version number in Main File Name
+
 ### v1.0
 - [x] Initial Release
