@@ -36,6 +36,8 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - [ ] Image Attacher
 - [ ] CSS Fix (Some errors)
 - [ ] Page Name as a Variable
+- [ ] Removed Material Icons as dependency
+- [ ] Removed Playfair Display Font as dependency
 - [ ] Removal of FileSaver.js as dependency
 
 ### v5.0
@@ -43,10 +45,6 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - [ ] Save As Fix?
 - [ ] Fonts as Variable
 - [ ] Themes
-
-
-### v6.0
-- [ ] HTML Startup and Folder
 
 ### Planned Functionality
 - Themes
@@ -85,12 +83,19 @@ Should I find a way to remove them, I will, but for development speed they may b
 If you have any ideas for features, or find any bugs, please open an issue or a pull request. I will try to respond as soon as possible.
 
 Should you want to donate, you can do so [here](https://www.buymeacoffee.com/caddickbrown).
+
 Thank you!
 
 ## License
 This project is licensed under the MIT License.
 
 ## Change Log
+### [3.0.1] - 2021-10-29
+
+#### Changed
+
+- Updated Folder Names to fall in line with SAppTemplate
+
 ### v3.0
 - [x] Fixed Dark Mode button hover behavior
 - [x] Added Export to Zip

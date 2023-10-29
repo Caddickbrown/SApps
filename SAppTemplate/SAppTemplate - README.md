@@ -21,6 +21,18 @@ The SApp Template Version also tells me something about what functionality the S
 
 ## Future
 
+### [2.1.0] -
+
+#### Changed
+
+- Changed Dark/Light Mode Toggle Button Text to Embedded Icons (Lucide Icons)
+- Toggle Button CSS to account for Icon
+- Archive Now contains latest version of the SApp Template - will be updated with each new version
+
+#### Fixed
+
+- Hidden Notification was blocking Dark Mode Toggle Button - Fixed by adding a changing z-index to the Notification
+
 ### Planned Functionality
 - Multiple Themes
 - Simplification
