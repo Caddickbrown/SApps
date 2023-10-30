@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Download Example</title>
+</head>
+<body>
+
+<button id="downloadButton">Download File</button>
+
+<script>
+    // Function to create and trigger a file download
+    function downloadFile() {
+        // Create some content for the file
+        var fileContent = 'This is the content of the file.';
+
+        // Create a Blob with the content
+        var blob = new Blob([fileContent], { type: 'text/plain' });
+
+        // Create a URL for the Blob
+        var url = URL.createObjectURL(blob);
+
+        // Create a link element for the download
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'myFile.txt'; // Set the desired file name
+        a.style.display = 'none';
+
+        // Append the link to the body and trigger the download
+        document.body.appendChild(a);
+        a.click();
+
+        // Clean up by removing the link and revoking the URL
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // Add a click event listener to the button
+    document.getElementById('downloadButton').addEventListener('click', downloadFile);
+</script>
+
+</body>
+</html>

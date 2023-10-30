@@ -28,19 +28,16 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - Clipboard (In Markdown)
 
 ## Future
-### v4.0
-- [x] More Prompts
-- [x] Dark Mode Button Icon Rather than text
-- [x] Version Number as a Variable
-- [ ] Daily Gratitude Section
-- [ ] Image Attacher
-- [ ] CSS Fix (Some errors)
-- [ ] Page Name as a Variable
-- [ ] Removed Material Icons as dependency
-- [ ] Removed Playfair Display Font as dependency
-- [ ] Removal of FileSaver.js as dependency
+
+
 
 ### v5.0
+- [ ] Daily Gratitude Section
+- [ ] HTML Export
+- [ ] Removal of FileSaver.js as dependency
+- [ ] Removal of JSZip.js as dependency
+- [ ] JSON Tags saved in array
+- [ ] Image Attacher
 - [ ] Cleaner Aesthetics
 - [ ] Save As Fix?
 - [ ] Fonts as Variable
@@ -48,6 +45,7 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 
 ### Planned Functionality
 - Themes
+- Fonts
 - Dynamically Generated Form
     - Not really sure how this would work realistically
     - Headers?
@@ -56,15 +54,8 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - Mood Option
     - With Tags?
 - Separate Prompt section in main form with extra section exported?
-- Daily Gratitude Section
 - More Prompts
-- Dark Mode Button Icon Rather than text
-- Font Options
-- Easily Configuable Default Theme
-- Removal of JSZip.js as dependency
-- Removal of Google Material Symbols Outline Font as dependency
-- Removal of Playfair Display Font as dependency
-- HTML Export
+- Easily Configurable Default Theme
 - PDF Export
 - Word Counter
 
@@ -76,8 +67,6 @@ Should I find a way to remove them, I will, but for development speed they may b
 ### Current Dependencies
 - FileSaver.js
 - JSZip.js
-- Google Material Symbols Outline Font
-- Playfair Display Font
 
 ## Contributing
 If you have any ideas for features, or find any bugs, please open an issue or a pull request. I will try to respond as soon as possible.
@@ -90,7 +79,23 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
-### [3.0.1] - 2021-10-29
+### [4.0.0] - 2023-10-30
+
+#### Added 
+
+- More Prompts
+
+#### Changed
+
+- Aligned with SAppTemplate v2.1.1
+
+#### Removed
+
+- Material Icons as dependency
+- Playfair Display Font as dependency
+
+
+### [3.0.1] - 2023-10-29
 
 #### Changed
 
