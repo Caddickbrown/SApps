@@ -18,20 +18,24 @@ The idea being that you have a folder of HTML files/journal entries and you have
 ## How it works
 The Python script will look for all HTML files in the "Library" folder and then generate a HTML file with links to each of the files.
 
-## Future
+## Roadmap
+
 I may add a way to generate a "blog" style page with the most recent entries at the top. I may also add a way to generate a "wiki" style page with links to other pages.
 
-## Future
 ### v2.0.0
+
 - [ ] Dark/Light Mode
 - [ ] Default Light/Dark Mode
 - [ ] Standardise with SApp Template
 
 ### Planned Functionality
+
 - [ ] New Entry Button (Generating a Postage file)
 
 ## Changelog
+
 ### 1.0.0
+
 - Initial release
 - Version Number/Variable Prep
 - README.md

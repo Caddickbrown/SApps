@@ -7,7 +7,7 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 
 ## Usage
 1. Download the latest release.
-2. Open `Journaller vx.x.html` in your browser of choice.
+2. Open `Journaller.html` in your browser of choice.
 3. Fill out the form.
 4. Choose your export option.
 5. Enjoy your exported file(s)!
@@ -27,9 +27,7 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - Zip Folder (All of the above)
 - Clipboard (In Markdown)
 
-## Future
-
-
+## Roadmap
 
 ### v5.0
 - [ ] Daily Gratitude Section
@@ -101,7 +99,7 @@ This project is licensed under the MIT License.
 
 - Updated Folder Names to fall in line with SAppTemplate
 
-### v3.0
+### [3.0.0]
 - [x] Fixed Dark Mode button hover behavior
 - [x] Added Export to Zip
 - [x] Tags Field
@@ -115,7 +113,7 @@ This project is licensed under the MIT License.
 - [x] Adjusted Export Button Placement
 - [x] Adjusted Textbox Size
 
-### v2.0
+### [2.0.0]
 - [x] Journal Prompts
 - [x] More Colour
 - [x] Colours as Variables
@@ -126,7 +124,7 @@ This project is licensed under the MIT License.
 - [x] Textbox Border Added
 - [x] Spaced out Markdown Export
 
-### v1.0
+### [1.0.0]
 - [x] Date/Titles
 - [x] Export to Markdown
 - [x] Export to CSV

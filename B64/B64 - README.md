@@ -10,11 +10,16 @@ B64 is a single page app that converts images into base64 strings.
 ## Features
 - Dark/Light Mode
 
-## Future
+## Roadmap
+
 ### v1.0
+
+#### Added
+
 - [x] Initial Release
 - [x] Basic Functionality
 - [x] Copy to Clipboard Button
+- [ ] Wrap Text
 
 ### v2.0
 - 
