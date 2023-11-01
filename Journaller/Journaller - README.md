@@ -66,6 +66,10 @@ Should I find a way to remove them, I will, but for development speed they may b
 - FileSaver.js
 - JSZip.js
 
+### Previous Dependencies
+- Material Icons
+- Playfair Display Font
+
 ## Contributing
 If you have any ideas for features, or find any bugs, please open an issue or a pull request. I will try to respond as soon as possible.
 

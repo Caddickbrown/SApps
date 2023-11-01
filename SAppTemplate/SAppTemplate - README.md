@@ -19,7 +19,7 @@ The SApp Template Version also tells me something about what functionality the S
 - Default Light/Dark Mode
 - Standardised Footer
 
-## Future
+## Roadmap
 
 ### Planned Functionality
 - Multiple Themes
@@ -35,7 +35,7 @@ Should I find a way to remove them, I will, but for development speed they may b
 - None
 
 ### Previous Dependencies
-- 
+- None
 
 ## Contributing
 If you have any ideas for features, or find any bugs, please open an issue or a pull request. I will try to respond as soon as possible.
@@ -96,5 +96,5 @@ This project is licensed under the MIT License.
 - CSS Toggle Button Hover Colour Variables
 - Version number in Main File Name - to allow for easier change reviewing
 
-### v1.0
+### [1.0.0]
 - [x] Initial Release
