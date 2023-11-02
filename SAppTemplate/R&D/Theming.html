@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Theme Selector</title>
+    <style>
+        /* Light Themes */
+        .theme1-light {
+            background-color: lightblue;
+            color: black;
+        }
+
+        .theme2-light {
+            background-color: lightcoral;
+            color: white;
+        }
+
+        .theme3-light {
+            background-color: lightgreen;
+            color: black;
+        }
+
+        /* Dark Themes */
+        .theme1-dark {
+            background-color: darkblue;
+            color: white;
+        }
+
+        .theme2-dark {
+            background-color: darkred;
+            color: lightyellow;
+        }
+
+        .theme3-dark {
+            background-color: darkgreen;
+            color: lightcyan;
+        }
+
+        /* Dark Mode Styles */
+        .dark-mode {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body id="content" class="theme1-light">
+    <h1>Theme Selector</h1>
+
+    <!-- Dropdown for selecting themes -->
+    <label for="theme-select">Select a theme:</label>
+    <select id="theme-select">
+        <option value="theme1-light">Theme 1</option>
+        <option value="theme2-light">Theme 2</option>
+        <option value="theme3-light">Theme 3</option>
+    </select>
+
+    <!-- Dark Mode toggle -->
+    <label for="mode-toggle">Dark Mode:</label>
+    <input type="checkbox" id="mode-toggle">
+
+    <script>
+        // Define the default theme and mode
+        var defaultDarkMode = 
+            //"light"
+            "dark"
+            ;
+        var defaultTheme =
+            //"1"
+            "2"
+            //"3"
+            ;
+    
+        // Get the elements
+        const themeSelect = document.getElementById('theme-select');
+        const modeToggle = document.getElementById('mode-toggle');
+        const content = document.getElementById('content');
+    
+        // Set the initial theme and mode
+        themeSelect.value = `theme${defaultTheme}-light`;
+        modeToggle.checked = defaultDarkMode === "dark";
+        let currentTheme = themeSelect.value;
+    
+        // Update the theme when the selection changes
+        themeSelect.addEventListener('change', function () {
+            currentTheme = themeSelect.value;
+            updateTheme();
+        });
+    
+        // Update the theme when the mode changes
+        modeToggle.addEventListener('change', updateTheme);
+    
+        // Update the theme
+        function updateTheme() {
+            const isDarkMode = modeToggle.checked;
+            const themeClass = isDarkMode ? currentTheme.replace('light', 'dark') : currentTheme;
+            content.className = themeClass;
+        }
+    
+        // Call updateTheme to set the initial theme and mode
+        updateTheme();
+    </script>
+</body>
+</html>
