@@ -1,5 +1,5 @@
 # ExApps
-ExApps (Exception Apps) are a collection of Apps that don't fit the single page philosophy. They are however tangentially related to the main project. This is almost a "catchall" for anything that can't be included in the main project.
+ExApps (Exception Apps) are a collection of Apps that don't fit the single page philosophy. They are however tangentially related to the main project and can be used with or alongside other SApps. This is almost a "catchall" for anything that can't be included in the main project.
 
 Where possible I will try to keep them as close to SApps as I can - however some may require other dependencies.
 
