@@ -54,7 +54,10 @@ Algorithmix is slightly different to the other SApps. It was originally an idea 
 It does contain the "App" in Python and C++ though as this was an older application prior to the SApp project.
 
 ### Galleria
-Galleria is a simple image gallery for Base64 encoded images. It is designed to be used for images that are stored in the HTML file itself, rather than external images. This is useful for storing images in a "gallery" in a single file, or for storing images on a USB drive. 
+Galleria is a simple image gallery for Base64 encoded images. It is designed to be used for images that are stored in the HTML file itself, rather than external images. This is useful for storing images in a "gallery" in a single file, or for storing images on a USB drive.
+
+### Recordr
+A simple audio recorder that can record audio and save it to a file. It is designed to be used for recording audio notes, or for recording audio for transcription. It is not designed to be used for recording music or other high quality audio.
 
 ### ExApps
 ExApps are a collection of Apps that don't fit the single page philosophy. They are however tangentially related to the main project. Details of any ExApps can be found in the ExApps folder.
