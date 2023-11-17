@@ -14,6 +14,10 @@
             font-family: 'Varela Round';
             font-size: 22px;
             transition: background-color 0.3s ease; /* Add a transition for smooth dark mode switch */
+            background-image: url('https://images.unsplash.com/photo-1655111323144-7e2ea2143fce?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            
         }
 
         .background-animation {
@@ -64,24 +68,49 @@
             border: none;
             cursor: pointer;
         }
+        .glasslay {
+            backdrop-filter: blur(10px);
+            display: block;
+            width: 80%;
+            margin-top: 5%;
+            margin-left: 10%;
+            box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.096);
+        }
+        .glass2 {
+            box-shadow: inset 5px 5px 20px -10px rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+        }
+        
+        .carving {
+            text-shadow: inset 10px 10px 10px 10px rgba(36, 36, 36, 1.0);
+            border-radius: 15px;
+        }
+        
     </style>
 </head>
 <body>
     <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-    <div class="background-animation"></div>
-    <h1>A Modern UI</h1>
-    <p>This is what a more modern UI might look like.</p>
-    <p>It's a bit subtle, but still very nice.</p>
-    <p>It also has a dark mode!</p>
-    <p>Click the button in the top right to toggle it.</p>
-    <p>It's not perfect, but it's a start.</p>
-    <p>It's also a bit more complex, but that's okay.</p>
-    <p>It's still pretty simple, and it's still just HTML and CSS.</p>
-    <p>It's also still just a single file, which is nice.</p>
-    <p>Although it does have a dependency.</p>
-    <p>It's just a font.</p>
-    <p>It's not a big deal, but it's still a dependency.</p>
-
+    <!--<div class="background-animation"></div>-->
+    <div class="glasslay">
+        <div class="glass2">
+            <div class="carving">
+            <h1>A Modern UI</h1>
+            <p>This is what a more modern UI might look like.</p>
+            <p>It's a bit subtle, but still very nice.</p>
+            <p>It also has a dark mode!</p>
+            <p>Click the button in the top right to toggle it.</p>
+            <p>It's not perfect, but it's a start.</p>
+            <p>It's also a bit more complex, but that's okay.</p>
+            <p>It's still pretty simple, and it's still just HTML and CSS.</p>
+            <p>It's also still just a single file, which is nice.</p>
+            <p>Although it does have a dependency.</p>
+            <p>It's just a font.</p>
+            <p>It's not a big deal, but it's still a dependency.</p>
+            <p>There also might be an image...</p>
+        </div>
+        </div>
+    </div>
 
     
 

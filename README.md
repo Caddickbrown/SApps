@@ -83,6 +83,10 @@ See the [LICENSE](LICENSE) file for details.
 You can contact me at [daniel@caddickbrown.com](mailto:daniel@caddickbrown.com) or via my website at [caddickbrown.com](https://caddickbrown.com).
 
 ## Changelog
+### [1.3.0] - 2023-11-17
+#### Added
+- SApp Home Page
+
 ### [1.2.0] - 2023-10-27
 #### Added
 - ExApps
