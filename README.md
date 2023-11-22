@@ -1,12 +1,17 @@
 # SApps
 SApps is a project of a collection of simple, lightweight Single-Page HTML Applications that can perform various tasks and functions. They are portable, do not use any dependencies (where possible), are offline-friendly, and are able to be stored and used from a USB Drive.
 
-They have entirely inline CSS and Javascript, and are designed to be entirely self-reliant with no external requirements. They should be consistent in formatting and should not have "quirks" unique to an app. 
-
 Each SApp should have its own README.md file that details the usage and features of the application. This README.md file is for the SApps project as a whole.
 
 ## Background
 I started off experimenting in looking at a way to make a journalling app that was portable and could export to various formats. Soon realising that I could use a similar format for other applications that could be used for various tasks. From here I began standardising the format and creating a template that could be used for all of the applications.
+
+They have entirely inline CSS and Javascript, and are designed to be entirely self-reliant with no external requirements. They should be consistent in formatting and should not have "quirks" unique to an app.
+
+## No Frameworks, No Libraries, No Dependencies, No Problem
+These applications are designed to be as lightweight as possible. They do not use any frameworks, libraries, or dependencies. They are designed to be entirely self-contained and portable. They should be able to be used on any computer, from a USB drive, and should not require any installation or configuration.
+
+There is some customisation that can be done - but this should be a one time think and should not require any further configuration.
 
 ## Usage
 1. Download the latest release of the relevant application.
