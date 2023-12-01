@@ -2,7 +2,7 @@
 B64 is a single page app that converts images into base64 strings.
 
 ## Background
-
+I needed a way to convert images into base64 strings for use in SApp projects. I figured why not make a SApp that does it? So here we are.
 
 ## Usage
 
@@ -11,18 +11,10 @@ B64 is a single page app that converts images into base64 strings.
 - Dark/Light Mode
 
 ## Roadmap
-
-### v1.0
-
-#### Added
-
-- [x] Initial Release
-- [x] Basic Functionality
-- [x] Copy to Clipboard Button
-- [ ] Wrap Text
-
 ### v2.0
-- 
+- [ ] Copy to Clipboard Notification
+- [ ] SApp Template Update
+- [ ] Copy to HTML Code Button
 
 ### Planned Functionality
 - HTML Code Copy
@@ -48,3 +40,13 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+
+### v1.0.0 - 2023-12-01
+
+#### Added
+
+- [x] Initial Release
+- [x] Basic Functionality
+- [x] Copy to Clipboard Button
+- [x] Dark/Light Mode
+

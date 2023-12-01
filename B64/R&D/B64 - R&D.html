@@ -203,9 +203,7 @@
     <button onclick="toggleDarkMode()" id="darkModeButton">Dark Mode</button>
   </div>
   <div class="container">
-    
-    <h1>Image to Base64 Converter</h1>
-    
+        
     <input type="file" id="imageInput" accept="image/*">
     <br><br>
     
@@ -213,8 +211,7 @@
     <br><br>
     
     <div id="base64Result"></div>
-    <img src="data:image/png;base64, /9j/4AAQSkZJRgABAQEAXwBgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wgARCADIAI0DASIAAhEBAxEB/8QAGgABAAIDAQAAAAAAAAAAAAAAAAIEAwUGAf/EABgBAQEBAQEAAAAAAAAAAAAAAAABAwQC/9oADAMBAAIQAxAAAAHvwAADCmZVVaYM8AoAADz2Jy/tGfZy2seFZbVEu+v6+7z72hn7AAARlE4qcJ93GABvbuq3/L0hn7AAAeejjZ9e2y5B145B141W1MtAlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/8QAJBAAAQQBAwMFAAAAAAAAAAAAAgABAwQyExQwESAxIiMzQID/2gAIAQEAAQUC+ycog/Wcl77IJWJ+J/DW7DturCe1YQTTA+6sLdWFXd7MUROTcL4hh20MA+fhfEMO2hhB6uJ8Qw7aYFIHjifwMUjDpyLTkWnItORacioiQh+S/wD/xAAdEQACAQUBAQAAAAAAAAAAAAAAARECEhMgMTBg/9oACAEDAQE/AdJ3uZLLmU88aObYkYjEJQvlf//EAB8RAAECBgMAAAAAAAAAAAAAAAEAAhESEyAxUQMwYP/aAAgBAgEBPwGyF8rdKUKVuk/J6eTJurFViqxRMTHyv//EACwQAAECAwQIBwAAAAAAAAAAAAEAAhEzkgMhMHESEyAxMkFSciNAUWGAgaL/2gAIAQEABj8C8zC8u6QtzGZ3ris3e0ILRILX+hxAdYKVMFKm/lEi0377lMFKmClO1hvBuI5Ih3E0wOEUMtp/crX6wihltP7k+063RGWEUMtp40oMjfDnhlDw30lS30lS30lS30lS30lS30lP0mkX8x8TP//EACgQAAEDAQYFBQAAAAAAAAAAAAEAESHwMDFBYaHBIIGRsfFAUXGA0f/aAAgBAQABPyH1IBNXBclYATOT6Bu6afmXW5TByn8vezJiOSv6Ae4vEESMHwClkG5ES68QXiCBD0fMYJmm6eOfSy0i0LirsgqvKy0i0LirsgoMDkCB2fnZaRaFxFHga9AQ+AQAAABgLKYskCy+BVCq7ZVdsqu2VXbKrtlIRxgwH1M//9oADAMBAAIAAwAAABDzzzvDfzzzyx634Tzzzz7/AN9A8888suMM+888888888888888888888888888888888888888888888888888888888888888888888888888888888888//EAB4RAAIBBAMBAAAAAAAAAAAAAAABESAhUWEQMGBx/9oACAEDAQE/EOW4PgTmrabjaNY+m5athDJDJaPK/wD/xAAeEQACAgICAwAAAAAAAAAAAAAAARFhIDEQQVFgcf/aAAgBAgEBPxDlJvR9DTW8UVDphFQRQeMVvCCyqCgoJ71V/8QAKBABAAECAwcEAwAAAAAAAAAAAREAITFBUSAwYXGhsfAQQIGRgOHx/9oACAEBAAE/EPcsgDmIWsYBxUONFzlr7DAPhU2jik7x5UrCEo5TVFhxPmN2x2IkpWAlDUPTiBA8nKpH84Qggu3sZYevHB+7WzoIkZ3eeDar5zIIFAgMhQxlMZbrrfavGabXTqsthMuf6xuut9q8ZptW8tUoTEJqA3JN1Ot9q8ZptAGYxn+8EXdSjLAgAgDdBAJVB9UQWETCY2gwYMGDJ2CUM0xIQfxM/9k=" alt="Red dot" />
-  </div>
+</div>
 
   <script>
     var appName = "B64";
@@ -249,22 +246,57 @@
   </script>
 
   <script>
-    function convertToBase64() {
-        const input = document.getElementById('imageInput');
-        const resultContainer = document.getElementById('base64Result');
+function convertToBase64() {
+    const input = document.getElementById('imageInput');
+    const resultContainer = document.getElementById('base64Result');
 
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
 
-            reader.onload = function (e) {
-                const base64String = e.target.result.split(',')[1]; // Get the base64 part of the data URL
-                resultContainer.innerHTML = '<strong>Base64:</strong><br>' + base64String;
-            };
+        reader.onload = function (e) {
+            const base64String = e.target.result.split(',')[1]; // Get the base64 part of the data URL
 
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            resultContainer.innerHTML = 'Please select an image file.';
-        }
+            // Display the base64 string
+            resultContainer.innerHTML = '<strong>Base64:</strong><br>' + base64String;
+
+            // Add a button for copying to clipboard
+            const copyButton = document.createElement('button');
+            copyButton.textContent = 'Copy to Clipboard';
+            copyButton.addEventListener('click', function () {
+                copyToClipboard(base64String);
+            });
+            resultContainer.appendChild(copyButton);
+
+            // Display the image
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.maxWidth = '100%';
+
+            // Add a line break
+            resultContainer.appendChild(document.createElement('br'));
+
+            // Display the "Image" label
+            const imageLabel = document.createElement('strong');
+            imageLabel.innerHTML = 'Image:<br>';
+            resultContainer.appendChild(imageLabel);
+
+            // Display the image
+            resultContainer.appendChild(img);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        resultContainer.innerHTML = 'Please select an image file.';
+    }
+}
+
+    function copyToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
     }
   </script>
 
