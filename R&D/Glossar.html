@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--Glossar is a rough template for a "Glossary" page. It is a simple page that lists headings, subheadings, and a list of items. It is intended to be an easy way to access a list of articles.-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guidebook</title>
+  <style>
+    body {
+      display: flex;
+      font-family: Arial, sans-serif;
+    }
+
+    #sidebar {
+      width: 200px;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+
+    #main-content {
+      flex-grow: 1;
+      padding: 20px;
+    }
+
+    /* Add your additional CSS styles here */
+  </style>
+</head>
+<body>
+
+  <div id="sidebar"></div>
+  <div id="main-content"></div>
+
+  <script>
+    // Your JSON data
+    var guidebookData = {
+      "sections": [
+        {
+          "heading": "Section 1",
+          "subheadings": [
+            {
+              "subheading": "Subsection 1.1",
+              "items": ["Item 1.1.1", "Item 1.1.2", "Item 1.1.3"]
+            },
+            {
+              "subheading": "Subsection 1.2",
+              "items": ["Item 1.2.1", "Item 1.2.2", "Item 1.2.3"]
+            }
+          ]
+        },
+        {
+          "heading": "Section 2",
+          "subheadings": [
+            {
+              "subheading": "Subsection 2.1",
+              "items": ["Item 2.1.1", "Item 2.1.2", "Item 2.1.3"]
+            },
+            {
+              "subheading": "Subsection 2.2",
+              "items": ["Item 2.2.1", "Item 2.2.2", "Item 2.2.3"]
+            }
+          ]
+        }
+        // Add more sections as needed
+      ]
+    };
+
+    // Keep track of the currently selected subsection
+    var selectedSubsection = null;
+
+    // Function to generate the sidebar
+    function generateSidebar() {
+      var sidebarDiv = document.getElementById('sidebar');
+
+      guidebookData.sections.forEach(section => {
+        var headingLink = document.createElement('a');
+        headingLink.href = '#';
+        headingLink.textContent = section.heading;
+        headingLink.onclick = function () {
+          selectedSubsection = null; // Reset the selected subsection
+          displaySubheadings(section.subheadings);
+        };
+
+        sidebarDiv.appendChild(headingLink);
+        sidebarDiv.appendChild(document.createElement('br'));
+      });
+    }
+
+    // Function to display subheadings in the main content area
+    function displaySubheadings(subheadings) {
+      var mainContentDiv = document.getElementById('main-content');
+      mainContentDiv.innerHTML = '';
+
+      subheadings.forEach(subheading => {
+        var subheadingLink = document.createElement('a');
+        subheadingLink.href = '#';
+        subheadingLink.textContent = subheading.subheading;
+        subheadingLink.onclick = function () {
+          selectedSubsection = subheading;
+          displayItems(subheading.items);
+        };
+
+        mainContentDiv.appendChild(subheadingLink);
+        mainContentDiv.appendChild(document.createElement('br'));
+      });
+    }
+
+    // Function to display items in the main content area
+    function displayItems(items) {
+      var mainContentDiv = document.getElementById('main-content');
+      mainContentDiv.innerHTML = '';
+
+      // Display the selected subsection (if any)
+      if (selectedSubsection) {
+        var subheadingTitle = document.createElement('h3');
+        subheadingTitle.textContent = selectedSubsection.subheading;
+        mainContentDiv.appendChild(subheadingTitle);
+      }
+
+      var itemsList = document.createElement('ul');
+      items.forEach(item => {
+        var listItem = document.createElement('li');
+        listItem.textContent = item;
+        itemsList.appendChild(listItem);
+      });
+
+      mainContentDiv.appendChild(itemsList);
+    }
+
+    // Call the function to generate the sidebar
+    generateSidebar();
+  </script>
+
+</body>
+</html>
