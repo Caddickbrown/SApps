@@ -15,3 +15,29 @@ Originally created as this was the first language available to me, it could be u
 
 ## Python
 There are three versions of the file here. All work and basically do the same thing. One is entirely self contained, one has a more easily updatable JSON file that can be used with it, and the final one is a slightly less readable, but smaller file.
+
+
+### Thoughts
+A [ART FORM] of a [NOUN] which is [VERB] with [2nd NOUN] and sense of [EMOTION].
+
+Art Forms - Painting, Song, Poem, Spray Paint, Photoshop
+Verbs - Running, Cycling
+Emotion - Happiness, Sadness, Joy, Anger, Fear, Disgust,
+
+1
+2 describe
+3 colour/material
+4 noun
+5 emotion
+6 style
+7 medium
+
+Small robotic giraffe happy pop art pen
+
+1. big small normal huge miniscule
+2 natural robotic mutant alien dreamy warped
+3. red blue yellow green pink orange purple rainbow wood metal paper
+4 animals robots alien objects (interesting-movable?)
+5 love hate passion envy anger calm greed happiness sadness
+6 pop art
+7 pen origami paint spray photography sculpture
