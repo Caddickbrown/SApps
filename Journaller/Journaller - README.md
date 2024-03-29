@@ -32,6 +32,7 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 ### v5.0
 - [ ] Daily Gratitude Section
 - [ ] HTML Export
+- [ ] TXT Export (jrnl.sh format)
 - [ ] Removal of FileSaver.js as dependency
 - [ ] Removal of JSZip.js as dependency
 - [ ] JSON Tags saved in array
@@ -40,6 +41,7 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - [ ] Save As Fix?
 - [ ] Fonts as Variable
 - [ ] Themes
+- [ ] Split out into 2 - Pro and Basic
 
 ### Planned Functionality
 - Themes
@@ -56,6 +58,13 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - Easily Configurable Default Theme
 - PDF Export
 - Word Counter
+
+- Basic Mode
+    - Simple Functionality 
+
+- Pro Mode
+    - More Customisable
+    - Extra Fields 
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some are necessary for the functionality of the application.
