@@ -1,0 +1,73 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>New Count Page</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+            }
+            button {
+                font-size: 24px;
+                padding: 10px 20px;
+                margin: 0 10px;
+            }
+            #count {
+                font-size: 36px;
+                margin-top: 10px;
+            }
+            #manualInput {
+                font-size: 16px;
+                margin-top: 10px;
+                width: 60px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="increment()">+</button>
+        <span id="count">0</span>
+        <button onclick="decrement()">-</button>
+
+        <input type="text" id="manualInput" placeholder="Manual" oninput="manualChange(this.value)">
+
+        <script>
+            let count = 0;
+            const countElement = document.getElementById('count');
+            const manualInputElement = document.getElementById('manualInput');
+
+            function updateCount() {
+                countElement.textContent = count;
+                manualInputElement.value = count; // Update the manual input field when count changes
+            }
+
+            function increment() {
+                count++;
+                updateCount();
+            }
+
+            function decrement() {
+                if (count > 0) {
+                    count--;
+                    updateCount();
+                }
+            }
+
+            function manualChange(value) {
+                const parsedValue = parseInt(value, 10);
+                if (!isNaN(parsedValue)) {
+                    count = parsedValue;
+                    updateCount();
+                }
+            }
+        </script>
+    </body>
+    </html>
+    
