@@ -43,6 +43,9 @@ I wanted to start journaling, but I didn't want to use a physical journal. I wan
 - [ ] Themes
 - [ ] Split out into 2 - Pro and Basic
 
+### Minor Fixes
+- [ ] Change Project Link in Footer
+
 ### Planned Functionality
 - Themes
 - Fonts
