@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Workout Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        label, input, textarea {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button {
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Daily Workout Log</h1>
+        <form id="workoutForm">
+            <label for="workoutType">Workout Type:</label>
+            <input type="text" id="workoutType" name="workoutType" required>
+
+            <label for="duration">Duration (minutes):</label>
+            <input type="number" id="duration" name="duration" required>
+
+            <label for="notes">Notes:</label>
+            <textarea id="notes" name="notes"></textarea>
+
+            <button type="button" onclick="saveWorkout()">Save Workout</button>
+            <button type="button" onclick="copyToCSV(true)">Copy out as CSV</button>
+            <button type="button" onclick="copyToCSV(false)">Copy without Header</button>
+        </form>
+
+        <input type="file" id="csvFileInput" accept=".csv" onchange="importCSV()" />
+        <table id="workoutTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Workout Type</th>
+                    <th>Duration (minutes)</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        function saveWorkout() {
+            const workoutType = document.getElementById('workoutType').value;
+            const duration = document.getElementById('duration').value;
+            const notes = document.getElementById('notes').value;
+
+            if (workoutType && duration) {
+                const workoutData = { workoutType, duration, notes };
+                localStorage.setItem('workoutData', JSON.stringify(workoutData));
+                displayWorkout();
+            }
+        }
+
+        function displayWorkout() {
+            const workoutData = JSON.parse(localStorage.getItem('workoutData'));
+            if (workoutData) {
+                document.getElementById('workoutLog').innerHTML = `
+                    <h2>Last Workout</h2>
+                    <p><strong>Type:</strong> ${workoutData.workoutType}</p>
+                    <p><strong>Duration:</strong> ${workoutData.duration} minutes</p>
+                    <p><strong>Notes:</strong> ${workoutData.notes}</p>
+                `;
+            }
+        }
+
+        function copyToCSV(includeHeader) {
+            const workoutData = JSON.parse(localStorage.getItem('workoutData'));
+            if (workoutData) {
+                let csvContent = '';
+                if (includeHeader) {
+                    csvContent += 'Workout Type,Duration,Notes\n';
+                }
+                csvContent += `${workoutData.workoutType},${workoutData.duration},${workoutData.notes}`;
+                copyTextToClipboard(csvContent);
+                alert(`Workout data copied as CSV${includeHeader ? ' with header' : ' without header'}!`);
+            } else {
+                alert("No workout data to copy!");
+            }
+        }
+
+        function copyTextToClipboard(text) {
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+        }
+
+        function importCSV() {
+            const fileInput = document.getElementById('csvFileInput');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const csvContent = e.target.result;
+                    const rows = csvContent.split('\n').map(row => row.split(','));
+                    displayCSVData(rows);
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function displayCSVData(rows) {
+            const table = document.getElementById('workoutTable');
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            rows.forEach((row, index) => {
+                if (index > 0 && row.length === 3) { // Skip header and ensure row has 3 columns
+                    const tr = document.createElement('tr');
+                    row.forEach(cell => {
+                        const td = document.createElement('td');
+                        td.textContent = cell.trim();
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                }
+            });
+
+            table.style.display = 'table'; // Show the table after adding data
+        }
+
+        // Display the last saved workout on page load
+        window.onload = displayWorkout;
+    </script>
+</body>
+</html>
