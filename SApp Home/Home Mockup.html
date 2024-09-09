@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-App SPA</title>
+    <style>
+        :root {
+            /* Light Mode */
+            --default-text-color: #333;
+            --background-color: #f1f1f1;
+            --form-field-background-color: #fff;
+            --button-background-color: #4bc67c;
+            --button-hover-background-color: #348b57;
+            --button-text-color: #fff;
+            --toggle-button-background-color: #444;
+            --toggle-button-hover-background-color: #515151;
+
+            /* Dark Mode */
+            --dark-mode-text-color: #fff;
+            --dark-mode-background-color: #222;
+            --dark-mode-form-field-background-color: #333;
+            --dark-mode-button-background-color: #58319f;
+            --dark-mode-button-hover-background-color: #6d45b8;
+            --dark-mode-toggle-button-background-color: #fff;
+            --dark-mode-toggle-button-hover-background-color: #e6e6e6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        .app-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .app-button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .app-button:hover {
+            background-color: var(--button-hover-background-color);
+        }
+
+        #darkModeToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--toggle-button-background-color);
+            color: var(--button-text-color);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        #darkModeToggle:hover {
+            background-color: var(--toggle-button-hover-background-color);
+        }
+
+        .dark-mode {
+            background-color: var(--dark-mode-background-color);
+            color: var(--dark-mode-text-color);
+        }
+
+        .dark-mode .app-button {
+            background-color: var(--dark-mode-button-background-color);
+        }
+
+        .dark-mode .app-button:hover {
+            background-color: var(--dark-mode-button-hover-background-color);
+        }
+
+        .dark-mode #darkModeToggle {
+            background-color: var(--dark-mode-toggle-button-background-color);
+            color: var(--dark-mode-background-color);
+        }
+
+        .dark-mode #darkModeToggle:hover {
+            background-color: var(--dark-mode-toggle-button-hover-background-color);
+        }
+
+        /* Common styles for app containers */
+        .app-container {
+            display: none;
+            background-color: var(--form-field-background-color);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .dark-mode .app-container {
+            background-color: var(--dark-mode-form-field-background-color);
+        }
+
+        /* JPrompt specific styles */
+        #jprompt #prompt {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            min-height: 3em;
+        }
+
+        /* Todo List specific styles */
+        #todo-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #todo-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #todo-list input[type="text"] {
+            padding: 5px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        /* Quote Generator specific styles */
+        #quote-generator #quote {
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        #quote-generator #author {
+            font-weight: bold;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <button id="darkModeToggle">🌓</button>
+    <div class="container">
+        <div id="homepage">
+            <h1>Multi-App SPA</h1>
+            <div class="app-list">
+                <button class="app-button" onclick="showApp('jprompt')">JPrompt</button>
+                <button class="app-button" onclick="showApp('todo-list')">Todo List</button>
+                <button class="app-button" onclick="showApp('quote-generator')">Quote Generator</button>
+            </div>
+        </div>
+
+        <div id="jprompt" class="app-container">
+            <h2>JPrompt</h2>
+            <p id="prompt">Click 'Generate' to get your first prompt!</p>
+            <div class="button-container">
+                <button onclick="generatePrompt()">Generate</button>
+                <button onclick="copyPrompt()">Copy</button>
+            </div>
+            <button class="app-button" onclick="showHomepage()" style="margin-top: 20px;">Back to Home</button>
+        </div>
+
+        <div id="todo-list" class="app-container">
+            <h2>Todo List</h2>
+            <input type="text" id="new-todo" placeholder="Add a new todo">
+            <button onclick="addTodo()">Add</button>
+            <ul id="todos"></ul>
+            <button class="app-button" onclick="showHomepage()" style="margin-top: 20px;">Back to Home</button>
+        </div>
+
+        <div id="quote-generator" class="app-container">
+            <h2>Random Quote Generator</h2>
+            <div id="quote"></div>
+            <div id="author"></div>
+            <button onclick="generateQuote()" style="margin-top: 20px;">New Quote</button>
+            <button class="app-button" onclick="showHomepage()" style="margin-top: 20px;">Back to Home</button>
+        </div>
+    </div>
+
+    <script>
+        // JPrompt specific code
+        const prompts = [
+            "What's a challenge you overcame recently, and what did you learn from it?",
+            "Describe your ideal day. What would you do, and why?",
+            "Write about a person who has had a significant impact on your life.",
+            "What are three things you're grateful for today?",
+            "If you could change one thing about yourself, what would it be and why?",
+            "What's a goal you have for the next year, and what steps can you take to achieve it?",
+            "Reflect on a mistake you made and what you learned from it.",
+            "Write about a place you've always wanted to visit and why it appeals to you.",
+            "What's a skill you'd like to develop, and how might you go about learning it?",
+            "Describe a moment when you felt truly proud of yourself."
+        ];
+
+        function generatePrompt() {
+            const promptElement = document.getElementById('prompt');
+            const randomIndex = Math.floor(Math.random() * prompts.length);
+            promptElement.textContent = prompts[randomIndex];
+        }
+
+        function copyPrompt() {
+            const promptElement = document.getElementById('prompt');
+            const promptText = promptElement.textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                alert('Prompt copied to clipboard!');
+            });
+        }
+
+        // Todo List specific code
+        function addTodo() {
+            const input = document.getElementById('new-todo');
+            const todoText = input.value.trim();
+            if (todoText) {
+                const todoList = document.getElementById('todos');
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${todoText}</span>
+                    <button onclick="removeTodo(this)">Delete</button>
+                `;
+                todoList.appendChild(li);
+                input.value = '';
+            }
+        }
+
+        function removeTodo(button) {
+            button.parentElement.remove();
+        }
+
+        // Quote Generator specific code
+        const quotes = [
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "Life is what happens to you while you're busy making other plans.", author: "John Lennon" },
+            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+            { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+            { text: "The only limit to our realization of tomorrow will be our doubts of today.", author: "Franklin D. Roosevelt" }
+        ];
+
+        function generateQuote() {
+            const quoteElement = document.getElementById('quote');
+            const authorElement = document.getElementById('author');
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const randomQuote = quotes[randomIndex];
+            quoteElement.textContent = `"${randomQuote.text}"`;
+            authorElement.textContent = `- ${randomQuote.author}`;
+        }
+
+        // Navigation and dark mode toggle
+        function showApp(appId) {
+            document.getElementById('homepage').style.display = 'none';
+            document.querySelectorAll('.app-container').forEach(app => app.style.display = 'none');
+            document.getElementById(appId).style.display = 'block';
+        }
+
+        function showHomepage() {
+            document.getElementById('homepage').style.display = 'block';
+            document.querySelectorAll('.app-container').forEach(app => app.style.display = 'none');
+        }
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Initialize the SPA
+        showHomepage();
+    </script>
+</body>
+</html>
