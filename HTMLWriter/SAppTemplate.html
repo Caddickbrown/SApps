@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title id="pageName"></title>
+  <h1 id="pageName"></h1>
+  <!--Default CSS-->
+  <style>
+    :root {
+        /* Light Mode */
+        --default-text-color: #333;
+        --background-color: #f1f1f1;
+        --form-field-background-color: #fff;
+        --button-background-color: #4bc67c;
+        --button-hover-background-color: #348b57;
+        --button-text-color: #fff;
+        --toggle-button-background-color: #444;
+
+        /* Dark Mode */
+        --dark-mode-text-color: #fff;
+        --dark-mode-background-color: #222;
+        --dark-mode-form-field-background-color: #333;
+        --dark-mode-button-background-color: #58319f;
+        --dark-mode-button-hover-background-color: #6d45b8;
+        --dark-mode-toggle-button-background-color: #fff;
+    }
+
+    /* Affix h1 to the top left */
+    h1 {
+        top: 10px;
+        margin-left: 3%;
+        font-family: serif;
+        font-style: italic;
+        font-size: 3em;
+    }
+
+    /* Body */
+    body {
+        font-family: system-ui, sans-serif;
+        color: var(--default-text-color);
+        background-color: var(--background-color);
+        transition: background-color 0.3s ease, color 0.3s ease;
+        margin-bottom: 5em;
+    }
+    body.dark-mode {
+        color: var(--dark-mode-text-color);
+        background-color: var(--dark-mode-background-color);
+    }
+    body a:link, body a:visited {
+        color: var(--default-text-color);
+        transition: color 0.3s ease, color 0.3s ease;
+    }
+    body.dark-mode a:link, body.dark-mode a:visited {
+        color: var(--dark-mode-text-color);
+    }
+    body a:hover {
+        color: var(--button-background-color);
+        transition: color 0.3s ease, color 0.3s ease;
+    }
+    body.dark-mode a:hover {
+        color: var(--button-background-color);
+    }
+
+    /* Form */
+    .container {
+        width: 60%;
+        margin: 0 auto;
+    }
+    form {
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    input, textarea {
+        font-family: system-ui, sans-serif;
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 10px;
+        background-color: var(--form-field-background-color);
+        border: 1px solid var(--button-background-color);
+        border-radius: 4px;
+        outline: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        transition: color 0.3s ease, color 0.3s ease;
+        resize: vertical;
+        overflow: auto;
+        width: 100%;
+    }
+    body.dark-mode input, body.dark-mode textarea {
+        background-color: var(--dark-mode-form-field-background-color);
+        color: var(--dark-mode-text-color);
+        border: 1px solid var(--dark-mode-button-background-color);
+        border-radius: 4px;
+    }
+    .prompt {
+        text-align: center;
+    }
+    .export-options {
+        text-align: center;
+    }
+    .export-options h2 {
+        margin: 0;
+        font-size: 1.2em;
+    }
+
+    /* Buttons */
+    .btn-container {
+        text-align: center;
+    }
+    .btn-container button {
+        margin: 5px;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        background-color: var(--button-background-color);
+        color: var(--button-text-color);
+        font-size: 16px;
+        cursor: pointer;
+    }
+    body.dark-mode .btn-container button {
+        background-color: var(--dark-mode-button-background-color);
+    }
+    .btn-container button:hover {
+        background-color: var(--button-hover-background-color);
+    }
+    body.dark-mode .btn-container button:hover {
+        background-color: var(--dark-mode-button-hover-background-color);
+    }
+    .dark-mode-toggle {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .dark-mode-toggle button {
+        padding: 5px 5px;
+        background-color: var(--toggle-button-background-color);
+        color: var(--background-color);
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        display: inline-block;
+        text-align: center;
+        height: 27px;
+        width: 27px;
+        z-index: 0;
+    }
+    .dark-mode-toggle button:hover {
+        background-color: var(--dark-mode-button-background-color);
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    body.dark-mode .dark-mode-toggle button {
+        background-color: var(--dark-mode-toggle-button-background-color);
+        color: var(--dark-mode-background-color);
+    }
+    body.dark-mode .dark-mode-toggle button:hover {
+        background-color: var(--button-background-color);
+    }
+
+    /* Footer */
+    footer {
+        text-align: right;
+        font-size: 0.8em;
+        vertical-align: middle;
+        position: fixed;
+        bottom: 0;
+        width: 95%;
+    }
+    /* Tags */
+    .tag {
+        display: inline-block;
+        padding: 4px 1em;
+        padding-left: 8px;
+        margin: 4px;
+        background-color: var(--button-background-color);
+        color: var(--button-text-color);
+        border: none;
+        border-radius: 4px;
+        position: relative;
+    }
+    .tag b {
+        font-weight: bold;
+        align-content: left;
+    }
+    .tag .material-icons-outlined {
+        font-size: 14px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        padding: 0 4px;
+    }
+    body.dark-mode .tag {
+        background-color: var(--dark-mode-button-background-color);
+        color: var(--button-text-color);
+    }
+    .whole-form {
+        width: 60%;
+        margin: 0 auto;
+    }
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: var(--button-background-color);
+        color: var(--button-text-color);
+        padding: 10px;
+        border-radius: 8px;
+        opacity: 0; /* Initially transparent */
+        transition: opacity 0.5s;
+        z-index: -1;
+    }
+    .dark-mode .notification {
+        background-color: var(--dark-mode-button-background-color);
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+  </style>
+
+  <!--Custom CSS-->
+  <style>
+
+  </style>
+</head>
+
+<body>
+    <div class="dark-mode-toggle">
+        <button onclick="toggleDarkMode()" id="darkModeButton">
+            <img style="display: block; width: 16px; height: 16px; margin: 0 auto;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAFKmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS41LjAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgZXhpZjpDb2xvclNwYWNlPSIxIgogICBleGlmOlBpeGVsWERpbWVuc2lvbj0iMjAiCiAgIGV4aWY6UGl4ZWxZRGltZW5zaW9uPSIyMCIKICAgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIKICAgcGhvdG9zaG9wOklDQ1Byb2ZpbGU9InNSR0IgSUVDNjE5NjYtMi4xIgogICB0aWZmOkltYWdlTGVuZ3RoPSIyMCIKICAgdGlmZjpJbWFnZVdpZHRoPSIyMCIKICAgdGlmZjpSZXNvbHV0aW9uVW5pdD0iMiIKICAgdGlmZjpYUmVzb2x1dGlvbj0iNzIvMSIKICAgdGlmZjpZUmVzb2x1dGlvbj0iNzIvMSIKICAgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMy0xMC0yOVQyMjoxNjo0OVoiCiAgIHhtcDpNb2RpZnlEYXRlPSIyMDIzLTEwLTI5VDIyOjE2OjQ5WiI+CiAgIDx4bXBNTTpIaXN0b3J5PgogICAgPHJkZjpTZXE+CiAgICAgPHJkZjpsaQogICAgICB4bXBNTTphY3Rpb249InByb2R1Y2VkIgogICAgICB4bXBNTTpzb2Z0d2FyZUFnZW50PSJBZmZpbml0eSBQaG90byAyIDIuMi4xIgogICAgICB4bXBNTTp3aGVuPSIyMDIzLTEwLTI5VDIxOjU3OjA0WiIvPgogICAgIDxyZGY6bGkKICAgICAgc3RFdnQ6YWN0aW9uPSJwcm9kdWNlZCIKICAgICAgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWZmaW5pdHkgUGhvdG8gMiAyLjIuMSIKICAgICAgc3RFdnQ6d2hlbj0iMjAyMy0xMC0yOVQyMjoxNjo0OVoiLz4KICAgIDwvcmRmOlNlcT4KICAgPC94bXBNTTpIaXN0b3J5PgogIDwvcmRmOkRlc2NyaXB0aW9uPgogPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KPD94cGFja2V0IGVuZD0iciI/PvMi1AQAAAGAaUNDUHNSR0IgSUVDNjE5NjYtMi4xAAAokXWRy0tCQRSHv6wotDDIRQsXEtaqwgyiNkFGWCARZtBro9dX4ONyrxLSNmgrFERtei3qL6ht0DoIiiKItrUualNyO1cFJXKGmfPNb845nDkDllBKSestHkhnclrQ73MtLa+42l6x4sQh0xZWdHVyfj5Aw/H1QJNp7wbNXI39/h22aExXoKldeEJRtZzwjHBgI6eavCvsUJLhqPC58IAmBQrfm3qkwm8mJyr8Y7IWCk6BpUvYlajjSB0rSS0tLC/HnU7llWo95ks6YpnFBbG9spzoBPHjw8Us00wxyjDjso8yiJchOdEg3lOOnyMrsYrsKgU01kmQJMeAqHnJHhMbFz0mM0XB7P/fvurxEW8le4cPWl8M46MP2nagVDSM72PDKJ1A8zNcZWrx2SMY+xS9WNPch2DfgovrmhbZg8tt6HlSw1q4LDXLssTj8H4GncvQfQvW1UrPqvecPkJoU77qBvYPoF/87Wu/Plpn0zVlkOgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAF3SURBVDiNnZSxSxxREMZ/7y6cFkL6ICQgFmksjI0QsJDAcaBlsLH16mAfSWkhQgQhgvkXUiVdAoEkVQwIisVx/4B1UAzkfhbOwfLc27v1g2F3Z+b73szsew9KoE6pHfWt+s077KmNsvxKqOtq3/s4UZt1hBrqQUHgVP1U+H5et7LdIF6pb2KBw/Dt1xVrqwP1Rl0p+M9DcLmOWKsws+0sdhn+2TqCm0E6y4f+kAobwEa8v08p/c/i3+P5uk6Fw7aelsQWYrbXE//lIDhqj6kfIn6hzo3ImVN/qTtJHQAJeFTSMuoM8BNYAP4Cx8APoAfMAy+BLjA9tuWC6GP1Y8npyfEvqZ+BDtBNKR2NGc8S8ApYjOp6wB/gGbAFfKncNpNAbQZXdbNyY08ouB3cvtoaOkuP3gRiK8EZqO08eO9yqBBqRM5VcHZHJeXX1zt1TX0Stha+00LeQdXiVRdsjr66nvPTCNEpYBVYCnsRoRPgd9jXlNJNzr0FEes2bOdIDiwAAAAASUVORK5CYII="/>
+        </button>
+    </div>
+<div class="btn-container">
+    <button id="notif-btn">Template Button</button>
+</div>
+
+  <!--Javascript-->
+  <!--Default-->
+  <script>
+    var defaultTheme = 
+        //"light"
+        "dark"
+        ;
+
+    if (defaultTheme === "dark") {
+        toggleDarkMode();
+    }
+    
+    function toggleDarkMode() {
+      const body = document.body;
+      const darkModeButton = document.getElementById("darkModeButton");
+
+      if (body.classList.contains("dark-mode")) {
+        body.classList.remove("dark-mode");
+        darkModeButton.innerHTML = '<img style="display: block;width: 16px; height: 16px; margin: 0 auto;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAFKmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS41LjAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgZXhpZjpDb2xvclNwYWNlPSIxIgogICBleGlmOlBpeGVsWERpbWVuc2lvbj0iMjAiCiAgIGV4aWY6UGl4ZWxZRGltZW5zaW9uPSIyMCIKICAgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIKICAgcGhvdG9zaG9wOklDQ1Byb2ZpbGU9InNSR0IgSUVDNjE5NjYtMi4xIgogICB0aWZmOkltYWdlTGVuZ3RoPSIyMCIKICAgdGlmZjpJbWFnZVdpZHRoPSIyMCIKICAgdGlmZjpSZXNvbHV0aW9uVW5pdD0iMiIKICAgdGlmZjpYUmVzb2x1dGlvbj0iNzIvMSIKICAgdGlmZjpZUmVzb2x1dGlvbj0iNzIvMSIKICAgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMy0xMC0yOVQyMjoxNjo0OVoiCiAgIHhtcDpNb2RpZnlEYXRlPSIyMDIzLTEwLTI5VDIyOjE2OjQ5WiI+CiAgIDx4bXBNTTpIaXN0b3J5PgogICAgPHJkZjpTZXE+CiAgICAgPHJkZjpsaQogICAgICB4bXBNTTphY3Rpb249InByb2R1Y2VkIgogICAgICB4bXBNTTpzb2Z0d2FyZUFnZW50PSJBZmZpbml0eSBQaG90byAyIDIuMi4xIgogICAgICB4bXBNTTp3aGVuPSIyMDIzLTEwLTI5VDIxOjU3OjA0WiIvPgogICAgIDxyZGY6bGkKICAgICAgc3RFdnQ6YWN0aW9uPSJwcm9kdWNlZCIKICAgICAgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWZmaW5pdHkgUGhvdG8gMiAyLjIuMSIKICAgICAgc3RFdnQ6d2hlbj0iMjAyMy0xMC0yOVQyMjoxNjo0OVoiLz4KICAgIDwvcmRmOlNlcT4KICAgPC94bXBNTTpIaXN0b3J5PgogIDwvcmRmOkRlc2NyaXB0aW9uPgogPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KPD94cGFja2V0IGVuZD0iciI/PvMi1AQAAAGAaUNDUHNSR0IgSUVDNjE5NjYtMi4xAAAokXWRy0tCQRSHv6wotDDIRQsXEtaqwgyiNkFGWCARZtBro9dX4ONyrxLSNmgrFERtei3qL6ht0DoIiiKItrUualNyO1cFJXKGmfPNb845nDkDllBKSestHkhnclrQ73MtLa+42l6x4sQh0xZWdHVyfj5Aw/H1QJNp7wbNXI39/h22aExXoKldeEJRtZzwjHBgI6eavCvsUJLhqPC58IAmBQrfm3qkwm8mJyr8Y7IWCk6BpUvYlajjSB0rSS0tLC/HnU7llWo95ks6YpnFBbG9spzoBPHjw8Us00wxyjDjso8yiJchOdEg3lOOnyMrsYrsKgU01kmQJMeAqHnJHhMbFz0mM0XB7P/fvurxEW8le4cPWl8M46MP2nagVDSM72PDKJ1A8zNcZWrx2SMY+xS9WNPch2DfgovrmhbZg8tt6HlSw1q4LDXLssTj8H4GncvQfQvW1UrPqvecPkJoU77qBvYPoF/87Wu/Plpn0zVlkOgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAF3SURBVDiNnZSxSxxREMZ/7y6cFkL6ICQgFmksjI0QsJDAcaBlsLH16mAfSWkhQgQhgvkXUiVdAoEkVQwIisVx/4B1UAzkfhbOwfLc27v1g2F3Z+b73szsew9KoE6pHfWt+s077KmNsvxKqOtq3/s4UZt1hBrqQUHgVP1U+H5et7LdIF6pb2KBw/Dt1xVrqwP1Rl0p+M9DcLmOWKsws+0sdhn+2TqCm0E6y4f+kAobwEa8v08p/c/i3+P5uk6Fw7aelsQWYrbXE//lIDhqj6kfIn6hzo3ImVN/qTtJHQAJeFTSMuoM8BNYAP4Cx8APoAfMAy+BLjA9tuWC6GP1Y8npyfEvqZ+BDtBNKR2NGc8S8ApYjOp6wB/gGbAFfKncNpNAbQZXdbNyY08ouB3cvtoaOkuP3gRiK8EZqO08eO9yqBBqRM5VcHZHJeXX1zt1TX0Stha+00LeQdXiVRdsjr66nvPTCNEpYBVYCnsRoRPgd9jXlNJNzr0FEes2bOdIDiwAAAAASUVORK5CYII="/>';
+      } else {
+        body.classList.add("dark-mode");
+        darkModeButton.innerHTML = '<img style="display: block;width: 16px; height: 16px; margin: 0 auto;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAFsmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS41LjAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgZXhpZjpDb2xvclNwYWNlPSIxIgogICBleGlmOlBpeGVsWERpbWVuc2lvbj0iMjIiCiAgIGV4aWY6UGl4ZWxZRGltZW5zaW9uPSIyMiIKICAgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIKICAgcGhvdG9zaG9wOklDQ1Byb2ZpbGU9InNSR0IgSUVDNjE5NjYtMi4xIgogICB0aWZmOkltYWdlTGVuZ3RoPSIyMiIKICAgdGlmZjpJbWFnZVdpZHRoPSIyMiIKICAgdGlmZjpSZXNvbHV0aW9uVW5pdD0iMiIKICAgdGlmZjpYUmVzb2x1dGlvbj0iNzIvMSIKICAgdGlmZjpZUmVzb2x1dGlvbj0iNzIvMSIKICAgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMy0x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"/>';
+      }
+    }
+    const notificationBtn = document.getElementById('notif-btn');
+    
+    notificationBtn.addEventListener('click', function() {
+        // Insert Javascript Code
+        notification.style.zIndex = '1';
+        notification.style.opacity = '1';
+        setTimeout(function() {
+            notification.style.opacity = '0';
+            notification.style.zIndex = '-1';
+        }, 2000);
+    });
+  </script>
+
+  <!--Custom-->
+  <script>
+    var appName = "SAppTemplate";
+    var versionNumber = "2.1.1";
+    var templateVersionNumber = "2.1.1"; //SAppTemplate version
+
+    document.querySelectorAll("#pageName").forEach(function(element) {element.innerHTML = appName;});
+  </script>
+
+  <!--Notifications-->
+  <div>
+    <div class="notification" id="notification">Template Notification</div>
+  </div>
+</body>
+
+<footer>
+  <p id="versionNumber"></p>
+  <p>Find this project on <a href="https://github.com/Caddickbrown/SAppTemplate">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
+
+  <script>
+    document.querySelectorAll("#versionNumber").forEach(function(element) {
+      element.innerHTML = "v" + versionNumber;
+    });
+  </script>
+
+</footer>
+</html>
