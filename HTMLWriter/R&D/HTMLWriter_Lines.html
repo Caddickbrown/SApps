@@ -42,6 +42,28 @@
             flex-direction: column;
             height: 100%;
         }
+        .editor-container {
+            display: flex;
+            flex-grow: 1;
+            width: 60%;
+            margin: 0 auto;
+        }
+        #line-numbers {
+            padding: 20px 10px;
+            font-size: 18px;
+            line-height: 1.6;
+            text-align: right;
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+            border-right: 1px solid #ccc;
+            user-select: none;
+            overflow-y: hidden;
+        }
+        body.dark-mode #line-numbers {
+            background-color: var(--dark-mode-darker-background-color);
+            color: var(--dark-mode-text-color);
+            border-right-color: #555;
+        }
         #editor {
             flex-grow: 1;
             border: none;
@@ -50,8 +72,6 @@
             line-height: 1.6;
             resize: none;
             transition: background-color 0.3s, color 0.3s;
-            width: 60%;
-            margin: 0 auto;
             outline: none;
         }
         body.dark-mode #editor {
@@ -108,23 +128,50 @@
                 <button onclick="exportText()">Export</button>
                 <button onclick="copyText()">Copy</button>
                 <button onclick="toggleDarkMode()">Theme</button>
+                <button onclick="toggleLineNumbers()">Line Numbers</button>
             </div>
             <div id="word-count">Words: 0</div>
         </div>
-        <textarea id="editor" placeholder="Start writing..."></textarea>
+        <div class="editor-container">
+            <div id="line-numbers"></div>
+            <textarea id="editor" placeholder="Start writing..."></textarea>
+        </div>
     </div>
 
     <script>
         const editor = document.getElementById('editor');
         const wordCount = document.getElementById('word-count');
+        const lineNumbers = document.getElementById('line-numbers');
         let isDarkMode = false;
+        let showLineNumbers = false;
+        var defaultTheme = 
+            "light"
+            //"dark"
+            ;
+    
+        if (defaultTheme === "dark") {
+            toggleDarkMode();
+        }
 
-        editor.addEventListener('input', updateWordCount);
+        editor.addEventListener('input', () => {
+            updateWordCount();
+            updateLineNumbers();
+        });
+        editor.addEventListener('scroll', syncScroll);
 
         function updateWordCount() {
             const text = editor.value.trim();
             const words = text ? text.split(/\s+/).length : 0;
             wordCount.textContent = `Words: ${words}`;
+        }
+
+        function updateLineNumbers() {
+            const lines = editor.value.split('\n');
+            lineNumbers.innerHTML = lines.map((_, index) => `${index + 1}`).join('<br>');
+        }
+
+        function syncScroll() {
+            lineNumbers.scrollTop = editor.scrollTop;
         }
 
         function formatText(style) {
@@ -148,6 +195,7 @@
             editor.value = editor.value.substring(0, start) + formattedText + editor.value.substring(end);
             editor.focus();
             editor.setSelectionRange(start + 2, end + 2);
+            updateLineNumbers();
         }
 
         function exportText() {
@@ -189,12 +237,23 @@
             editor.selectionStart = editor.selectionEnd = cursorPos + dateTimeString.length;
             
             updateWordCount();
+            updateLineNumbers();
         }
 
         function toggleDarkMode() {
             isDarkMode = !isDarkMode;
             document.body.classList.toggle('dark-mode');
         }
+
+        function toggleLineNumbers() {
+            showLineNumbers = !showLineNumbers;
+            lineNumbers.style.display = showLineNumbers ? 'block' : 'none';
+            updateLineNumbers();
+        }
+
+        // Initialize
+        toggleLineNumbers(); // Hide line numbers initially
+        updateLineNumbers();
     </script>
 </body>
 </html>

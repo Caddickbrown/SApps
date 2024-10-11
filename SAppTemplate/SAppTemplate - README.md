@@ -19,6 +19,17 @@ The SApp Template Version also tells me something about what functionality the S
 - Default Light/Dark Mode
 - Standardised Footer
 
+## Changing the Default Theme
+To change the default theme you just need to "uncomment" out the theme you want and comment out any others within the HTML file.
+- Open the HTML file in your text editor of choice.
+- Hit Ctrl+F and Search for "defaultTheme"
+- Find the section that lists the different options (such as "light" or "dark")
+- Comment out the themes that you don't want by putting "//" in front of them.
+- Remove the "//" from the theme you would like to be your default.
+- Save the file.
+- Test
+- Enjoy!
+
 ## Roadmap
 
 ### Planned Functionality
@@ -48,6 +59,12 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+
+### [2.1.2] - 2024-10-11
+
+#### Added
+
+- Instructions for changing Default Theme
 
 ### [2.1.1] - 2023-10-30
 

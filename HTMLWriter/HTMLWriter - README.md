@@ -17,6 +17,18 @@ I wanted a simple writing app that I didn't need to install. I also wanted to be
 - Formatting Buttons (Bold, Italics, Underline)
 - txt Export Button
 - Copy Button
+- Default Theme Option
+
+## Changing the Default Theme
+To change the default theme you just need to "uncomment" out the theme you want and comment out any others within the HTML file.
+- Open the HTML file in your text editor of choice.
+- Hit Ctrl+F and Search for "defaultTheme"
+- Find the section that lists the different options (such as "light" or "dark")
+- Comment out the themes that you don't want by putting "//" in front of them.
+- Remove the "//" from the theme you would like to be your default.
+- Save the file.
+- Test
+- Enjoy!
 
 ## Roadmap
 
@@ -50,6 +62,12 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+
+### [1.1.0] - 2024-10-09
+
+#### Added
+
+- [x] Default Theme
 
 ### [1.0.0] - 2024-10-09
 - [x] Initial Release
