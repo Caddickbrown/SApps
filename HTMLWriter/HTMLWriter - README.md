@@ -33,12 +33,10 @@ To change the default theme you just need to "uncomment" out the theme you want 
 ## Roadmap
 
 ### Planned Functionality
-- Multiple Themes
-- Focus Mode
+- Focus Mode (Fading Sentences)
 - SApp Standardisation
 - Version Number as Variable
 - Standardised Footer
-- Line Numbers
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
@@ -63,6 +61,23 @@ This project is licensed under the MIT License.
 
 ## Change Log
 
+### [2.0.0] - 2024-10-15
+
+#### Added
+
+- [x] Notification Bubble Support
+- [x] Line Numbers Mode
+- [x] Multiple Themes
+- [x] Multiple Fonts
+
+#### Removed
+
+- [x] Annoying Pop Up when Copying
+
+#### Fixed
+
+- [x] Formatting Selection Offset
+
 ### [1.1.0] - 2024-10-09
 
 #### Added
@@ -70,4 +85,5 @@ This project is licensed under the MIT License.
 - [x] Default Theme
 
 ### [1.0.0] - 2024-10-09
+
 - [x] Initial Release
