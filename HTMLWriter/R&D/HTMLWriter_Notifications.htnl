@@ -42,28 +42,6 @@
             flex-direction: column;
             height: 100%;
         }
-        .editor-container {
-            display: flex;
-            flex-grow: 1;
-            width: 60%;
-            margin: 0 auto;
-        }
-        #line-numbers {
-            padding: 20px 10px;
-            font-size: 18px;
-            line-height: 1.6;
-            text-align: right;
-            background-color: var(--background-color);
-            color: var(--default-text-color);
-            border-right: 1px solid #ccc;
-            user-select: none;
-            overflow-y: hidden;
-        }
-        body.dark-mode #line-numbers {
-            background-color: var(--dark-mode-darker-background-color);
-            color: var(--dark-mode-text-color);
-            border-right-color: #555;
-        }
         #editor {
             flex-grow: 1;
             border: none;
@@ -72,6 +50,8 @@
             line-height: 1.6;
             resize: none;
             transition: background-color 0.3s, color 0.3s;
+            width: 60%;
+            margin: 0 auto;
             outline: none;
         }
         body.dark-mode #editor {
@@ -115,22 +95,21 @@
         #word-count {
             font-size: 14px;
         }
-    .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background-color: var(--button-background-color);
-        color: var(--button-text-color);
-        padding: 10px;
-        border-radius: 8px;
-        opacity: 0; /* Initially transparent */
-        transition: opacity 0.5s;
-        z-index: -1;
-    }
-    .dark-mode .notification {
-        background-color: var(--dark-mode-button-background-color);
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            padding: 10px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: -1;
+        }
+        body.dark-mode .notification {
+            background-color: var(--dark-mode-button-background-color);
+        }
     </style>
 </head>
 <body>
@@ -141,33 +120,22 @@
                 <button onclick="formatText('italic')"><i>I</i></button>
                 <button onclick="formatText('underline')"><u>U</u></button>
                 <button onclick="insertDateTime()">Date/Time</button>
-                <button id="notif-btn-export" onclick="exportText()">Export</button>
-                <button id="notif-btn-copy" onclick="copyText()">Copy</button>
+                <button onclick="exportText()">Export</button>
+                <button onclick="copyText()">Copy</button>
                 <button onclick="toggleDarkMode()">Theme</button>
-                <button onclick="toggleLineNumbers()">Line Numbers</button>
             </div>
             <div id="word-count">Words: 0</div>
         </div>
-        <div class="editor-container">
-            <div id="line-numbers"></div>
-            <textarea id="editor" placeholder="Start writing..."></textarea>
-        </div>
+        <textarea id="editor" placeholder="Start writing..."></textarea>
     </div>
 
-    <!--Notifications-->
-    <div>
-        <div class="notificationExport" id="notificationExport">Exported</div>
-    </div>
-    <div>
-        <div class="notificationCopy" id="notificationCopy">Text Copied</div>
-    </div>
+    <div class="notification" id="notification"></div>
 
     <script>
         const editor = document.getElementById('editor');
         const wordCount = document.getElementById('word-count');
-        const lineNumbers = document.getElementById('line-numbers');
+        const notification = document.getElementById('notification');
         let isDarkMode = false;
-        let showLineNumbers = false;
         var defaultTheme = 
             "light"
             //"dark"
@@ -176,49 +144,13 @@
         if (defaultTheme === "dark") {
             toggleDarkMode();
         }
-        const notificationBtnExport = document.getElementById('notif-btn-export');
-    
-        notificationBtnExport.addEventListener('click', function() {
-            // Insert Javascript Code
-            notificationExport.style.zIndex = '1';
-            notificationExport.style.opacity = '1';
-            setTimeout(function() {
-                notificationExport.style.opacity = '0';
-                notificationExport.style.zIndex = '-1';
-            }, 2000);
-        });
 
-        const notificationBtnCopy = document.getElementById('notif-btn-copy');
-    
-        notificationBtnCopy.addEventListener('click', function() {
-            // Insert Javascript Code
-            notificationCopy.style.zIndex = '1';
-            notificationCopy.style.opacity = '1';
-            setTimeout(function() {
-                notificationCopy.style.opacity = '0';
-                notificationCopy.style.zIndex = '-1';
-            }, 2000);
-        });
-
-        editor.addEventListener('input', () => {
-            updateWordCount();
-            updateLineNumbers();
-        });
-        editor.addEventListener('scroll', syncScroll);
+        editor.addEventListener('input', updateWordCount);
 
         function updateWordCount() {
             const text = editor.value.trim();
             const words = text ? text.split(/\s+/).length : 0;
             wordCount.textContent = `Words: ${words}`;
-        }
-
-        function updateLineNumbers() {
-            const lines = editor.value.split('\n');
-            lineNumbers.innerHTML = lines.map((_, index) => `${index + 1}`).join('<br>');
-        }
-
-        function syncScroll() {
-            lineNumbers.scrollTop = editor.scrollTop;
         }
 
         function formatText(style) {
@@ -242,7 +174,6 @@
             editor.value = editor.value.substring(0, start) + formattedText + editor.value.substring(end);
             editor.focus();
             editor.setSelectionRange(start + 2, end + 2);
-            updateLineNumbers();
         }
 
         function exportText() {
@@ -256,11 +187,13 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            showNotification('Text exported successfully!');
         }
 
         function copyText() {
             editor.select();
             document.execCommand('copy');
+            showNotification('Text copied to clipboard!');
         }
 
         function insertDateTime() {
@@ -283,7 +216,6 @@
             editor.selectionStart = editor.selectionEnd = cursorPos + dateTimeString.length;
             
             updateWordCount();
-            updateLineNumbers();
         }
 
         function toggleDarkMode() {
@@ -291,15 +223,15 @@
             document.body.classList.toggle('dark-mode');
         }
 
-        function toggleLineNumbers() {
-            showLineNumbers = !showLineNumbers;
-            lineNumbers.style.display = showLineNumbers ? 'block' : 'none';
-            updateLineNumbers();
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.style.zIndex = '1';
+            notification.style.opacity = '1';
+            setTimeout(function() {
+                notification.style.opacity = '0';
+                notification.style.zIndex = '-1';
+            }, 2000);
         }
-
-        // Initialize
-        toggleLineNumbers(); // Hide line numbers initially
-        updateLineNumbers();
     </script>
 </body>
 </html>
