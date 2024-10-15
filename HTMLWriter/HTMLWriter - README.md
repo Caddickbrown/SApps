@@ -35,8 +35,8 @@ To change the default theme you just need to "uncomment" out the theme you want 
 ### Planned Functionality
 - Focus Mode (Fading Sentences)
 - SApp Standardisation
-- Version Number as Variable
-- Standardised Footer
+- Margin Width Options
+- More Themes
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
@@ -60,6 +60,18 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+
+### [2.1.0] - 2024-10-15
+
+#### Added
+
+- [x] Hoverable Footer
+- [x] Version Number as Variable
+
+#### Fixed
+
+- [x] CSS Cleanup
+- [x] Button Hover Colours
 
 ### [2.0.0] - 2024-10-15
 
