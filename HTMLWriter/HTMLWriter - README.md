@@ -36,6 +36,11 @@ To change the default theme you just need to "uncomment" out the theme you want 
 - Focus Mode (Fading Sentences)
 - SApp Standardisation
 - Margin Width Options
+- Font Size Options
+- Focus Mode
+- Typewriter Mode
+- Toolbar Orientation (Side/Top/Bottom)
+- Theme Selection Popup Menu
 - More Themes
 
 ## Dependencies
