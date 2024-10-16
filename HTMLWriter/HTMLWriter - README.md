@@ -22,8 +22,8 @@ I wanted a simple writing app that I didn't need to install. I also wanted to be
 ## Changing the Default Theme
 To change the default theme you just need to "uncomment" out the theme you want and comment out any others within the HTML file.
 - Open the HTML file in your text editor of choice.
-- Hit Ctrl+F and Search for "defaultTheme"
-- Find the section that lists the different options (such as "light" or "dark")
+- Hit Ctrl+F and Search for "Config"
+- Find the section that lists the different options (such as "default" or "sepia")
 - Comment out the themes that you don't want by putting "//" in front of them.
 - Remove the "//" from the theme you would like to be your default.
 - Save the file.
@@ -32,15 +32,35 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
+### v3.0.0 - 
+
+#### Added
+
+- [x] Terminal Theme
+- [ ] Border Variables to Buttons for more flexibility
+- [ ] Border CSS Styling for all themes
+- [ ] Margin Width Options
+- [ ] Font Size Options
+
+#### Changed
+
+- [ ] Standardised Setting Colour Properties
+
+#### Fixed
+
+- [ ] 
+
+#### Removed
+
+- [x] Redundant Script Tags
+
 ### Planned Functionality
-- Focus Mode (Fading Sentences)
+- Focus Mode (Fading Sentences/Clear Away Options)
 - SApp Standardisation
-- Margin Width Options
-- Font Size Options
-- Focus Mode
 - Typewriter Mode
 - Toolbar Orientation (Side/Top/Bottom)
 - Theme Selection Popup Menu
+- Mobile Optimisation
 - More Themes
 
 ## Dependencies
