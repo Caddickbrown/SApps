@@ -12,12 +12,15 @@ I wanted a simple writing app that I didn't need to install. I also wanted to be
 5. Enjoy!
 
 ## Features
-- Dark/Light Mode
+- Themes!
 - Insert Date Button
 - Formatting Buttons (Bold, Italics, Underline)
 - txt Export Button
 - Copy Button
-- Default Theme Option
+- Default Theme Options
+- Multiple Fonts
+- Line Numbers
+- Word Counter
 
 ## Changing the Default Theme
 To change the default theme you just need to "uncomment" out the theme you want and comment out any others within the HTML file.
@@ -62,6 +65,14 @@ To change the default theme you just need to "uncomment" out the theme you want 
 - Theme Selection Popup Menu
 - Mobile Optimisation
 - More Themes
+- To Do Buttons
+- Bullet Point Buttons
+- Text File Upload (txt and md)
+- Character/Sentence Counters
+- Reading Time Estimate
+- Word Goal
+- Heading Increaser/Decreaser
+- Margin Options
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
