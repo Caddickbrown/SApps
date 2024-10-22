@@ -40,8 +40,9 @@ To change the default theme you just need to "uncomment" out the theme you want 
 #### Added
 
 - [x] Terminal Theme
+- [x] Text File Upload (txt and md)
 - [ ] Border Variables to Buttons for more flexibility
-- [ ] Border CSS Styling for all themes
+- [ ] Button Border CSS Styling for all themes
 - [ ] Margin Width Options
 - [ ] Font Size Options
 
@@ -67,12 +68,10 @@ To change the default theme you just need to "uncomment" out the theme you want 
 - More Themes
 - To Do Buttons
 - Bullet Point Buttons
-- Text File Upload (txt and md)
 - Character/Sentence Counters
 - Reading Time Estimate
 - Word Goal
 - Heading Increaser/Decreaser
-- Margin Options
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.

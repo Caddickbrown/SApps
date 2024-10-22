@@ -178,7 +178,9 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+        #file-input {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -204,6 +206,8 @@
                     <option value="sans-serif">Sans-Serif</option>
                     <option value="monospace">Mono</option>
                 </select>
+                <button onclick="document.getElementById('file-input').click()">Upload</button>
+                <input type="file" id="file-input" accept=".txt,.md" onchange="handleFileUpload(event)" style="display: none;">
             </div>
             <div id="word-count">Words: 0</div>
         </div>
@@ -414,6 +418,37 @@
 
         function applyFont() {
             editor.style.fontFamily = currentFont;
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check if file is txt or md
+                if (!file.name.match(/\.(txt|md)$/i)) {
+                    showNotification('Please upload only .txt or .md files!');
+                    event.target.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    editor.value = e.target.result;
+                    updateWordCount();
+                    updateLineNumbers();
+    
+                    // Show filename in notification
+                    showNotification(`Loaded ${file.name} successfully!`);
+    
+                    // Optional: Update page title to reflect loaded file
+                    document.title = `${appName} - ${file.name}`;
+                };
+                reader.onerror = function() {
+                    showNotification('Error reading file!');
+                };
+                reader.readAsText(file);
+            }
+            // Reset the input to allow uploading the same file again
+            event.target.value = '';
         }
 
         // Initialize
