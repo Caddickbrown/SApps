@@ -669,7 +669,7 @@
         }
 
         function applyTheme() {
-            const mode = isDarkMode ? 'dark' : 'light';
+            const mode = isDarkMode;
             
             document.body.style.color = `var(--${currentTheme}-${mode}-text-color)`;
             document.body.style.backgroundColor = `var(--${currentTheme}-${mode}-background-color)`;
