@@ -470,9 +470,10 @@
             false
             //true
             ;
-        let isDarkMode = 
-            false
-            //true
+        let darkMode = 
+            "system"
+            //"light"
+            //"dark"
             ;
         let currentTheme =
             'default'
@@ -496,6 +497,23 @@
             "60"
             //"40"
             ;
+
+        
+            let isDarkMode = getDarkModePreference(darkMode);
+        // Function to get the dark mode preference
+        function getDarkModePreference(mode) {
+            if (mode === 'light') return false;
+            if (mode === 'dark') return true;
+            // For "system" mode, check the system's preference
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+            // Listen for theme changes only if in "system" mode
+        if (themeMode === 'system') {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+                isDarkMode = event.matches;
+                applyTheme(); // Call your function to apply the updated theme
+            });
+        }
         
 
         editor.addEventListener('input', () => {
