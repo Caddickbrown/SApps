@@ -35,39 +35,27 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
-### v3.0.0 - 
+### v4.0.0 - 
 
 #### Added
-
-- [x] Terminal Theme
-- [x] Text File Upload (txt and md)
-- [ ] Border Variables to Buttons for more flexibility
-- [ ] Button Border CSS Styling for all themes
-- [ ] Margin Width Options
-- [ ] Font Size Options
+- [ ] To Do Buttons
+- [ ] Bullet Point Buttons
 
 #### Changed
 
-- [ ] Standardised Setting Colour Properties
-
 #### Fixed
 
-- [ ] 
+- [ ] Javascript Cleanup
 
 #### Removed
-
-- [x] Redundant Script Tags
 
 ### Planned Functionality
 - Focus Mode (Fading Sentences/Clear Away Options)
 - SApp Standardisation
 - Typewriter Mode
 - Toolbar Orientation (Side/Top/Bottom)
-- Theme Selection Popup Menu
 - Mobile Optimisation
 - More Themes
-- To Do Buttons
-- Bullet Point Buttons
 - Character/Sentence Counters
 - Reading Time Estimate
 - Word Goal
@@ -95,6 +83,22 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+
+### [3.0.0] - 2024-10-25
+
+#### Added
+
+- [x] Terminal Theme
+- [x] Text File Upload (txt and md)
+- [x] Button Border CSS Styling for all themes
+- [x] Style Settings Popup Menu
+- [x] Margin Width Options
+- [x] Font Size Options
+- [x] Version Info on Version Number click
+
+#### Removed
+
+- [x] Redundant Script Tags
 
 ### [2.1.0] - 2024-10-15
 

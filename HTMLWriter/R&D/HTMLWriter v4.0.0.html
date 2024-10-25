@@ -13,6 +13,7 @@
             --default-light-button-background-color: #4bc67c;
             --default-light-button-text-color: #ffffff;
             --default-light-button-hover-color: #348b57;
+            --default-light-button-border-color: none;
             /* Default Theme - Dark Mode */
             --default-dark-text-color: #e0e0e0;
             --default-dark-background-color: #1d1d1d;
@@ -20,6 +21,7 @@
             --default-dark-button-background-color: #58319f;
             --default-dark-button-text-color: #ffffff;
             --default-dark-button-hover-color: #6d45b8;
+            --default-dark-button-border-color: none;
 
             /* Sepia Theme - Light Mode */
             --sepia-light-text-color: #5b4636;
@@ -28,6 +30,7 @@
             --sepia-light-button-background-color: #c19a6b;
             --sepia-light-button-text-color: #ffffff;
             --sepia-light-button-hover-color: #a67c52;
+            --sepia-light-button-border-color: none;
             /* Sepia Theme - Dark Mode */
             --sepia-dark-text-color: #d3c4a9;
             --sepia-dark-background-color: #433422;
@@ -35,6 +38,7 @@
             --sepia-dark-button-background-color: #8b6b4a;
             --sepia-dark-button-text-color: #ffffff;
             --sepia-dark-button-hover-color: #6d5438;
+            --sepia-dark-button-border-color: none;
 
             /* Cool Theme - Light Mode */
             --cool-light-text-color: #2c3e50;
@@ -43,6 +47,7 @@
             --cool-light-button-background-color: #3498db;
             --cool-light-button-text-color: #ffffff;
             --cool-light-button-hover-color: #2980b9;
+            --cool-light-button-border-color: none;
             /* Cool Theme - Dark Mode */
             --cool-dark-text-color: #bdc3c7;
             --cool-dark-background-color: #2c3e50;
@@ -50,21 +55,24 @@
             --cool-dark-button-background-color: #2980b9;
             --cool-dark-button-text-color: #ffffff;
             --cool-dark-button-hover-color: #3498db;
+            --cool-dark-button-border-color: none;
 
             /* Terminal Theme - Light Mode */
             --terminal-light-text-color: #59b822;
             --terminal-light-background-color: #0e290e;
-            --terminal-light-alt-background-color: #1d4515;
+            --terminal-light-alt-background-color: #0c2108;
             --terminal-light-button-background-color: #13451a;
             --terminal-light-button-text-color: #59b822;
             --terminal-light-button-hover-color: #186d1d;
+            --terminal-light-button-border-color: none;
             /* Terminal Theme - Dark Mode */
             --terminal-dark-text-color: #c20000;
             --terminal-dark-background-color: #000000;
-            --terminal-dark-alt-background-color: #222222;
-            --terminal-dark-button-background-color: #320000;
+            --terminal-dark-alt-background-color: #320000;
+            --terminal-dark-button-background-color: #000000;
             --terminal-dark-button-text-color: #c20000;
             --terminal-dark-button-hover-color: #690000;
+            --terminal-dark-button-border-color: 1px solid #c20000;
         }
 
         body, html {
@@ -103,8 +111,9 @@
         .editor-container {
             display: flex;
             flex-grow: 1;
-            width: 60%;
+            width: var(--editor-width, 60%); /* Default width */
             margin: 0 auto;
+            transition: width 0.3s ease;
         }
         #line-numbers {
             display: none;
@@ -125,7 +134,7 @@
             line-height: 1.6;
             resize: none;
             transition: background-color 0.3s, color 0.3s;
-            width: 60%;
+            width: 100%;
             margin: 0 auto;
             outline: none;
         }
@@ -144,7 +153,7 @@
         button {
             background-color: var(--button-background-color);
             color: var(--button-text-color);
-            border: none;
+            border: var(--button-border-color);
             padding: 5px 10px;
             margin-right: 5px;
             cursor: pointer;
@@ -181,6 +190,172 @@
         #file-input {
             display: none;
         }
+
+        .theme-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--background-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            color: var(--text-color);
+        }
+
+        .theme-popup h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 999;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+
+        /* Update toolbar button styles */
+        #toolbar button {
+            min-width: 30px;
+        }
+
+        .overlay-active #toolbar,
+        .overlay-active footer {
+            opacity: 1 !important;
+        }
+
+        /* Add styles for the checkbox container */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .checkbox-container:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        /* Style the checkbox input */
+        .checkbox-container input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+        }
+
+        /* Style the label */
+        .checkbox-container label {
+            cursor: pointer;
+            user-select: none;
+            color: var(--button-text-color);
+        }
+
+        
+        .modal-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--background-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            color: var(--text-color);
+        }
+
+        .modal-popup h2, .modal-popup h3 {
+            margin-top: 0;
+            color: var(--text-color);
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+
+        /* Theme-specific styles */
+        #theme-popup {
+            max-width: 400px;
+        }
+
+        .theme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Version-specific styles */
+        #version-info-popup {
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .version-info-content {
+            margin-top: 15px;
+            color: var(--text-color);
+        }
+
+        .version-info-content h3 {
+            margin: 15px 0 5px 0;
+        }
+
+        .version-info-content ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+
+        #versionNumber {
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        #versionNumber:hover {
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
@@ -191,22 +366,10 @@
                 <button onclick="formatText('italic')"><i>I</i></button>
                 <button onclick="formatText('underline')"><u>U</u></button>
                 <button onclick="insertDateTime()">Date/Time</button>
+                <button onclick="document.getElementById('file-input').click()">Import</button>
                 <button onclick="exportText()">Export</button>
                 <button onclick="copyText()">Copy</button>
-                <button onclick="toggleLineNumbers()">Line Numbers</button>
-                <button onclick="toggleDarkMode()">Theme</button>
-                <select id="theme-select" onchange="changeTheme()">
-                    <option value="default">Default</option>
-                    <option value="sepia">Sepia</option>
-                    <option value="cool">Cool</option>
-                    <option value="terminal">Terminal</option>
-                </select>
-                <select id="font-select" onchange="changeFont()">
-                    <option value="serif">Serif</option>
-                    <option value="sans-serif">Sans-Serif</option>
-                    <option value="monospace">Mono</option>
-                </select>
-                <button onclick="document.getElementById('file-input').click()">Upload</button>
+                <button onclick="openThemePopup()">Styles</button>
                 <input type="file" id="file-input" accept=".txt,.md" onchange="handleFileUpload(event)" style="display: none;">
             </div>
             <div id="word-count">Words: 0</div>
@@ -214,6 +377,80 @@
         <div class="editor-container">
             <div id="line-numbers"></div>
             <textarea id="editor" placeholder="Start writing..."></textarea>
+        </div>
+    </div>
+
+
+    <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
+    <div class="modal-popup" id="theme-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h3>Style Settings</h3>
+        <div class="theme-options">
+            <div class="theme-row">
+                <label for="theme-select">Style:</label>
+                <select id="theme-select" onchange="changeTheme()">
+                    <option value="default">Default</option>
+                    <option value="sepia">Sepia</option>
+                    <option value="cool">Cool</option>
+                    <option value="terminal">Terminal</option>
+                </select>
+            </div>
+            <div class="theme-row">
+                <button onclick="toggleDarkMode()">Light/Dark Mode</button>
+            </div>
+            <div class="theme-row">
+                <label for="theme-select">Font:</label>
+                <select id="font-select" onchange="changeFont()">
+                    <option value="monospace">Mono</option>
+                    <option value="serif">Serif</option>
+                    <option value="sans-serif">Sans-Serif</option>
+                </select>
+            </div>
+            <div class="theme-row">
+                <label for="theme-select">Font:</label>
+                <select id="font-size-select" onchange="changeFontSize()">
+                    <option value="16">Small</option>
+                    <option value="20">Medium</option>
+                    <option value="24">Large</option>
+                    <option value="28">Extra-Large</option>
+                </select>
+            </div>
+            <div class="theme-row">
+                <label for="theme-select">Line Numbers:</label>
+                <input type="checkbox" id="line-numbers-toggle" onchange="toggleLineNumbers()" />
+            </div>
+            <div class="theme-row">
+                <label for="margin-width-select">Margin Width:</label>
+                <select id="margin-width-select" onchange="changeMarginWidth()">
+                    <option value="80">Small</option>
+                    <option value="60" selected>Medium</option>
+                    <option value="40">Large</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-popup" id="version-info-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h2>Version Information</h2>
+        <div class="version-info-content">
+            <h3>v3.0.0 - 2024-10-25</h3>
+            
+            <h3>New Features:</h3>
+            <ul>
+                <li>New Theme: Terminal</li>
+                <li>Text File Upload</li>
+                <li>Font Size Options</li>
+                <li>Margin Width Options</li>
+            </ul>
+    
+            <h3>Improvements:</h3>
+            <ul>
+                <li>Button Border CSS Styling for all themes</li>
+                <li>Style Settings Popup Menu</li>
+                <li>Version Information</li>
+                <li>Removed Redundant Script Tags</li>
+            </ul>
         </div>
     </div>
 
@@ -248,6 +485,18 @@
             //"serif"
             //"sans-serif"
             ;
+        let currentFontSize =
+            //"16"
+            "20"
+            //"24"
+            //"28"
+            ;
+        let currentMarginWidth =
+            //"80"
+            "60"
+            //"40"
+            ;
+        
 
         editor.addEventListener('input', () => {
             updateWordCount();
@@ -382,6 +631,25 @@
             applyFont();
         }
 
+        function showPopup(popupId) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById(popupId).style.display = 'block';
+            document.body.classList.add('overlay-active');
+        }
+
+        function closeAllPopups() {
+            document.getElementById('overlay').style.display = 'none';
+            document.querySelectorAll('.modal-popup').forEach(popup => {
+                popup.style.display = 'none';
+            });
+            document.body.classList.remove('overlay-active');
+        }
+
+        // Update existing functions to use new unified system
+        function openThemePopup() {
+        showPopup('theme-popup');
+        }
+
         function applyTheme() {
             const mode = isDarkMode ? 'dark' : 'light';
             
@@ -395,6 +663,7 @@
             document.documentElement.style.setProperty('--button-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
             document.documentElement.style.setProperty('--button-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
             document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
+            document.documentElement.style.setProperty('--button-border-color', `var(--${currentTheme}-${mode}-button-border-color)`);
 
             document.documentElement.style.setProperty('--notification-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
             document.documentElement.style.setProperty('--notification-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
@@ -404,8 +673,12 @@
             document.documentElement.style.setProperty('--select-text-color', `var(--${currentTheme}-${mode}-text-color)`);
         
             document.documentElement.style.setProperty('--link-hover-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+           
+            const popup = document.getElementById('theme-popup');
+            popup.style.backgroundColor = `var(--${currentTheme}-${mode}-alt-background-color)`;
+            popup.style.color = `var(--${currentTheme}-${mode}-text-color)`;
         }
-
+        
         function showNotification(message) {
             notification.textContent = message;
             notification.style.zIndex = '1';
@@ -419,6 +692,12 @@
         function applyFont() {
             editor.style.fontFamily = currentFont;
         }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeAllPopups();
+            }
+        });
 
         function handleFileUpload(event) {
             const file = event.target.files[0];
@@ -451,14 +730,61 @@
             event.target.value = '';
         }
 
+        function changeFontSize() {
+            currentFontSize = document.getElementById('font-size-select').value;
+            applyFontSize();
+        }
+
+        function applyFontSize() {
+            editor.style.fontSize = `${currentFontSize}px`;
+            lineNumbers.style.fontSize = `${currentFontSize}px`;
+        }
+        
+
+        function changeMarginWidth() {
+            currentMarginWidth = document.getElementById('margin-width-select').value;
+            applyMarginWidth();
+        }
+
+        function applyMarginWidth() {
+            document.documentElement.style.setProperty('--editor-width', currentMarginWidth + '%');
+        }
+
+        function setInitialStates() {
+            // Set font size initial selection
+            const fontSizeSelect = document.getElementById('font-size-select');
+            for (let i = 0; i < fontSizeSelect.options.length; i++) {
+                if (fontSizeSelect.options[i].value === currentFontSize) {
+                    fontSizeSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // Set margin width initial selection
+            const marginWidthSelect = document.getElementById('margin-width-select');
+            for (let i = 0; i < marginWidthSelect.options.length; i++) {
+                if (marginWidthSelect.options[i].value === currentMarginWidth) {
+                    marginWidthSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            
+            // Previous initial states
+            document.getElementById('line-numbers-toggle').checked = showLineNumbers;
+            lineNumbers.style.display = showLineNumbers ? 'block' : 'none';
+            setInitialSelections();
+            updateLineNumbers();
+            applyTheme();
+            applyFont();
+            applyFontSize();
+            applyMarginWidth();
+        }
+
         // Initialize
-        updateLineNumbers();
-        applyTheme();
-        applyFont();
-        setInitialSelections();
+        setInitialStates();
 
         var appName = "HTMLWriter";
-        var versionNumber = "3.0.0";
+        var versionNumber = "4.0.0";
 
         document.querySelectorAll("#pageName").forEach(function(element) {element.innerHTML = appName;});
 
@@ -471,9 +797,10 @@
     <p>Find this project on <a href="https://github.com/Caddickbrown/SApps/">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
   
     <script>
-      document.querySelectorAll("#versionNumber").forEach(function(element) {
-        element.innerHTML = "v" + versionNumber;
-      });
+        document.querySelectorAll("#versionNumber").forEach(function(element) {
+            element.innerHTML = "v" + versionNumber;
+            element.onclick = () => showPopup('version-info-popup');
+        });
     </script>
 </footer>
 </html>
