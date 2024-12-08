@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageName"></title>
+    <style>
+        :root {
+            /* Default Theme - Light Mode */
+            --default-light-text-color: #333;
+            --default-light-background-color: #ffffff;
+            --default-light-alt-background-color: #f0f0f0;
+            --default-light-button-background-color: #4bc67c;
+            --default-light-button-text-color: #ffffff;
+            --default-light-button-hover-color: #348b57;
+            --default-light-button-border-color: none;
+            /* Default Theme - Dark Mode */
+            --default-dark-text-color: #e0e0e0;
+            --default-dark-background-color: #1d1d1d;
+            --default-dark-alt-background-color: #2d2d2d;
+            --default-dark-button-background-color: #58319f;
+            --default-dark-button-text-color: #ffffff;
+            --default-dark-button-hover-color: #6d45b8;
+            --default-dark-button-border-color: none;
+
+            /* Cool Theme - Light Mode */
+            --cool-light-text-color: #2c3e50;
+            --cool-light-background-color: #ecf0f1;
+            --cool-light-alt-background-color: #ffffff;
+            --cool-light-button-background-color: #3498db;
+            --cool-light-button-text-color: #ffffff;
+            --cool-light-button-hover-color: #2980b9;
+            --cool-light-button-border-color: none;
+            /* Cool Theme - Dark Mode */
+            --cool-dark-text-color: #bdc3c7;
+            --cool-dark-background-color: #2c3e50;
+            --cool-dark-alt-background-color: #34495e;
+            --cool-dark-button-background-color: #2980b9;
+            --cool-dark-button-text-color: #ffffff;
+            --cool-dark-button-hover-color: #3498db;
+            --cool-dark-button-border-color: none;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            font-family: sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background: var(--background-color);
+        }
+        body a:link, body a:visited {
+            color: var(--default-text-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body a:hover {
+            color: var(--link-hover-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        footer {
+            text-align: right;
+            font-size: 0.8em;
+            vertical-align: middle;
+            position: fixed;
+            bottom: 0;
+            width: 95%;
+            transition: opacity 0.3s;
+            opacity: 1;
+        }
+        button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: var(--button-border-color);
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #42526e;
+            padding: 0 10px;
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--background-color);
+            min-width: 160px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            z-index: 1000;
+        }
+
+        .menu-content button {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .menu-content button:hover {
+            background-color: #f4f5f7;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .board {
+            display: flex;
+            gap: 20px;
+            min-height: 80vh;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+
+        .column {
+            background: #ebecf0;
+            border-radius: 10px;
+            min-width: 300px;
+            max-width: 300px;
+            padding: 10px;
+            height: fit-content;
+            cursor: move;
+        }
+
+        .column.dragging {
+            opacity: 0.5;
+            background: #c1c7d0;
+        }
+
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: move;
+        }
+
+        .column-title {
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        .column-title:hover {
+            background: rgba(0,0,0,0.05);
+            border-radius: 3px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: move;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .card:hover {
+            background: #f8f9fa;
+        }
+
+        .add-card {
+            background: transparent;
+            border: none;
+            color: #5e6c84;
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .add-card:hover {
+            background: rgba(0,0,0,0.05);
+            border-radius: 3px;
+        }
+
+        .add-column {
+            background: #ebecf0;
+            border: none;
+            border-radius: 10px;
+            color: #5e6c84;
+            cursor: pointer;
+            height: fit-content;
+            min-width: 300px;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .add-column:hover {
+            background: #dfe1e6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 15% auto;
+            padding: 20px;
+            width: 70%;
+            max-width: 500px;
+            border-radius: 5px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin: 10px 0;
+            padding: 10px;
+        }
+
+        .modal button {
+            background: #0079bf;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .modal button:hover {
+            background: #026aa7;
+        }
+
+        .delete-column {
+            background: none;
+            border: none;
+            color: #6b778c;
+            cursor: pointer;
+            padding: 4px 8px;
+            margin: 0;
+        }
+
+        .delete-column:hover {
+            background: rgba(0,0,0,0.08);
+            color: var(--default-text-color);
+        }
+
+        .theme-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--background-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            color: var(--text-color);
+        }
+
+        .theme-popup h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+.theme-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 999;
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--text-color);
+}
+
+.overlay-active #toolbar,
+.overlay-active footer {
+    opacity: 1 !important;
+}
+
+/* Add styles for the checkbox container */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.checkbox-container:hover {
+    background-color: var(--button-hover-color);
+}
+
+/* Style the checkbox input */
+.checkbox-container input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+
+/* Style the label */
+.checkbox-container label {
+    cursor: pointer;
+    user-select: none;
+    color: var(--button-text-color);
+}
+
+.modal-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--background-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    color: var(--text-color);
+}
+
+.modal-popup h2, .modal-popup h3 {
+    margin-top: 0;
+    color: var(--text-color);
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--text-color);
+}
+
+/* Theme-specific styles */
+#theme-popup {
+    max-width: 400px;
+}
+
+.theme-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.theme-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Version-specific styles */
+#version-info-popup {
+    max-width: 500px;
+    width: 90%;
+}
+
+.version-info-content {
+    margin-top: 15px;
+    color: var(--text-color);
+}
+
+.version-info-content h3 {
+    margin: 15px 0 5px 0;
+}
+
+.version-info-content ul {
+    margin: 5px 0;
+    padding-left: 20px;
+}
+
+#versionNumber {
+    cursor: pointer;
+    display: inline-block;
+}
+
+#versionNumber:hover {
+    text-decoration: underline;
+}
+
+
+
+
+
+
+    </style>
+</head>
+
+
+
+
+
+
+
+
+<body>
+    <div class="header">
+        <h1>Kanban Board</h1>
+        <div class="menu-container">
+            <button class="menu-button" onclick="toggleMenu()">⋮</button>
+            <div id="menuContent" class="menu-content">
+                <button onclick="openThemePopup()">Theme</button>
+                <button onclick="exportToMarkdown()">Export MD</button>
+                <button onclick="showImportModal()">Import MD</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="board" id="board">
+        <button class="add-column" onclick="addColumn()">+ Add another column</button>
+    </div>
+
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <h2>Import from Markdown</h2>
+            <textarea id="markdownInput" placeholder="Paste your markdown here..."></textarea>
+            <button onclick="importFromMarkdown()">Import</button>
+            <button onclick="closeImportModal()">Cancel</button>
+        </div>
+    </div>
+
+
+    <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
+    <div class="modal-popup" id="theme-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h3>Style Settings</h3>
+        <div class="theme-options">
+            <div class="theme-row">
+                <label for="theme-select">Style:</label>
+                <select id="theme-select" onchange="changeTheme()">
+                    <option value="default">Default</option>
+                    <option value="cool">Cool</option>
+                </select>
+            </div>
+            <div class="theme-row">
+                <button onclick="toggleDarkMode()">Light/Dark Mode</button>
+            </div>
+            <div class="theme-row">
+                <label for="theme-select">Font:</label>
+                <select id="font-select" onchange="changeFont()">
+                    <option value="monospace">Mono</option>
+                    <option value="serif">Serif</option>
+                    <option value="sans-serif">Sans-Serif</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <script>
+
+        const editor = document.getElementById('editor');
+        const wordCount = document.getElementById('word-count');
+        const lineNumbers = document.getElementById('line-numbers');
+        const themeSelect = document.getElementById('theme-select');
+        const fontSelect = document.getElementById('font-select');
+        const notification = document.getElementById('notification');
+
+        //Config
+        let isDarkMode = 
+            //false
+            true
+            ;
+        let currentTheme =
+            //'default'
+            //'sepia'
+            'cool'
+            //'terminal'
+            ;
+        let currentFont = 
+            "monospace"
+            //"serif"
+            //"sans-serif"
+            ;
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            applyTheme();
+        }
+
+        function changeTheme() {
+            currentTheme = themeSelect.value;
+            applyTheme();
+        }
+
+        function changeFont() {
+            currentFont = fontSelect.value;
+            applyFont();
+        }
+
+        function showPopup(popupId) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById(popupId).style.display = 'block';
+            document.body.classList.add('overlay-active');
+        }
+
+        function closeAllPopups() {
+            document.getElementById('overlay').style.display = 'none';
+            document.querySelectorAll('.modal-popup').forEach(popup => {
+                popup.style.display = 'none';
+            });
+            document.body.classList.remove('overlay-active');
+        }
+
+        // Update existing functions to use new unified system
+        function openThemePopup() {
+            showPopup('theme-popup');
+        }
+
+function applyTheme() {
+    const mode = isDarkMode ? 'dark' : 'light';
+    
+    document.body.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+    document.body.style.backgroundColor = `var(--${currentTheme}-${mode}-background-color)`;
+
+    document.documentElement.style.setProperty('--button-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+    document.documentElement.style.setProperty('--button-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+    document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
+    document.documentElement.style.setProperty('--button-border-color', `var(--${currentTheme}-${mode}-button-border-color)`);
+
+    document.documentElement.style.setProperty('--notification-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+    document.documentElement.style.setProperty('--notification-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+
+    document.documentElement.style.setProperty('--select-background-color', `var(--${currentTheme}-${mode}-background-color)`);
+    document.documentElement.style.setProperty('--select-alt-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+    document.documentElement.style.setProperty('--select-text-color', `var(--${currentTheme}-${mode}-text-color)`);
+
+    document.documentElement.style.setProperty('--link-hover-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+   
+    const popup = document.getElementById('theme-popup');
+    popup.style.backgroundColor = `var(--${currentTheme}-${mode}-alt-background-color)`;
+    popup.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+}
+
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.style.zIndex = '1';
+            notification.style.opacity = '1';
+            setTimeout(function() {
+                notification.style.opacity = '0';
+                notification.style.zIndex = '-1';
+            }, 2000);
+        }
+
+        function applyFont() {
+            body.style.fontFamily = currentFont;
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeAllPopups();
+            }
+        });
+
+        function setInitialStates() {
+            // Set initial theme selection
+            for (let i = 0; i < themeSelect.options.length; i++) {
+                if (themeSelect.options[i].value === currentTheme) {
+                    themeSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // Set initial font selection
+            for (let i = 0; i < fontSelect.options.length; i++) {
+                if (fontSelect.options[i].value === currentFont) {
+                    fontSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // Set font size initial selection
+            const fontSizeSelect = document.getElementById('font-size-select');
+            for (let i = 0; i < fontSizeSelect.options.length; i++) {
+                if (fontSizeSelect.options[i].value === currentFontSize) {
+                    fontSizeSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // Set margin width initial selection
+            const marginWidthSelect = document.getElementById('margin-width-select');
+            for (let i = 0; i < marginWidthSelect.options.length; i++) {
+                if (marginWidthSelect.options[i].value === currentMarginWidth) {
+                    marginWidthSelect.selectedIndex = i;
+                    break;
+                }
+            }
+    
+            // Previous initial states
+            document.getElementById('line-numbers-toggle').checked = showLineNumbers;
+            lineNumbers.style.display = showLineNumbers ? 'block' : 'none';
+            applyTheme();
+            applyFont();
+
+            
+
+        }
+
+
+        var appName = "HTMLKanban";
+        var versionNumber = "1.0.0";
+
+        document.querySelectorAll("#pageName").forEach(function(element) {element.innerHTML = appName;});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // Initialize board with default columns
+        document.addEventListener('DOMContentLoaded', function() {
+            const defaultColumns = ['To Do', 'Doing', 'Done'];
+            defaultColumns.forEach(name => createColumn(name));
+        });
+
+        // Menu functionality
+        function toggleMenu() {
+            document.getElementById("menuContent").classList.toggle("show");
+        }
+
+        // Close menu when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.menu-button')) {
+                const dropdowns = document.getElementsByClassName("menu-content");
+                for (let dropdown of dropdowns) {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                }
+            }
+
+            const modal = document.getElementById('importModal');
+            if (event.target === modal) {
+                closeImportModal();
+            }
+        }
+
+        // Column Management
+        function createColumn(name) {
+            const board = document.getElementById('board');
+            const addColumnBtn = document.querySelector('.add-column');
+            
+            const column = document.createElement('div');
+            column.className = 'column';
+            column.setAttribute('draggable', 'true');
+            column.setAttribute('ondrop', 'drop(event)');
+            column.setAttribute('ondragover', 'allowDrop(event)');
+            column.setAttribute('ondragstart', 'dragColumn(event)');
+            column.setAttribute('ondragend', 'dragEndColumn(event)');
+            
+            const header = document.createElement('div');
+            header.className = 'column-header';
+            
+            const title = document.createElement('div');
+            title.className = 'column-title';
+            title.textContent = name;
+            title.onclick = function() {
+                const newName = prompt('Enter new column name:', title.textContent);
+                if (newName) {
+                    title.textContent = newName;
+                }
+            };
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-column';
+            deleteBtn.innerHTML = '×';
+            deleteBtn.onclick = function() {
+                if (confirm('Delete this column and all its cards?')) {
+                    column.remove();
+                }
+            };
+            
+            header.appendChild(title);
+            header.appendChild(deleteBtn);
+            
+            const addCardBtn = document.createElement('button');
+            addCardBtn.className = 'add-card';
+            addCardBtn.textContent = '+ Add a card';
+            addCardBtn.onclick = function() {
+                addCard(column);
+            };
+            
+            column.appendChild(header);
+            column.appendChild(addCardBtn);
+            
+            board.insertBefore(column, addColumnBtn);
+        }
+
+        function addColumn() {
+            const name = prompt('Enter column name:');
+            if (name) {
+                createColumn(name);
+            }
+        }
+
+        // Column Drag and Drop
+        function dragColumn(event) {
+            event.stopPropagation();
+            event.target.classList.add('dragging');
+            event.dataTransfer.setData('text/plain', 'column');
+            event.dataTransfer.effectAllowed = 'move';
+        }
+
+        function dragEndColumn(event) {
+            event.target.classList.remove('dragging');
+        }
+
+        function getClosestColumn(x) {
+            const columns = [...document.querySelectorAll('.column:not(.dragging)')];
+            return columns.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = x - box.left - box.width / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        // Card Drag and Drop
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.stopPropagation();
+            ev.dataTransfer.setData("text/plain", ev.target.id);
+            ev.dataTransfer.effectAllowed = 'move';
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text/plain");
+            
+            if (data === 'column') {
+                const draggingColumn = document.querySelector('.column.dragging');
+                const closestColumn = getClosestColumn(ev.clientX);
+                if (closestColumn) {
+                    closestColumn.parentNode.insertBefore(draggingColumn, closestColumn);
+                }
+            } else {
+                const draggedElement = document.getElementById(data);
+                const dropZone = ev.target.closest('.column');
+                
+                if (dropZone && draggedElement) {
+                    const addCardButton = dropZone.querySelector('.add-card');
+                    dropZone.insertBefore(draggedElement, addCardButton);
+                }
+            }
+        }
+
+        // Card Management
+        function addCard(column) {
+            const text = prompt("Enter card text:");
+            if (text) {
+                const card = createCard(text);
+                const addButton = column.querySelector('.add-card');
+                column.insertBefore(card, addButton);
+            }
+        }
+
+        function createCard(text) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.draggable = true;
+            card.id = 'card-' + Date.now();
+            card.ondragstart = drag;
+            card.onclick = function(e) {
+                if (e.target === card) {
+                    const newText = prompt("Edit card:", text);
+                    if (newText) {
+                        card.textContent = newText;
+                    }
+                }
+            };
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '×';
+            deleteBtn.style.float = 'right';
+            deleteBtn.style.background = 'none';
+            deleteBtn.style.border = 'none';
+            deleteBtn.style.color = '#999';
+            deleteBtn.style.padding = '0 5px';
+            deleteBtn.onclick = function(e) {
+                e.stopPropagation();
+                if (confirm('Delete this card?')) {
+                    card.remove();
+                }
+            };
+            
+            card.textContent = text;
+            card.appendChild(deleteBtn);
+            return card;
+        }
+
+        // Import/Export functionality
+        function exportToMarkdown() {
+            let markdown = "";
+            const columns = document.querySelectorAll('.column');
+            
+            columns.forEach(column => {
+                const columnHeader = column.querySelector('.column-title').textContent;
+                markdown += `## ${columnHeader}\n\n`;
+                
+                const cards = column.querySelectorAll('.card');
+                cards.forEach(card => {
+                    const cardText = card.textContent.slice(0, -1).trim();
+                    markdown += `- ${cardText}\n`;
+                });
+                markdown += '\n';
+            });
+
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'kanban-board.md';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            toggleMenu();
+        }
+
+        function showImportModal() {
+            document.getElementById('importModal').style.display = 'block';
+            toggleMenu();
+        }
+
+        function closeImportModal() {
+            document.getElementById('importModal').style.display = 'none';
+            document.getElementById('markdownInput').value = '';
+        }
+
+        function importFromMarkdown() {
+            const markdown = document.getElementById('markdownInput').value;
+            const lines = markdown.split('\n');
+            let currentColumn = null;
+
+            document.querySelectorAll('.column').forEach(column => column.remove());
+
+            lines.forEach(line => {
+                line = line.trim();
+                if (line.startsWith('## ')) {
+                    const columnName = line.substring(3).trim();
+                    createColumn(columnName);
+                    currentColumn = Array.from(document.querySelectorAll('.column')).pop();
+                } else if (line.startsWith('- ') && currentColumn) {
+                    const cardText = line.substring(2).trim();
+                    const card = createCard(cardText);
+                    const addButton = currentColumn.querySelector('.add-card');
+                    currentColumn.insertBefore(card, addButton);
+                }
+            });
+
+            closeImportModal();
+        }
+
+
+
+
+        // Initialize
+        setInitialStates();
+
+
+
+    </script>
+</body>
+
+<footer>
+    <p id="versionNumber"></p>
+    <p>Find this project on <a href="https://github.com/Caddickbrown/SApps/">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
+  
+    <script>
+        document.querySelectorAll("#versionNumber").forEach(function(element) {
+            element.innerHTML = "v" + versionNumber;
+            element.onclick = () => showPopup('version-info-popup');
+        });
+    </script>
+</footer>
+</html>
