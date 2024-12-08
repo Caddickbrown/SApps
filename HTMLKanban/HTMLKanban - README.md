@@ -2,7 +2,7 @@
 A simple, markdown-based Kanban App contained in a single HTML File.
 
 ## Background
-I wanted a simple kanban app that I didn't need to install. I also wanted to be able to use it on any computer, even from a USB Drive.
+I wanted a simple kanban app that I didn't need to install. I also wanted to be able to use it on any computer, even from a USB Drive. Additionally being able to export and import a standardised file was useful so I added that in.
 
 ## Usage
 1. Download the latest release.
@@ -12,10 +12,6 @@ I wanted a simple kanban app that I didn't need to install. I also wanted to be 
 5. Enjoy!
 
 ## Features
-- Drag-and-drop for cards
-- Themes
-- Settings modal functionality
-- Export to and import from Markdown
 
 ## Changing the Default Theme
 To change the default theme you just need to "uncomment" out the theme you want and comment out any others within the HTML file.
@@ -42,18 +38,24 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 #### Fixed
 
-- [ ] Moving Cards After Import
-- [ ] Themeing
+- [ ] 
 
 #### Removed
 
 - [ ] 
 
 ### Planned Functionality
+- Drag-and-drop Cards
+- Drag-and-drop Columns
+- Themes
+- Settings Pop-Up
+- Export to and import from Markdown
+- Default Cards
 - Change Theme with Imported File
 - Change App Name with Imported File
 - Change Settings with Imported File
 - Auto Complete in Column
+- Custom CSS
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
