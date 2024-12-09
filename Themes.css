@@ -67,4 +67,21 @@
     --terminal-dark-button-text-color: #c20000;
     --terminal-dark-button-hover-color: #690000;
     --terminal-dark-button-border-color: 1px solid #c20000;
-}
+
+    /* GX Theme - Light Mode */
+    --gx-light-text-color: #333;
+    --gx-light-background-color: #ffffff;
+    --gx-light-alt-background-color: #f0f0f0;
+    --gx-light-button-background-color: #4bc67c;
+    --gx-light-button-text-color: #ffffff;
+    --gx-light-button-hover-color: #348b57;
+    --gx-light-button-border-color: none;
+    /* GX Theme - Dark Mode */
+    --gx-dark-text-color: #e0e0e0;
+    --gx-dark-background-color: #1d1d1d;
+    --gx-dark-alt-background-color: #2d2d2d;
+    --gx-dark-button-background-color: #58319f;
+    --gx-dark-button-text-color: #ffffff;
+    --gx-dark-button-hover-color: #6d45b8;
+    --gx-dark-button-border-color: none;
+} 
