@@ -26,6 +26,13 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
+### [1.1.0] - 2024-12-09
+
+#### Changed
+
+- [x] Removed overly questioning deletion for Columns and Cards
+- [ ] Smoothed Adding/Renaming of Cards
+
 ### Planned Functionality
 - Cleaned Up Style Menu
 - Easier Dragging
@@ -72,3 +79,4 @@ This project is licensed under the MIT License.
 - [x] Settings Pop-Up
 - [x] Export to and import from Markdown
 - [x] Default Cards (Change in File)
+- [x] 
