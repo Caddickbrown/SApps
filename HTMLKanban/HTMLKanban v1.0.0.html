@@ -50,6 +50,7 @@
             line-height: 1.6;
             padding: 20px;
             background: var(--background-color);
+            transition: background-color 0.3s, color 0.3s;
         }
         body a:link, body a:visited {
             color: var(--default-text-color);
@@ -81,6 +82,18 @@
         }
         button:hover {
             background-color: var(--button-hover-color);
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--notification-background-color);
+            color: var(--notification-text-color);
+            padding: 10px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: -1;
         }
 
         .header {
@@ -458,7 +471,6 @@
         </div>
     </div>
 
-
     <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
     <div class="modal-popup" id="theme-popup">
         <button class="close-popup" onclick="closeAllPopups()">×</button>
@@ -501,6 +513,8 @@
         </div>
     </div>
 
+    <div class="notification" id="notification"></div>
+
 
 
 
@@ -527,9 +541,9 @@
             //'terminal'
             ;
         let currentFont = 
-            "monospace"
+            //"monospace"
             //"serif"
-            //"sans-serif"
+            "sans-serif"
             ;
 
         var appName = "HTMLKanban";
@@ -585,6 +599,16 @@
             popup.style.backgroundColor = `var(--${currentTheme}-${mode}-alt-background-color)`;
             popup.style.color = `var(--${currentTheme}-${mode}-text-color)`;
         }
+        
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.style.zIndex = '1';
+            notification.style.opacity = '1';
+            setTimeout(function() {
+                notification.style.opacity = '0';
+                notification.style.zIndex = '-1';
+            }, 2000);
+        }
 
         function toggleDarkMode() {
             isDarkMode = !isDarkMode;
@@ -601,6 +625,10 @@
             applyFont();
         }
 
+        function applyFont() {
+            document.body.style.fontFamily = currentFont;
+        }
+
         function showNotification(message) {
             notification.textContent = message;
             notification.style.zIndex = '1';
@@ -609,10 +637,6 @@
                 notification.style.opacity = '0';
                 notification.style.zIndex = '-1';
             }, 2000);
-        }
-
-        function applyFont() {
-            body.style.fontFamily = currentFont;
         }
 
         document.addEventListener('keydown', function(event) {

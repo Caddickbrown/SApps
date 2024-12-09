@@ -26,31 +26,11 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
-### v1.0.0 - 
-
-#### Added
-
-- [ ] 
-
-#### Changed
-
-- [ ] 
-
-#### Fixed
-
-- [ ] 
-
-#### Removed
-
-- [ ] 
-
 ### Planned Functionality
-- Drag-and-drop Cards
-- Drag-and-drop Columns
-- Themes
-- Settings Pop-Up
-- Export to and import from Markdown
-- Default Cards
+- Cleaned Up Style Menu
+- Easier Dragging
+- Imported File Fixes?
+- More Themes
 - Change Theme with Imported File
 - Change App Name with Imported File
 - Change Settings with Imported File
@@ -80,6 +60,15 @@ This project is licensed under the MIT License.
 
 ## Change Log
 
-### [1.0.0] - ????-??-??
+### [1.0.0] - 2024-12-09
 
-- [ ] Initial Release
+#### Added
+
+- [x] Initial Release
+- [x] Drag-and-drop Cards
+- [x] Drag-and-drop Columns
+- [x] Notification Support
+- [x] Basic Themes
+- [x] Settings Pop-Up
+- [x] Export to and import from Markdown
+- [x] Default Cards (Change in File)
