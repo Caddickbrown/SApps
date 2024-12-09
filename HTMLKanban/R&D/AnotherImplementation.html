@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Implementation</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #bebebe;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .board {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+
+        .list {
+            background: #ebecf0;
+            border-radius: 3px;
+            width: 300px;
+            min-height: 100px;
+            padding: 10px;
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .list-title {
+            font-weight: bold;
+            padding: 5px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 8px;
+            box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            background: #f4f5f7;
+        }
+
+        .add-card {
+            background: none;
+            border: none;
+            color: #5e6c84;
+            padding: 5px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .add-card:hover {
+            background: rgba(9, 30, 66, 0.08);
+            color: #172b4d;
+        }
+
+        .add-list {
+            background: hsla(0, 0%, 100%, 0.24);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 300px;
+        }
+
+        .add-list:hover {
+            background: hsla(0, 0%, 100%, 0.32);
+        }
+
+        .card.dragging {
+            opacity: 0.5;
+        }
+
+        .card-input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #0079bf;
+            border-radius: 3px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="board">
+        <div class="list" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div class="list-header">
+                <div class="list-title">To Do</div>
+            </div>
+            <div class="cards">
+                <div class="card" draggable="true" ondragstart="drag(event)">Add documentation</div>
+                <div class="card" draggable="true" ondragstart="drag(event)">Create mockups</div>
+            </div>
+            <button class="add-card" onclick="showCardInput(this)">+ Add a card</button>
+        </div>
+
+        <div class="list" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div class="list-header">
+                <div class="list-title">In Progress</div>
+            </div>
+            <div class="cards">
+                <div class="card" draggable="true" ondragstart="drag(event)">Design system</div>
+            </div>
+            <button class="add-card" onclick="showCardInput(this)">+ Add a card</button>
+        </div>
+
+        <div class="list" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div class="list-header">
+                <div class="list-title">Done</div>
+            </div>
+            <div class="cards">
+                <div class="card" draggable="true" ondragstart="drag(event)">Project setup</div>
+            </div>
+            <button class="add-card" onclick="showCardInput(this)">+ Add a card</button>
+        </div>
+
+        <button class="add-list" onclick="addList()">+ Add another list</button>
+    </div>
+
+    <script>
+        // Drag and drop functionality
+        function drag(event) {
+            event.target.classList.add('dragging');
+            event.dataTransfer.setData("text", event.target.innerHTML);
+            event.dataTransfer.setData("sourceList", event.target.parentElement.parentElement.id);
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text");
+            const sourceList = event.dataTransfer.getData("sourceList");
+            
+            // Find the closest list from the drop target
+            let targetList = event.target.closest('.list');
+            if (!targetList) return;
+
+            // Create new card
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.draggable = true;
+            card.ondragstart = drag;
+            card.innerHTML = data;
+
+            // Find the cards container in the target list
+            const cardsContainer = targetList.querySelector('.cards');
+            
+            // Remove the original card if it exists
+            document.querySelectorAll('.card.dragging').forEach(card => card.remove());
+            
+            // Add the new card
+            cardsContainer.appendChild(card);
+        }
+
+        // Add new card functionality
+        function showCardInput(button) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'card-input';
+            input.placeholder = 'Enter card title...';
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value.trim()) {
+                    addCard(this.value.trim(), button);
+                    this.remove();
+                }
+            });
+
+            input.addEventListener('blur', function() {
+                if (this.value.trim()) {
+                    addCard(this.value.trim(), button);
+                }
+                this.remove();
+            });
+
+            button.parentNode.insertBefore(input, button);
+            input.focus();
+        }
+
+        function addCard(text, button) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.draggable = true;
+            card.ondragstart = drag;
+            card.innerHTML = text;
+
+            const cardsContainer = button.parentNode.querySelector('.cards');
+            cardsContainer.appendChild(card);
+        }
+
+        // Add new list functionality
+        function addList() {
+            const board = document.querySelector('.board');
+            const addListButton = document.querySelector('.add-list');
+            
+            const list = document.createElement('div');
+            list.className = 'list';
+            list.ondrop = drop;
+            list.ondragover = allowDrop;
+            
+            list.innerHTML = `
+                <div class="list-header">
+                    <div class="list-title">New List</div>
+                </div>
+                <div class="cards"></div>
+                <button class="add-card" onclick="showCardInput(this)">+ Add a card</button>
+            `;
+            
+            board.insertBefore(list, addListButton);
+        }
+
+        // Generate unique IDs for lists
+        document.querySelectorAll('.list').forEach((list, index) => {
+            list.id = 'list-' + (index + 1);
+        });
+    </script>
+</body>
+</html>
