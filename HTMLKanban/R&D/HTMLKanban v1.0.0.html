@@ -100,7 +100,7 @@
             border: none;
             font-size: 24px;
             cursor: pointer;
-            color: #42526e;
+            color: var(--column-text-color);
             padding: 0 10px;
         }
 
@@ -108,7 +108,7 @@
             display: none;
             position: absolute;
             right: 0;
-            background-color: var(--background-color);
+            background: var(--column-color);
             min-width: 160px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             border-radius: 4px;
@@ -127,7 +127,7 @@
         }
 
         .menu-content button:hover {
-            background-color: #f4f5f7;
+            background-color: var(--card-color);
         }
 
         .show {
@@ -143,7 +143,8 @@
         }
 
         .column {
-            background: #ebecf0;
+            background: var(--column-color);
+            color: var(--column-text-color);
             border-radius: 10px;
             min-width: 300px;
             max-width: 300px;
@@ -178,7 +179,8 @@
         }
 
         .card {
-            background: white;
+            background: var(--card-color);
+            color: var(--card-text-color);
             border-radius: 3px;
             padding: 10px;
             margin-bottom: 10px;
@@ -187,13 +189,13 @@
         }
 
         .card:hover {
-            background: #f8f9fa;
+            background: var(--column-color);
         }
 
         .add-card {
             background: transparent;
             border: none;
-            color: #5e6c84;
+            color: var(--button-hover-color);
             padding: 10px;
             width: 100%;
             text-align: left;
@@ -206,19 +208,13 @@
         }
 
         .add-column {
-            background: #ebecf0;
             border: none;
             border-radius: 10px;
-            color: #5e6c84;
             cursor: pointer;
             height: fit-content;
             min-width: 300px;
             padding: 10px;
             text-align: left;
-        }
-
-        .add-column:hover {
-            background: #dfe1e6;
         }
 
         .modal {
@@ -232,7 +228,8 @@
         }
 
         .modal-content {
-            background: white;
+            background: var(--column-color);
+            color: var(--column-text-color);
             margin: 15% auto;
             padding: 20px;
             width: 70%;
@@ -245,20 +242,6 @@
             height: 200px;
             margin: 10px 0;
             padding: 10px;
-        }
-
-        .modal button {
-            background: #0079bf;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 3px;
-            cursor: pointer;
-            margin: 5px;
-        }
-
-        .modal button:hover {
-            background: #026aa7;
         }
 
         .delete-column {
@@ -295,144 +278,144 @@
             color: var(--text-color);
         }
 
-.theme-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0);
-    z-index: 999;
-}
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 999;
+        }
 
-.close-popup {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    font-size: 18px;
-    color: var(--text-color);
-}
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-color);
+        }
 
-.overlay-active #toolbar,
-.overlay-active footer {
-    opacity: 1 !important;
-}
+        .overlay-active #toolbar,
+        .overlay-active footer {
+            opacity: 1 !important;
+        }
 
-/* Add styles for the checkbox container */
-.checkbox-container {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.2s, border-color 0.2s;
-}
+        /* Add styles for the checkbox container */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
 
-.checkbox-container:hover {
-    background-color: var(--button-hover-color);
-}
+        .checkbox-container:hover {
+            background-color: var(--button-hover-color);
+        }
 
-/* Style the checkbox input */
-.checkbox-container input[type="checkbox"] {
-    cursor: pointer;
-    width: 16px;
-    height: 16px;
-    margin: 0;
-}
+        /* Style the checkbox input */
+        .checkbox-container input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+        }
 
-/* Style the label */
-.checkbox-container label {
-    cursor: pointer;
-    user-select: none;
-    color: var(--button-text-color);
-}
+        /* Style the label */
+        .checkbox-container label {
+            cursor: pointer;
+            user-select: none;
+            color: var(--button-text-color);
+        }
 
-.modal-popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: var(--background-color);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-    color: var(--text-color);
-}
+        .modal-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--background-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            color: var(--text-color);
+        }
 
-.modal-popup h2, .modal-popup h3 {
-    margin-top: 0;
-    color: var(--text-color);
-}
+        .modal-popup h2, .modal-popup h3 {
+            margin-top: 0;
+            color: var(--text-color);
+        }
 
-.close-popup {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    font-size: 18px;
-    color: var(--text-color);
-}
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-color);
+        }
 
-/* Theme-specific styles */
-#theme-popup {
-    max-width: 400px;
-}
+        /* Theme-specific styles */
+        #theme-popup {
+            max-width: 500px;
+        }
 
-.theme-options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+        .theme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-.theme-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-/* Version-specific styles */
-#version-info-popup {
-    max-width: 500px;
-    width: 90%;
-}
+        /* Version-specific styles */
+        #version-info-popup {
+            max-width: 500px;
+            width: 90%;
+        }
 
-.version-info-content {
-    margin-top: 15px;
-    color: var(--text-color);
-}
+        .version-info-content {
+            margin-top: 15px;
+            color: var(--text-color);
+        }
 
-.version-info-content h3 {
-    margin: 15px 0 5px 0;
-}
+        .version-info-content h3 {
+            margin: 15px 0 5px 0;
+        }
 
-.version-info-content ul {
-    margin: 5px 0;
-    padding-left: 20px;
-}
+        .version-info-content ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
 
-#versionNumber {
-    cursor: pointer;
-    display: inline-block;
-}
+        #versionNumber {
+            cursor: pointer;
+            display: inline-block;
+        }
 
-#versionNumber:hover {
-    text-decoration: underline;
-}
+        #versionNumber:hover {
+            text-decoration: underline;
+        }
 
 
 
@@ -463,12 +446,12 @@
     </div>
 
     <div class="board" id="board">
-        <button class="add-column" onclick="addColumn()">+ Add another column</button>
+        <button class="add-column" onclick="addColumn()">+ Add column</button>
     </div>
 
     <div id="importModal" class="modal">
         <div class="modal-content">
-            <h2>Import from Markdown</h2>
+            <h2>Import MD</h2>
             <textarea id="markdownInput" placeholder="Paste your markdown here..."></textarea>
             <button onclick="importFromMarkdown()">Import</button>
             <button onclick="closeImportModal()">Cancel</button>
@@ -502,6 +485,22 @@
         </div>
     </div>
 
+    
+
+    <div class="modal-popup" id="version-info-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h2>Version Info</h2>
+        <div class="version-info-content">
+            <h3>v1.0.0 - ????-??-??</h3>
+            
+            <h3>New Features:</h3>
+            <ul>
+                <li>An Actually working Board!</li>
+                <li>MD Upload</li>
+            </ul>
+        </div>
+    </div>
+
 
 
 
@@ -512,9 +511,6 @@
 
     <script>
 
-        const editor = document.getElementById('editor');
-        const wordCount = document.getElementById('word-count');
-        const lineNumbers = document.getElementById('line-numbers');
         const themeSelect = document.getElementById('theme-select');
         const fontSelect = document.getElementById('font-select');
         const notification = document.getElementById('notification');
@@ -525,9 +521,9 @@
             true
             ;
         let currentTheme =
-            //'default'
+            'default'
             //'sepia'
-            'cool'
+            //'cool'
             //'terminal'
             ;
         let currentFont = 
@@ -536,20 +532,10 @@
             //"sans-serif"
             ;
 
-        function toggleDarkMode() {
-            isDarkMode = !isDarkMode;
-            applyTheme();
-        }
+        var appName = "HTMLKanban";
+        var versionNumber = "1.0.0";
 
-        function changeTheme() {
-            currentTheme = themeSelect.value;
-            applyTheme();
-        }
-
-        function changeFont() {
-            currentFont = fontSelect.value;
-            applyFont();
-        }
+        document.querySelectorAll("#pageName").forEach(function(element) {element.innerHTML = appName;});
 
         function showPopup(popupId) {
             document.getElementById('overlay').style.display = 'block';
@@ -570,30 +556,50 @@
             showPopup('theme-popup');
         }
 
-function applyTheme() {
-    const mode = isDarkMode ? 'dark' : 'light';
+        function applyTheme() {
+            const mode = isDarkMode ? 'dark' : 'light';
     
-    document.body.style.color = `var(--${currentTheme}-${mode}-text-color)`;
-    document.body.style.backgroundColor = `var(--${currentTheme}-${mode}-background-color)`;
+            document.body.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+            document.body.style.backgroundColor = `var(--${currentTheme}-${mode}-background-color)`;
 
-    document.documentElement.style.setProperty('--button-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
-    document.documentElement.style.setProperty('--button-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
-    document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
-    document.documentElement.style.setProperty('--button-border-color', `var(--${currentTheme}-${mode}-button-border-color)`);
+            document.documentElement.style.setProperty('--button-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--button-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+            document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
+            document.documentElement.style.setProperty('--button-border-color', `var(--${currentTheme}-${mode}-button-border-color)`);
 
-    document.documentElement.style.setProperty('--notification-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
-    document.documentElement.style.setProperty('--notification-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+            document.documentElement.style.setProperty('--notification-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--notification-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
 
-    document.documentElement.style.setProperty('--select-background-color', `var(--${currentTheme}-${mode}-background-color)`);
-    document.documentElement.style.setProperty('--select-alt-color', `var(--${currentTheme}-${mode}-button-background-color)`);
-    document.documentElement.style.setProperty('--select-text-color', `var(--${currentTheme}-${mode}-text-color)`);
+            document.documentElement.style.setProperty('--select-background-color', `var(--${currentTheme}-${mode}-background-color)`);
+            document.documentElement.style.setProperty('--select-alt-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--select-text-color', `var(--${currentTheme}-${mode}-text-color)`);
 
-    document.documentElement.style.setProperty('--link-hover-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--column-color', `var(--${currentTheme}-${mode}-alt-background-color)`);
+            document.documentElement.style.setProperty('--column-text-color', `var(--${currentTheme}-${mode}-text-color)`);
+            document.documentElement.style.setProperty('--card-color', `var(--${currentTheme}-${mode}-background-color)`);
+            document.documentElement.style.setProperty('--card-text-color', `var(--${currentTheme}-${mode}-text-color)`);
+
+            document.documentElement.style.setProperty('--link-hover-color', `var(--${currentTheme}-${mode}-button-background-color)`);
    
-    const popup = document.getElementById('theme-popup');
-    popup.style.backgroundColor = `var(--${currentTheme}-${mode}-alt-background-color)`;
-    popup.style.color = `var(--${currentTheme}-${mode}-text-color)`;
-}
+            const popup = document.getElementById('theme-popup');
+            popup.style.backgroundColor = `var(--${currentTheme}-${mode}-alt-background-color)`;
+            popup.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            applyTheme();
+        }
+
+        function changeTheme() {
+            currentTheme = themeSelect.value;
+            applyTheme();
+        }
+
+        function changeFont() {
+            currentFont = fontSelect.value;
+            applyFont();
+        }
 
         function showNotification(message) {
             notification.textContent = message;
@@ -631,59 +637,11 @@ function applyTheme() {
                     break;
                 }
             }
-
-            // Set font size initial selection
-            const fontSizeSelect = document.getElementById('font-size-select');
-            for (let i = 0; i < fontSizeSelect.options.length; i++) {
-                if (fontSizeSelect.options[i].value === currentFontSize) {
-                    fontSizeSelect.selectedIndex = i;
-                    break;
-                }
-            }
-
-            // Set margin width initial selection
-            const marginWidthSelect = document.getElementById('margin-width-select');
-            for (let i = 0; i < marginWidthSelect.options.length; i++) {
-                if (marginWidthSelect.options[i].value === currentMarginWidth) {
-                    marginWidthSelect.selectedIndex = i;
-                    break;
-                }
-            }
     
             // Previous initial states
-            document.getElementById('line-numbers-toggle').checked = showLineNumbers;
-            lineNumbers.style.display = showLineNumbers ? 'block' : 'none';
             applyTheme();
             applyFont();
-
-            
-
         }
-
-
-        var appName = "HTMLKanban";
-        var versionNumber = "1.0.0";
-
-        document.querySelectorAll("#pageName").forEach(function(element) {element.innerHTML = appName;});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // Initialize board with default columns
-        document.addEventListener('DOMContentLoaded', function() {
-            const defaultColumns = ['To Do', 'Doing', 'Done'];
-            defaultColumns.forEach(name => createColumn(name));
-        });
 
         // Menu functionality
         function toggleMenu() {
@@ -927,13 +885,14 @@ function applyTheme() {
             closeImportModal();
         }
 
-
-
+        // Initialize board with default columns
+        document.addEventListener('DOMContentLoaded', function() {
+            const defaultColumns = ['To Do', 'Doing', 'Done'];
+            defaultColumns.forEach(name => createColumn(name));
+        });
 
         // Initialize
         setInitialStates();
-
-
 
     </script>
 </body>

@@ -1,0 +1,70 @@
+
+:root {
+    /* Default Theme - Light Mode */
+    --default-light-text-color: #333;
+    --default-light-background-color: #ffffff;
+    --default-light-alt-background-color: #f0f0f0;
+    --default-light-button-background-color: #4bc67c;
+    --default-light-button-text-color: #ffffff;
+    --default-light-button-hover-color: #348b57;
+    --default-light-button-border-color: none;
+    /* Default Theme - Dark Mode */
+    --default-dark-text-color: #e0e0e0;
+    --default-dark-background-color: #1d1d1d;
+    --default-dark-alt-background-color: #2d2d2d;
+    --default-dark-button-background-color: #58319f;
+    --default-dark-button-text-color: #ffffff;
+    --default-dark-button-hover-color: #6d45b8;
+    --default-dark-button-border-color: none;
+
+    /* Sepia Theme - Light Mode */
+    --sepia-light-text-color: #5b4636;
+    --sepia-light-background-color: #f4ecd8;
+    --sepia-light-alt-background-color: #fbf0d9;
+    --sepia-light-button-background-color: #c19a6b;
+    --sepia-light-button-text-color: #ffffff;
+    --sepia-light-button-hover-color: #a67c52;
+    --sepia-light-button-border-color: none;
+    /* Sepia Theme - Dark Mode */
+    --sepia-dark-text-color: #d3c4a9;
+    --sepia-dark-background-color: #433422;
+    --sepia-dark-alt-background-color: #2c2417;
+    --sepia-dark-button-background-color: #8b6b4a;
+    --sepia-dark-button-text-color: #ffffff;
+    --sepia-dark-button-hover-color: #6d5438;
+    --sepia-dark-button-border-color: none;
+
+    /* Cool Theme - Light Mode */
+    --cool-light-text-color: #2c3e50;
+    --cool-light-background-color: #ecf0f1;
+    --cool-light-alt-background-color: #ffffff;
+    --cool-light-button-background-color: #3498db;
+    --cool-light-button-text-color: #ffffff;
+    --cool-light-button-hover-color: #2980b9;
+    --cool-light-button-border-color: none;
+    /* Cool Theme - Dark Mode */
+    --cool-dark-text-color: #bdc3c7;
+    --cool-dark-background-color: #2c3e50;
+    --cool-dark-alt-background-color: #34495e;
+    --cool-dark-button-background-color: #2980b9;
+    --cool-dark-button-text-color: #ffffff;
+    --cool-dark-button-hover-color: #3498db;
+    --cool-dark-button-border-color: none;
+
+    /* Terminal Theme - Light Mode */
+    --terminal-light-text-color: #59b822;
+    --terminal-light-background-color: #0e290e;
+    --terminal-light-alt-background-color: #0c2108;
+    --terminal-light-button-background-color: #13451a;
+    --terminal-light-button-text-color: #59b822;
+    --terminal-light-button-hover-color: #186d1d;
+    --terminal-light-button-border-color: none;
+    /* Terminal Theme - Dark Mode */
+    --terminal-dark-text-color: #c20000;
+    --terminal-dark-background-color: #000000;
+    --terminal-dark-alt-background-color: #320000;
+    --terminal-dark-button-background-color: #000000;
+    --terminal-dark-button-text-color: #c20000;
+    --terminal-dark-button-hover-color: #690000;
+    --terminal-dark-button-border-color: 1px solid #c20000;
+}
