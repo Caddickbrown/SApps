@@ -13,7 +13,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #bebebe;
+            background-color: #ffffff;
             padding: 20px;
             min-height: 100vh;
         }
@@ -32,6 +32,7 @@
             width: 300px;
             min-height: 100px;
             padding: 10px;
+            position: relative;
         }
 
         .list-header {
@@ -44,6 +45,27 @@
         .list-title {
             font-weight: bold;
             padding: 5px;
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        .list-title:hover {
+            background: rgba(9, 30, 66, 0.08);
+            border-radius: 3px;
+        }
+
+        .delete-list {
+            background: none;
+            border: none;
+            color: #6b778c;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        .delete-list:hover {
+            color: #172b4d;
         }
 
         .card {
@@ -53,10 +75,34 @@
             margin-bottom: 8px;
             box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
             cursor: pointer;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .card:hover {
             background: #f4f5f7;
+        }
+
+        .delete-card {
+            visibility: hidden;
+            background: none;
+            border: none;
+            color: #6b778c;
+            cursor: pointer;
+            padding: 2px 5px;
+            font-size: 12px;
+        }
+
+        .card:hover .delete-card {
+            visibility: visible;
+        }
+
+        .delete-card:hover {
+            color: #172b4d;
+            background: rgba(9, 30, 66, 0.08);
+            border-radius: 3px;
         }
 
         .add-card {
@@ -92,12 +138,17 @@
             opacity: 0.5;
         }
 
-        .card-input {
+        .card-input, .title-input {
             width: 100%;
             padding: 8px;
             border: 2px solid #0079bf;
             border-radius: 3px;
             margin-bottom: 8px;
+        }
+
+        .card-content {
+            flex-grow: 1;
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -105,31 +156,46 @@
     <div class="board">
         <div class="list" ondrop="drop(event)" ondragover="allowDrop(event)">
             <div class="list-header">
-                <div class="list-title">To Do</div>
+                <div class="list-title" onclick="showTitleInput(this)">To Do</div>
+                <button class="delete-list" onclick="deleteList(this)">×</button>
             </div>
             <div class="cards">
-                <div class="card" draggable="true" ondragstart="drag(event)">Add documentation</div>
-                <div class="card" draggable="true" ondragstart="drag(event)">Create mockups</div>
+                <div class="card" draggable="true" ondragstart="drag(event)">
+                    <div class="card-content">Add documentation</div>
+                    <button class="delete-card" onclick="deleteCard(this)">×</button>
+                </div>
+                <div class="card" draggable="true" ondragstart="drag(event)">
+                    <div class="card-content">Create mockups</div>
+                    <button class="delete-card" onclick="deleteCard(this)">×</button>
+                </div>
             </div>
             <button class="add-card" onclick="showCardInput(this)">+ Add a card</button>
         </div>
 
         <div class="list" ondrop="drop(event)" ondragover="allowDrop(event)">
             <div class="list-header">
-                <div class="list-title">In Progress</div>
+                <div class="list-title" onclick="showTitleInput(this)">In Progress</div>
+                <button class="delete-list" onclick="deleteList(this)">×</button>
             </div>
             <div class="cards">
-                <div class="card" draggable="true" ondragstart="drag(event)">Design system</div>
+                <div class="card" draggable="true" ondragstart="drag(event)">
+                    <div class="card-content">Design system</div>
+                    <button class="delete-card" onclick="deleteCard(this)">×</button>
+                </div>
             </div>
             <button class="add-card" onclick="showCardInput(this)">+ Add a card</button>
         </div>
 
         <div class="list" ondrop="drop(event)" ondragover="allowDrop(event)">
             <div class="list-header">
-                <div class="list-title">Done</div>
+                <div class="list-title" onclick="showTitleInput(this)">Done</div>
+                <button class="delete-list" onclick="deleteList(this)">×</button>
             </div>
             <div class="cards">
-                <div class="card" draggable="true" ondragstart="drag(event)">Project setup</div>
+                <div class="card" draggable="true" ondragstart="drag(event)">
+                    <div class="card-content">Project setup</div>
+                    <button class="delete-card" onclick="deleteCard(this)">×</button>
+                </div>
             </div>
             <button class="add-card" onclick="showCardInput(this)">+ Add a card</button>
         </div>
@@ -141,7 +207,7 @@
         // Drag and drop functionality
         function drag(event) {
             event.target.classList.add('dragging');
-            event.dataTransfer.setData("text", event.target.innerHTML);
+            event.dataTransfer.setData("text", event.target.querySelector('.card-content').innerHTML);
             event.dataTransfer.setData("sourceList", event.target.parentElement.parentElement.id);
         }
 
@@ -154,24 +220,22 @@
             const data = event.dataTransfer.getData("text");
             const sourceList = event.dataTransfer.getData("sourceList");
             
-            // Find the closest list from the drop target
             let targetList = event.target.closest('.list');
             if (!targetList) return;
 
-            // Create new card
             const card = document.createElement('div');
             card.className = 'card';
             card.draggable = true;
             card.ondragstart = drag;
-            card.innerHTML = data;
+            card.innerHTML = `
+                <div class="card-content">${data}</div>
+                <button class="delete-card" onclick="deleteCard(this)">×</button>
+            `;
 
-            // Find the cards container in the target list
             const cardsContainer = targetList.querySelector('.cards');
             
-            // Remove the original card if it exists
             document.querySelectorAll('.card.dragging').forEach(card => card.remove());
             
-            // Add the new card
             cardsContainer.appendChild(card);
         }
 
@@ -205,10 +269,18 @@
             card.className = 'card';
             card.draggable = true;
             card.ondragstart = drag;
-            card.innerHTML = text;
+            card.innerHTML = `
+                <div class="card-content">${text}</div>
+                <button class="delete-card" onclick="deleteCard(this)">×</button>
+            `;
 
             const cardsContainer = button.parentNode.querySelector('.cards');
             cardsContainer.appendChild(card);
+        }
+
+        // Delete card functionality
+        function deleteCard(button) {
+            button.parentElement.remove();
         }
 
         // Add new list functionality
@@ -223,19 +295,64 @@
             
             list.innerHTML = `
                 <div class="list-header">
-                    <div class="list-title">New List</div>
+                    <div class="list-title" onclick="showTitleInput(this)">New List</div>
+                    <button class="delete-list" onclick="deleteList(this)">×</button>
                 </div>
                 <div class="cards"></div>
                 <button class="add-card" onclick="showCardInput(this)">+ Add a card</button>
             `;
             
             board.insertBefore(list, addListButton);
+            updateListIds();
+        }
+
+        // Delete list functionality
+        function deleteList(button) {
+            button.closest('.list').remove();
+            updateListIds();
+        }
+
+        // Rename list functionality
+        function showTitleInput(titleElement) {
+            const currentTitle = titleElement.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'title-input';
+            input.value = currentTitle;
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value.trim()) {
+                    titleElement.textContent = this.value.trim();
+                    this.remove();
+                }
+            });
+
+            input.addEventListener('blur', function() {
+                if (this.value.trim()) {
+                    titleElement.textContent = this.value.trim();
+                }
+                this.remove();
+            });
+
+            titleElement.parentNode.insertBefore(input, titleElement);
+            titleElement.style.display = 'none';
+            input.focus();
+            input.select();
+
+            input.addEventListener('blur', function() {
+                titleElement.style.display = '';
+            });
         }
 
         // Generate unique IDs for lists
-        document.querySelectorAll('.list').forEach((list, index) => {
-            list.id = 'list-' + (index + 1);
-        });
+        function updateListIds() {
+            document.querySelectorAll('.list').forEach((list, index) => {
+                list.id = 'list-' + (index + 1);
+            });
+        }
+
+        // Initialize list IDs
+        updateListIds();
     </script>
 </body>
 </html>
