@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageName"></title>
+    <style>
+        :root {
+            /* Default Theme - Light Mode */
+            --default-light-text-color: #333;
+            --default-light-background-color: #ffffff;
+            --default-light-alt-background-color: #f0f0f0;
+            --default-light-button-background-color: #4bc67c;
+            --default-light-button-text-color: #ffffff;
+            --default-light-button-hover-color: #348b57;
+            --default-light-button-border-color: none;
+            /* Default Theme - Dark Mode */
+            --default-dark-text-color: #e0e0e0;
+            --default-dark-background-color: #1d1d1d;
+            --default-dark-alt-background-color: #2d2d2d;
+            --default-dark-button-background-color: #58319f;
+            --default-dark-button-text-color: #ffffff;
+            --default-dark-button-hover-color: #6d45b8;
+            --default-dark-button-border-color: none;
+
+            /* Sepia Theme - Light Mode */
+            --sepia-light-text-color: #5b4636;
+            --sepia-light-background-color: #f4ecd8;
+            --sepia-light-alt-background-color: #fbf0d9;
+            --sepia-light-button-background-color: #c19a6b;
+            --sepia-light-button-text-color: #ffffff;
+            --sepia-light-button-hover-color: #a67c52;
+            --sepia-light-button-border-color: none;
+            /* Sepia Theme - Dark Mode */
+            --sepia-dark-text-color: #d3c4a9;
+            --sepia-dark-background-color: #433422;
+            --sepia-dark-alt-background-color: #2c2417;
+            --sepia-dark-button-background-color: #8b6b4a;
+            --sepia-dark-button-text-color: #ffffff;
+            --sepia-dark-button-hover-color: #6d5438;
+            --sepia-dark-button-border-color: none;
+
+            /* Cool Theme - Light Mode */
+            --cool-light-text-color: #2c3e50;
+            --cool-light-background-color: #ecf0f1;
+            --cool-light-alt-background-color: #ffffff;
+            --cool-light-button-background-color: #3498db;
+            --cool-light-button-text-color: #ffffff;
+            --cool-light-button-hover-color: #2980b9;
+            --cool-light-button-border-color: none;
+            /* Cool Theme - Dark Mode */
+            --cool-dark-text-color: #bdc3c7;
+            --cool-dark-background-color: #2c3e50;
+            --cool-dark-alt-background-color: #34495e;
+            --cool-dark-button-background-color: #2980b9;
+            --cool-dark-button-text-color: #ffffff;
+            --cool-dark-button-hover-color: #3498db;
+            --cool-dark-button-border-color: none;
+
+            /* Terminal Theme - Light Mode */
+            --terminal-light-text-color: #59b822;
+            --terminal-light-background-color: #0e290e;
+            --terminal-light-alt-background-color: #0c2108;
+            --terminal-light-button-background-color: #13451a;
+            --terminal-light-button-text-color: #59b822;
+            --terminal-light-button-hover-color: #186d1d;
+            --terminal-light-button-border-color: none;
+            /* Terminal Theme - Dark Mode */
+            --terminal-dark-text-color: #c20000;
+            --terminal-dark-background-color: #000000;
+            --terminal-dark-alt-background-color: #320000;
+            --terminal-dark-button-background-color: #000000;
+            --terminal-dark-button-text-color: #c20000;
+            --terminal-dark-button-hover-color: #690000;
+            --terminal-dark-button-border-color: 1px solid #c20000;
+
+            /* GX Theme - Light Mode */
+            --gx-light-text-color: #333;
+            --gx-light-background-color: #ffffe7;
+            --gx-light-alt-background-color: #f0f0f0;
+            --gx-light-button-background-color: #273457;
+            --gx-light-button-text-color: #ffffff;
+            --gx-light-button-hover-color: #bb5e47;
+            --gx-light-button-border-color: none;
+            /* GX Theme - Dark Mode */
+            --gx-dark-text-color: #ffffe7;
+            --gx-dark-background-color: #16213d;
+            --gx-dark-alt-background-color: #273457;
+            --gx-dark-button-background-color: #bb5e47;
+            --gx-dark-button-text-color: #ffffff;
+            --gx-dark-button-hover-color: #d67a63;
+            --gx-dark-button-border-color: none;
+
+            /* Honey Bee Theme - Light Mode */
+            --honeybee-light-text-color: #4b3b2c;
+            --honeybee-light-background-color: #fff7e6;
+            --honeybee-light-alt-background-color: #ffedb3;
+            --honeybee-light-button-background-color: #ffa600;
+            --honeybee-light-button-text-color: #000000;
+            --honeybee-light-button-hover-color: #ffb730;
+            --honeybee-light-button-border-color: none;
+            /* Honey Bee Theme - Dark Mode */
+            --honeybee-dark-text-color: #ffd700;
+            --honeybee-dark-background-color: #1a1a1a;
+            --honeybee-dark-alt-background-color: #332200;
+            --honeybee-dark-button-background-color: #ffd700;
+            --honeybee-dark-button-text-color: #000000;
+            --honeybee-dark-button-hover-color: #ffed4a;
+            --honeybee-dark-button-border-color: none;
+
+            /* Forest - Light Mode */
+            --forest-light-text-color: #2c4a34;
+            --forest-light-background-color: #f0f7e6;
+            --forest-light-alt-background-color: #dce8c9;
+            --forest-light-button-background-color: #5c8b57;
+            --forest-light-button-text-color: #ffffff;
+            --forest-light-button-hover-color: #7aa874;
+            --forest-light-button-border-color: none;
+
+            /* Dark mode - Night Forest */
+            --forest-dark-text-color: #c1d9b8;
+            --forest-dark-background-color: #1a2718;
+            --forest-dark-alt-background-color: #2c4a34;
+            --forest-dark-button-background-color: #5c8b57;
+            --forest-dark-button-text-color: #ffffff;
+            --forest-dark-button-hover-color: #7aa874;
+            --forest-dark-button-border-color: none;
+
+            /* Light mode - Sunny Beach */
+            --ocean-light-text-color: #1a4b6e;
+            --ocean-light-background-color: #f0f9ff;
+            --ocean-light-alt-background-color: #e1f2fe;
+            --ocean-light-button-background-color: #2e8bc0;
+            --ocean-light-button-text-color: #ffffff;
+            --ocean-light-button-hover-color: #40a1d8;
+            --ocean-light-button-border-color: none;
+
+            /* Dark mode - Deep Ocean */
+            --ocean-dark-text-color: #b8e3ff;
+            --ocean-dark-background-color: #0a2133;
+            --ocean-dark-alt-background-color: #1a4b6e;
+            --ocean-dark-button-background-color: #2e8bc0;
+            --ocean-dark-button-text-color: #ffffff;
+            --ocean-dark-button-hover-color: #40a1d8;
+            --ocean-dark-button-border-color: none;
+
+            /* Light mode - Morning Glow */
+            --sunset-light-text-color: #78340f;
+            --sunset-light-background-color: #fff9f5;
+            --sunset-light-alt-background-color: #ffe8d6;
+            --sunset-light-button-background-color: #ff6b35;
+            --sunset-light-button-text-color: #ffffff;
+            --sunset-light-button-hover-color: #ff855e;
+            --sunset-light-button-border-color: none;
+
+            /* Dark mode - Evening Sky */
+            --sunset-dark-text-color: #ffc4b0;
+            --sunset-dark-background-color: #2b1810;
+            --sunset-dark-alt-background-color: #78340f;
+            --sunset-dark-button-background-color: #ff6b35;
+            --sunset-dark-button-text-color: #ffffff;
+            --sunset-dark-button-hover-color: #ff855e;
+            --sunset-dark-button-border-color: none;
+
+            /* Light mode - Morning Lavender */
+            --lavender-light-text-color: #4a3b63;
+            --lavender-light-background-color: #f9f6ff;
+            --lavender-light-alt-background-color: #efe8ff;
+            --lavender-light-button-background-color: #8c72cb;
+            --lavender-light-button-text-color: #ffffff;
+            --lavender-light-button-hover-color: #a08fd8;
+            --lavender-light-button-border-color: none;
+
+            /* Dark mode - Evening Lavender */
+            --lavender-dark-text-color: #e0d6ff;
+            --lavender-dark-background-color: #1d1736;
+            --lavender-dark-alt-background-color: #4a3b63;
+            --lavender-dark-button-background-color: #8c72cb;
+            --lavender-dark-button-text-color: #ffffff;
+            --lavender-dark-button-hover-color: #a08fd8;
+            --lavender-dark-button-border-color: none;
+
+            /* Light mode - Fresh Mint */
+            --mint-light-text-color: #1d4d4f;
+            --mint-light-background-color: #f2fffd;
+            --mint-light-alt-background-color: #e0f5f1;
+            --mint-light-button-background-color: #4fb3a9;
+            --mint-light-button-text-color: #ffffff;
+            --mint-light-button-hover-color: #65c7bd;
+            --mint-light-button-border-color: none;
+
+            /* Dark mode - Deep Mint */
+            --mint-dark-text-color: #b8ede7;
+            --mint-dark-background-color: #0a2728;
+            --mint-dark-alt-background-color: #1d4d4f;
+            --mint-dark-button-background-color: #4fb3a9;
+            --mint-dark-button-text-color: #ffffff;
+            --mint-dark-button-hover-color: #65c7bd;
+            --mint-dark-button-border-color: none;
+
+            --cherry-light-text-color: #814759;
+            --cherry-light-background-color: #fff5f8;
+            --cherry-light-alt-background-color: #ffe1eb;
+            --cherry-light-button-background-color: #ff8ba7;
+            --cherry-light-button-text-color: #ffffff;
+            --cherry-light-button-hover-color: #ffb5c7;
+            --cherry-light-button-border-color: none;
+
+            /* Dark mode - Evening Sakura */
+            --cherry-dark-text-color: #ffd6e0;
+            --cherry-dark-background-color: #2b1820;
+            --cherry-dark-alt-background-color: #814759;
+            --cherry-dark-button-background-color: #ff8ba7;
+            --cherry-dark-button-text-color: #ffffff;
+            --cherry-dark-button-hover-color: #ffb5c7;
+            --cherry-dark-button-border-color: none;
+
+            /* Light mode - Latte */
+            --coffee-light-text-color: #4a3525;
+            --coffee-light-background-color: #fff9f5;
+            --coffee-light-alt-background-color: #f2e2d3;
+            --coffee-light-button-background-color: #8b593e;
+            --coffee-light-button-text-color: #ffffff;
+            --coffee-light-button-hover-color: #a66f51;
+            --coffee-light-button-border-color: none;
+
+            /* Dark mode - Espresso */
+            --coffee-dark-text-color: #d9b99b;
+            --coffee-dark-background-color: #1a0f0a;
+            --coffee-dark-alt-background-color: #4a3525;
+            --coffee-dark-button-background-color: #8b593e;
+            --coffee-dark-button-text-color: #ffffff;
+            --coffee-dark-button-hover-color: #a66f51;
+            --coffee-dark-button-border-color: none;
+
+            /* Light mode - Snow Day */
+            --arctic-light-text-color: #394655;
+            --arctic-light-background-color: #f8faff;
+            --arctic-light-alt-background-color: #edf2fc;
+            --arctic-light-button-background-color: #6d90b9;
+            --arctic-light-button-text-color: #ffffff;
+            --arctic-light-button-hover-color: #89a7c8;
+            --arctic-light-button-border-color: none;
+
+            /* Dark mode - Polar Night */
+            --arctic-dark-text-color: #c5d5e9;
+            --arctic-dark-background-color: #1a1f26;
+            --arctic-dark-alt-background-color: #394655;
+            --arctic-dark-button-background-color: #6d90b9;
+            --arctic-dark-button-text-color: #ffffff;
+            --arctic-dark-button-hover-color: #89a7c8;
+            --arctic-dark-button-border-color: none;
+
+            /* Light mode - Desert Day */
+            --desert-light-text-color: #6b4423;
+            --desert-light-background-color: #fff8ec;
+            --desert-light-alt-background-color: #f5e6d3;
+            --desert-light-button-background-color: #c17f59;
+            --desert-light-button-text-color: #ffffff;
+            --desert-light-button-hover-color: #d4997a;
+            --desert-light-button-border-color: none;
+
+            /* Dark mode - Desert Night */
+            --desert-dark-text-color: #ffd7bc;
+            --desert-dark-background-color: #251811;
+            --desert-dark-alt-background-color: #6b4423;
+            --desert-dark-button-background-color: #c17f59;
+            --desert-dark-button-text-color: #ffffff;
+            --desert-dark-button-hover-color: #d4997a;
+            --desert-dark-button-border-color: none;
+
+            /* Light mode - Star Cluster */
+            --galaxy-light-text-color: #2d2357;
+            --galaxy-light-background-color: #f5f3ff;
+            --galaxy-light-alt-background-color: #e6e0ff;
+            --galaxy-light-button-background-color: #7b4fff;
+            --galaxy-light-button-text-color: #ffffff;
+            --galaxy-light-button-hover-color: #9775ff;
+            --galaxy-light-button-border-color: none;
+
+            /* Dark mode - Deep Space */
+            --galaxy-dark-text-color: #d1c4ff;
+            --galaxy-dark-background-color: #0f0b26;
+            --galaxy-dark-alt-background-color: #2d2357;
+            --galaxy-dark-button-background-color: #7b4fff;
+            --galaxy-dark-button-text-color: #ffffff;
+            --galaxy-dark-button-hover-color: #9775ff;
+            --galaxy-dark-button-border-color: none;
+
+            /* Light mode - Cotton Candy */
+            --bubblegum-light-text-color: #ff1493;
+            --bubblegum-light-background-color: #ffeeff;
+            --bubblegum-light-alt-background-color: #ffccff;
+            --bubblegum-light-button-background-color: #ff69b4;
+            --bubblegum-light-button-text-color: #ffffff;
+            --bubblegum-light-button-hover-color: #ff8ac1;
+            --bubblegum-light-button-border-color: none;
+
+            /* Dark mode - Neon Night */
+            --bubblegum-dark-text-color: #ff8ac1;
+            --bubblegum-dark-background-color: #660066;
+            --bubblegum-dark-alt-background-color: #990099;
+            --bubblegum-dark-button-background-color: #ff1493;
+            --bubblegum-dark-button-text-color: #ffffff;
+            --bubblegum-dark-button-hover-color: #ff69b4;
+            --bubblegum-dark-button-border-color: none;
+
+            /* Light mode - Fresh Brains */
+            --zombie-light-text-color: #3d6e3d;
+            --zombie-light-background-color: #e6ffe6;
+            --zombie-light-alt-background-color: #ccffcc;
+            --zombie-light-button-background-color: #8b0000;
+            --zombie-light-button-text-color: #98fb98;
+            --zombie-light-button-hover-color: #a52a2a;
+            --zombie-light-button-border-color: none;
+
+            /* Dark mode - Graveyard */
+            --zombie-dark-text-color: #98fb98;
+            --zombie-dark-background-color: #1a331a;
+            --zombie-dark-alt-background-color: #2d4d2d;
+            --zombie-dark-button-background-color: #8b0000;
+            --zombie-dark-button-text-color: #98fb98;
+            --zombie-dark-button-hover-color: #a52a2a;
+            --zombie-dark-button-border-color: none;
+
+            /* Light mode - Magic Sparkles */
+            --unicorn-light-text-color: #ff1493;
+            --unicorn-light-background-color: #e6e6ff;
+            --unicorn-light-alt-background-color: #ffccff;
+            --unicorn-light-button-background-color: #8a2be2;
+            --unicorn-light-button-text-color: #ffffff;
+            --unicorn-light-button-hover-color: #9400d3;
+            --unicorn-light-button-border-color: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
+
+            /* Dark mode - Rainbow Dreams */
+            --unicorn-dark-text-color: #00ffff;
+            --unicorn-dark-background-color: #4b0082;
+            --unicorn-dark-alt-background-color: #8b008b;
+            --unicorn-dark-button-background-color: #ff69b4;
+            --unicorn-dark-button-text-color: #ffffff;
+            --unicorn-dark-button-hover-color: #ff1493;
+            --unicorn-dark-button-border-color: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
+
+            /* Light mode - 8-bit Day */
+            --retro-light-text-color: #000000;
+            --retro-light-background-color: #c0ffee;
+            --retro-light-alt-background-color: #90ee90;
+            --retro-light-button-background-color: #ff4500;
+            --retro-light-button-text-color: #ffffff;
+            --retro-light-button-hover-color: #ff6347;
+            --retro-light-button-border-color: #000000;
+
+            /* Dark mode - Arcade Night */
+            --retro-dark-text-color: #00ff00;
+            --retro-dark-background-color: #000000;
+            --retro-dark-alt-background-color: #1a1a1a;
+            --retro-dark-button-background-color: #ff0000;
+            --retro-dark-button-text-color: #ffffff;
+            --retro-dark-button-hover-color: #ff4500;
+            --retro-dark-button-border-color: #00ff00;
+
+            /* Light mode - UFO Bright */
+            --alien-light-text-color: #39ff14;
+            --alien-light-background-color: #f0fff0;
+            --alien-light-alt-background-color: #ccffcc;
+            --alien-light-button-background-color: #6a5acd;
+            --alien-light-button-text-color: #00ff00;
+            --alien-light-button-hover-color: #836fff;
+            --alien-light-button-border-color: none;
+
+            /* Dark mode - Area 51 */
+            --alien-dark-text-color: #39ff14;
+            --alien-dark-background-color: #0a0a0a;
+            --alien-dark-alt-background-color: #1f1f1f;
+            --alien-dark-button-background-color: #9400d3;
+            --alien-dark-button-text-color: #00ff00;
+            --alien-dark-button-hover-color: #8a2be2;
+            --alien-dark-button-border-color: none;
+
+            /* Light mode - Synthwave Day */
+            --neon-light-text-color: #ff00ff;
+            --neon-light-background-color: #1a1a2e;
+            --neon-light-alt-background-color: #16213e;
+            --neon-light-button-background-color: #00ffff;
+            --neon-light-button-text-color: #000000;
+            --neon-light-button-hover-color: #00f7ff;
+            --neon-light-button-border-color: #ff00ff;
+
+            /* Dark mode - Cyberpunk Night */
+            --neon-dark-text-color: #0fff0f;
+            --neon-dark-background-color: #000000;
+            --neon-dark-alt-background-color: #0a0a0a;
+            --neon-dark-button-background-color: #ff00ff;
+            --neon-dark-button-text-color: #000000;
+            --neon-dark-button-hover-color: #ff33ff;
+            --neon-dark-button-border-color: #00ffff;
+
+            /* Classic B&W */
+            --mono-classic-light-text-color: #000000;
+            --mono-classic-light-background-color: #ffffff;
+            --mono-classic-light-alt-background-color: #f0f0f0;
+            --mono-classic-light-button-background-color: #000000;
+            --mono-classic-light-button-text-color: #ffffff;
+            --mono-classic-light-button-hover-color: #333333;
+            --mono-classic-light-button-border-color: none;
+
+            --mono-classic-dark-text-color: #ffffff;
+            --mono-classic-dark-background-color: #000000;
+            --mono-classic-dark-alt-background-color: #1a1a1a;
+            --mono-classic-dark-button-background-color: #ffffff;
+            --mono-classic-dark-button-text-color: #000000;
+            --mono-classic-dark-button-hover-color: #e0e0e0;
+            --mono-classic-dark-button-border-color: none;
+
+            /* Light mode - Happy Classroom */
+            --playschool-light-text-color: #2B3467;
+            --playschool-light-background-color: #FFFAA0;
+            --playschool-light-alt-background-color: #FFF677;
+            --playschool-light-button-background-color: #FF6B6B;
+            --playschool-light-button-text-color: #ffffff;
+            --playschool-light-button-hover-color: #FF8E8E;
+            --playschool-light-button-border-color: #4D96FF;
+        
+            /* Dark mode - Art Room */
+            --playschool-dark-text-color: #FFE15D;
+            --playschool-dark-background-color: #4D96FF;
+            --playschool-dark-alt-background-color: #6BA6FF;
+            --playschool-dark-button-background-color: #FF6B6B;
+            --playschool-dark-button-text-color: #ffffff;
+            --playschool-dark-button-hover-color: #FF8E8E;
+            --playschool-dark-button-border-color: #FFE15D;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            font-family: sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background: var(--background-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body a:link, body a:visited {
+            color: var(--default-text-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body a:hover {
+            color: var(--link-hover-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        footer {
+            text-align: right;
+            font-size: 0.8em;
+            vertical-align: middle;
+            position: fixed;
+            bottom: 0;
+            width: 95%;
+            transition: opacity 0.3s;
+            opacity: 1;
+        }
+        button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: var(--button-border-color);
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: var(--button-hover-color);
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--notification-background-color);
+            color: var(--notification-text-color);
+            padding: 10px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: -1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--column-text-color);
+            padding: 0 10px;
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: var(--column-color);
+            min-width: 160px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            z-index: 1000;
+        }
+
+        .menu-content button {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .menu-content button:hover {
+            background-color: var(--card-color);
+        }
+
+        .show {
+            display: block;
+        }
+
+        .board {
+            display: flex;
+            gap: 20px;
+            min-height: 80vh;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+
+        .column {
+            background: var(--column-color);
+            color: var(--column-text-color);
+            border-radius: 10px;
+            min-width: 300px;
+            max-width: 300px;
+            padding: 10px;
+            height: fit-content;
+            cursor: move;
+        }
+
+        .column.dragging {
+            opacity: 0.5;
+            background: #c1c7d0;
+        }
+
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: move;
+        }
+
+        .column-title {
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        .column-title:hover {
+            background: rgba(0,0,0,0.05);
+            border-radius: 3px;
+        }
+
+        .card {
+            background: var(--card-color);
+            color: var(--card-text-color);
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: move;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .card:hover {
+            background: var(--column-color);
+        }
+
+        .add-card {
+            background: transparent;
+            border: none;
+            color: var(--button-hover-color);
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .add-card:hover {
+            background: rgba(0,0,0,0.05);
+            border-radius: 3px;
+        }
+
+        .add-column {
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            height: fit-content;
+            min-width: 300px;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background: var(--column-color);
+            color: var(--column-text-color);
+            margin: 15% auto;
+            padding: 20px;
+            width: 70%;
+            max-width: 500px;
+            border-radius: 5px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin: 10px 0;
+            padding: 10px;
+        }
+
+        .delete-column {
+            background: none;
+            border: none;
+            color: #6b778c;
+            cursor: pointer;
+            padding: 4px 8px;
+            margin: 0;
+        }
+
+        .delete-column:hover {
+            background: rgba(0,0,0,0.08);
+            color: var(--default-text-color);
+        }
+
+        .theme-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--background-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            color: var(--text-color);
+        }
+
+        .theme-popup h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 999;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+
+        .overlay-active #toolbar,
+        .overlay-active footer {
+            opacity: 1 !important;
+        }
+
+        /* Add styles for the checkbox container */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .checkbox-container:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        /* Style the checkbox input */
+        .checkbox-container input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+        }
+
+        /* Style the label */
+        .checkbox-container label {
+            cursor: pointer;
+            user-select: none;
+            color: var(--button-text-color);
+        }
+
+        .modal-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--background-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            color: var(--text-color);
+        }
+
+        .modal-popup h2, .modal-popup h3 {
+            margin-top: 0;
+            color: var(--text-color);
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+
+        /* Theme-specific styles */
+        #theme-popup {
+            max-width: 500px;
+        }
+
+        .theme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Version-specific styles */
+        #version-info-popup {
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .version-info-content {
+            margin-top: 15px;
+            color: var(--text-color);
+        }
+
+        .version-info-content h3 {
+            margin: 15px 0 5px 0;
+        }
+
+        .version-info-content ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+
+        #versionNumber {
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        #versionNumber:hover {
+            text-decoration: underline;
+        }
+
+        .card-edit-input {
+            width: calc(100% - 20px);
+            padding: 2px 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: inherit;
+            font-family: inherit;
+        }
+
+        .board-title-input {
+            font-size: inherit;
+            font-weight: inherit;
+            font-family: inherit;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 2px 5px;
+            width: auto;
+            min-width: 200px;
+        }
+
+        h1 {
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+
+
+
+
+
+
+
+<body>
+    <div class="header">
+        <h1 onclick="showBoardTitleInput(this)">Kanban Board</h1>
+        <div class="menu-container">
+            <button class="menu-button" onclick="toggleMenu()">⋮</button>
+            <div id="menuContent" class="menu-content">
+                <button onclick="openThemePopup()">Theme</button>
+                <button onclick="exportToMarkdown()">Export MD</button>
+                <button onclick="showImportModal()">Import MD</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="board" id="board">
+        <button class="add-column" onclick="createColumn()">+ Add column</button>
+    </div>
+
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <h2>Import MD</h2>
+            <textarea id="markdownInput" placeholder="Paste your markdown here..."></textarea>
+            <button onclick="importFromMarkdown()">Import</button>
+            <button onclick="closeImportModal()">Cancel</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
+    <div class="modal-popup" id="theme-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h3>Style Settings</h3>
+        <div class="theme-options">
+            <div class="theme-row">
+                <label for="theme-select">Style:</label>
+                <select id="theme-select" onchange="changeTheme()">
+                    <option value="default">Default</option>
+                    <option value="sepia">Sepia</option>
+                    <option value="cool">Cool</option>
+                    <option value="terminal">Terminal</option>
+                    <option value="gx">GX</option>
+                    <option value="honeybee">Honey Bee</option>
+                    <option value="forest">Forest</option>
+                    <option value="ocean">Ocean</option>
+                    <option value="sunset">Sunset</option>
+                    <option value="lavender">Lavender</option>
+                    <option value="mint">Mint</option>
+                    <option value="cherry">Cherry Blossom</option>
+                    <option value="coffee">Coffee</option>
+                    <option value="arctic">Arctic</option>
+                    <option value="desert">Desert</option>
+                    <option value="galaxy">Galaxy</option>
+                    <option value="bubblegum">Bubblegum</option>
+                    <option value="zombie">Zombie</option>
+                    <option value="unicorn">Rainbow Unicorn</option>
+                    <option value="retro">Retro Gaming</option>
+                    <option value="alien">Space Alien</option>
+                    <option value="neon">Neon</option>
+                    <option value="mono-classic">Monochrome Classic</option>
+                    <option value="playschool">Play School</option>
+                </select>
+            </div>
+            <div class="theme-row">
+                <button onclick="toggleDarkMode()">Light/Dark Mode</button>
+            </div>
+            <div class="theme-row">
+                <label for="theme-select">Font:</label>
+                <select id="font-select" onchange="changeFont()">
+                    <option value="monospace">Mono</option>
+                    <option value="serif">Serif</option>
+                    <option value="sans-serif">Sans-Serif</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-popup" id="version-info-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h2>Version Info</h2>
+        <div class="version-info-content">
+            <h3>v1.1.0 - 2024-12-10</h3>
+            
+            <h3>New Features:</h3>
+            <ul>
+                <li>An Actually working Board!</li>
+                <li>MD Upload</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+
+
+
+
+
+
+
+
+    <script>
+
+        const themeSelect = document.getElementById('theme-select');
+        const fontSelect = document.getElementById('font-select');
+        const notification = document.getElementById('notification');
+
+        //Config
+        let isDarkMode = 
+            //false
+            true
+            ;
+        let currentTheme =
+            'default'
+            //'sepia'
+            //'cool'
+            //'terminal'
+            //'gx'
+            ;
+        let currentFont = 
+            //"monospace"
+            //"serif"
+            "sans-serif"
+            ;
+
+        var appName = "HTMLKanban";
+        var versionNumber = "1.0.0";
+
+        document.querySelectorAll("#pageName").forEach(function(element) {element.innerHTML = appName;});
+
+        function showPopup(popupId) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById(popupId).style.display = 'block';
+            document.body.classList.add('overlay-active');
+        }
+
+        function closeAllPopups() {
+            document.getElementById('overlay').style.display = 'none';
+            document.querySelectorAll('.modal-popup').forEach(popup => {
+                popup.style.display = 'none';
+            });
+            document.body.classList.remove('overlay-active');
+        }
+
+        // Update existing functions to use new unified system
+        function openThemePopup() {
+            showPopup('theme-popup');
+        }
+
+        function applyTheme() {
+            const mode = isDarkMode ? 'dark' : 'light';
+    
+            document.body.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+            document.body.style.backgroundColor = `var(--${currentTheme}-${mode}-background-color)`;
+
+            document.documentElement.style.setProperty('--button-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--button-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+            document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
+            document.documentElement.style.setProperty('--button-border-color', `var(--${currentTheme}-${mode}-button-border-color)`);
+
+            document.documentElement.style.setProperty('--notification-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--notification-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+
+            document.documentElement.style.setProperty('--select-background-color', `var(--${currentTheme}-${mode}-background-color)`);
+            document.documentElement.style.setProperty('--select-alt-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--select-text-color', `var(--${currentTheme}-${mode}-text-color)`);
+
+            document.documentElement.style.setProperty('--column-color', `var(--${currentTheme}-${mode}-alt-background-color)`);
+            document.documentElement.style.setProperty('--column-text-color', `var(--${currentTheme}-${mode}-text-color)`);
+            document.documentElement.style.setProperty('--card-color', `var(--${currentTheme}-${mode}-background-color)`);
+            document.documentElement.style.setProperty('--card-text-color', `var(--${currentTheme}-${mode}-text-color)`);
+
+            document.documentElement.style.setProperty('--link-hover-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+   
+            const popup = document.getElementById('theme-popup');
+            popup.style.backgroundColor = `var(--${currentTheme}-${mode}-alt-background-color)`;
+            popup.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+        }
+        
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.style.zIndex = '1';
+            notification.style.opacity = '1';
+            setTimeout(function() {
+                notification.style.opacity = '0';
+                notification.style.zIndex = '-1';
+            }, 2000);
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            applyTheme();
+        }
+
+        function changeTheme() {
+            currentTheme = themeSelect.value;
+            applyTheme();
+        }
+
+        function changeFont() {
+            currentFont = fontSelect.value;
+            applyFont();
+        }
+
+        function applyFont() {
+            document.body.style.fontFamily = currentFont;
+        }
+
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.style.zIndex = '1';
+            notification.style.opacity = '1';
+            setTimeout(function() {
+                notification.style.opacity = '0';
+                notification.style.zIndex = '-1';
+            }, 2000);
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeAllPopups();
+            }
+        });
+
+        function setInitialStates() {
+            // Set initial theme selection
+            for (let i = 0; i < themeSelect.options.length; i++) {
+                if (themeSelect.options[i].value === currentTheme) {
+                    themeSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // Set initial font selection
+            for (let i = 0; i < fontSelect.options.length; i++) {
+                if (fontSelect.options[i].value === currentFont) {
+                    fontSelect.selectedIndex = i;
+                    break;
+                }
+            }
+    
+            // Previous initial states
+            applyTheme();
+            applyFont();
+        }
+
+        // Menu functionality
+        function toggleMenu() {
+            document.getElementById("menuContent").classList.toggle("show");
+        }
+
+        // Close menu when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.menu-button')) {
+                const dropdowns = document.getElementsByClassName("menu-content");
+                for (let dropdown of dropdowns) {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                }
+            }
+
+            const modal = document.getElementById('importModal');
+            if (event.target === modal) {
+                closeImportModal();
+            }
+        }
+        // Drag and drop functionality
+        function drag(event) {
+            event.stopPropagation();
+            event.target.classList.add('dragging');
+            // Get specifically the card content text, not the whole card
+            const cardContent = event.target.querySelector('.card-content').textContent;
+            event.dataTransfer.setData("text", cardContent);
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text");
+            
+            let targetColumn = event.target.closest('.column');
+            if (!targetColumn) return;
+            
+            // Get the add card button from the target column
+            const addCardButton = targetColumn.querySelector('.add-card');
+            
+            // Remove the original dragged card
+            document.querySelectorAll('.card.dragging').forEach(card => card.remove());
+            
+            // Use addCard to create the new card in the target column
+            addCard(data, addCardButton);
+        }
+
+        // Add new card functionality
+        function showCardInput(button) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'card-input';
+            input.placeholder = 'Enter card title...';
+            
+            let cardAdded = false;  // Flag to track if card was already added
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value.trim()) {
+                    cardAdded = true;  // Set flag when card is added
+                    addCard(this.value.trim(), button);
+                    this.remove();
+                }
+            });
+
+            input.addEventListener('blur', function() {
+                if (this.value.trim() && !cardAdded) {  // Only add if not already added
+                    addCard(this.value.trim(), button);
+                }
+                this.remove();
+            });
+
+            button.parentNode.insertBefore(input, button);
+            input.focus();
+        }
+
+        function addCard(text, button) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.draggable = true;
+            card.ondragstart = drag;
+            
+            // Create the content div with click handler
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'card-content';
+            contentDiv.textContent = text;
+            contentDiv.onclick = function() {
+                showCardContentInput(this);
+            };
+            
+            // Create the delete button with styles
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '×';
+            deleteBtn.style.float = 'right';
+            deleteBtn.style.background = 'none';
+            deleteBtn.style.border = 'none';
+            deleteBtn.style.color = '#999';
+            deleteBtn.style.padding = '0 5px';
+            deleteBtn.onclick = function(e) {
+                e.stopPropagation();
+                card.remove();
+            };
+
+            // Add both elements to the card
+            card.appendChild(deleteBtn);
+            card.appendChild(contentDiv);
+
+            const cardsContainer = button.parentNode.querySelector('.cards');
+            cardsContainer.appendChild(card);
+        }
+
+        // Delete card functionality
+        function deleteCard(button) {
+            button.parentElement.remove();
+        }
+
+        function showCardContentInput(cardContentDiv) {
+            const currentText = cardContentDiv.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentText;
+            input.className = 'card-edit-input';
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    cardContentDiv.textContent = this.value.trim();
+                    this.remove();
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                cardContentDiv.textContent = this.value.trim();
+                this.remove();
+            });
+            
+            cardContentDiv.textContent = '';
+            cardContentDiv.appendChild(input);
+            input.focus();
+        }
+
+        // Add new column functionality
+        function createColumn(title = "New Column") {
+            const board = document.querySelector('.board');
+            const addColumnButton = document.querySelector('.add-column');
+            
+            const column = document.createElement('div');
+            column.className = 'column';
+            column.ondrop = drop;
+            column.ondragover = allowDrop;
+            
+            column.innerHTML = `
+                <div class="column-header">
+                    <div class="column-title" onclick="showTitleInput(this)">New Column</div>
+                    <button class="delete-column" onclick="deleteColumn(this)">×</button>
+                </div>
+                <div class="cards"></div>
+                <button class="add-card" onclick="showCardInput(this)">+ Add a card</button>
+            `;
+            
+            board.insertBefore(column, addColumnButton);
+
+            // Trigger the title edit immediately for new columns
+            // (but not for imported columns that have a specific title)
+            if (title === "New Column") {
+                const titleDiv = column.querySelector('.column-title');
+                showTitleInput(titleDiv);
+            } else {
+                const titleDiv = column.querySelector('.column-title');
+                titleDiv.textContent = title;
+            }
+            
+            return column;
+        }
+
+        // Delete column functionality
+        function deleteColumn(button) {
+            button.closest('.column').remove();
+        }
+
+        // Rename column functionality
+        function showTitleInput(titleElement) {
+            const currentTitle = titleElement.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'title-input';
+            input.value = currentTitle;
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value.trim()) {
+                    titleElement.textContent = this.value.trim();
+                    this.remove();
+                }
+            });
+
+            input.addEventListener('blur', function() {
+                if (this.value.trim()) {
+                    titleElement.textContent = this.value.trim();
+                }
+                this.remove();
+            });
+
+            titleElement.parentNode.insertBefore(input, titleElement);
+            titleElement.style.display = 'none';
+            input.focus();
+            input.select();
+
+            input.addEventListener('blur', function() {
+                titleElement.style.display = '';
+            });
+        }
+
+        // Import/Export functionality
+        function exportToMarkdown() {
+            let markdown = "";
+            
+            // Add metadata section
+            markdown += "---\n";
+            
+            // Get current theme settings from the select elements and isDarkMode variable
+            const style = document.getElementById('theme-select').value;
+            const theme = isDarkMode ? 'Dark' : 'Light';
+            const font = document.getElementById('font-select').value;
+            
+            // Add configuration settings
+            markdown += `style: ${style}\n`;
+            markdown += `theme: ${theme}\n`;
+            markdown += `font: ${font}\n`;
+            markdown += "---\n\n";
+            
+            // Rest of the export function remains the same...
+            const boardTitle = document.querySelector('h1').textContent;
+            markdown += `# ${boardTitle}\n\n`;
+            
+            const columns = document.querySelectorAll('.column');
+            
+            columns.forEach(column => {
+                const columnHeader = column.querySelector('.column-title').textContent;
+                markdown += `## ${columnHeader}\n\n`;
+                
+                const cards = column.querySelectorAll('.card');
+                cards.forEach(card => {
+                    const cardText = card.querySelector('.card-content').textContent.trim();
+                    markdown += `- ${cardText}\n`;
+                });
+                markdown += '\n';
+            });
+
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'kanban-board.md';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            toggleMenu();
+        }
+
+        function showImportModal() {
+            document.getElementById('importModal').style.display = 'block';
+            toggleMenu();
+        }
+
+        function closeImportModal() {
+            document.getElementById('importModal').style.display = 'none';
+            document.getElementById('markdownInput').value = '';
+        }
+
+        function importFromMarkdown() {
+            const markdown = document.getElementById('markdownInput').value;
+            const lines = markdown.split('\n');
+            let currentColumn = null;
+            let inMetadata = false;
+
+            document.querySelectorAll('.column').forEach(column => column.remove());
+
+            lines.forEach(line => {
+                line = line.trim();
+                
+                // Handle metadata section
+                if (line === '---') {
+                    inMetadata = !inMetadata;
+                    return;
+                }
+                
+                if (inMetadata) {
+                    // Parse configuration settings
+                    const [key, value] = line.split(':').map(part => part.trim());
+                    console.log(`Importing setting: ${key} = ${value}`);
+                    if (value) {
+                        switch(key.toLowerCase()) {
+                            case 'style':
+                                document.getElementById('theme-select').value = value.toLowerCase();
+                                currentTheme = value.toLowerCase(); // Add this line
+                                console.log('Set currentTheme to:', currentTheme);
+                                break;
+                            case 'theme':
+                                isDarkMode = (value.toLowerCase() === 'dark');
+                                console.log('Set isDarkMode to:', isDarkMode);
+                                break;
+                            case 'font':
+                                document.getElementById('font-select').value = value.toLowerCase();
+                                document.body.style.fontFamily = value.toLowerCase();
+                                break;
+                        }
+                    }
+                    return;
+                }
+
+                if (!inMetadata) {
+                    if (line.startsWith('# ')) {
+                        // Set board title
+                        const boardTitle = line.substring(2).trim();
+                        document.querySelector('h1').textContent = boardTitle;
+                    } else if (line.startsWith('## ')) {
+                        const columnName = line.substring(3).trim();
+                        createColumn(columnName);
+                        currentColumn = Array.from(document.querySelectorAll('.column')).pop();
+                    } else if (line.startsWith('- ') && currentColumn) {
+                        const cardText = line.substring(2).trim();
+                        const addCardButton = currentColumn.querySelector('.add-card');
+                        addCard(cardText, addCardButton);
+                    }
+                }
+            });
+
+            // Apply all theme settings after parsing
+            console.log('Applying theme with:', { currentTheme, isDarkMode });
+            applyTheme();
+            closeImportModal();
+        }
+
+        function showBoardTitleInput(titleElement) {
+            const currentText = titleElement.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentText;
+            input.className = 'board-title-input';
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    titleElement.textContent = this.value.trim() || 'Kanban Board'; // Default if empty
+                    this.remove();
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                titleElement.textContent = this.value.trim() || 'Kanban Board'; // Default if empty
+                this.remove();
+            });
+            
+            titleElement.textContent = '';
+            titleElement.appendChild(input);
+            input.focus();
+        }
+
+        // Initialize board with default columns
+        document.addEventListener('DOMContentLoaded', function() {
+            const defaultColumns = ['To Do', 'Doing', 'Done'];
+            defaultColumns.forEach(name => createColumn(name));
+        });
+
+        // Initialize
+        setInitialStates();
+
+    </script>
+</body>
+
+<footer>
+    <p id="versionNumber"></p>
+    <p>Find this project on <a href="https://github.com/Caddickbrown/SApps/">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
+  
+    <script>
+        document.querySelectorAll("#versionNumber").forEach(function(element) {
+            element.innerHTML = "v" + versionNumber;
+            element.onclick = () => showPopup('version-info-popup');
+        });
+    </script>
+</footer>
+</html>

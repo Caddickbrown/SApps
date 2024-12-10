@@ -103,324 +103,324 @@
     --honeybee-dark-button-border-color: none;
 
     /* Forest - Light Mode */
-    --forest-light-text-color: #2c4a34;          /* Dark green */
-    --forest-light-background-color: #f0f7e6;     /* Pale sage */
-    --forest-light-alt-background-color: #dce8c9; /* Light moss */
-    --forest-light-button-background-color: #5c8b57; /* Forest green */
-    --forest-light-button-text-color: #ffffff;    /* White */
-    --forest-light-button-hover-color: #7aa874;   /* Light forest green */
+    --forest-light-text-color: #2c4a34;
+    --forest-light-background-color: #f0f7e6;
+    --forest-light-alt-background-color: #dce8c9;
+    --forest-light-button-background-color: #5c8b57;
+    --forest-light-button-text-color: #ffffff;
+    --forest-light-button-hover-color: #7aa874;
     --forest-light-button-border-color: none;
 
     /* Dark mode - Night Forest */
-    --forest-dark-text-color: #c1d9b8;           /* Pale green */
-    --forest-dark-background-color: #1a2718;      /* Deep forest */
-    --forest-dark-alt-background-color: #2c4a34;  /* Dark pine */
-    --forest-dark-button-background-color: #5c8b57; /* Forest green */
-    --forest-dark-button-text-color: #ffffff;     /* White */
-    --forest-dark-button-hover-color: #7aa874;    /* Light forest green */
+    --forest-dark-text-color: #c1d9b8;
+    --forest-dark-background-color: #1a2718;
+    --forest-dark-alt-background-color: #2c4a34;
+    --forest-dark-button-background-color: #5c8b57;
+    --forest-dark-button-text-color: #ffffff;
+    --forest-dark-button-hover-color: #7aa874;
     --forest-dark-button-border-color: none;
 
     /* Light mode - Sunny Beach */
-    --ocean-light-text-color: #1a4b6e;           /* Deep blue */
-    --ocean-light-background-color: #f0f9ff;      /* Sky blue */
-    --ocean-light-alt-background-color: #e1f2fe;  /* Light blue */
-    --ocean-light-button-background-color: #2e8bc0; /* Ocean blue */
-    --ocean-light-button-text-color: #ffffff;     /* White */
-    --ocean-light-button-hover-color: #40a1d8;    /* Light ocean blue */
+    --ocean-light-text-color: #1a4b6e;
+    --ocean-light-background-color: #f0f9ff;
+    --ocean-light-alt-background-color: #e1f2fe;
+    --ocean-light-button-background-color: #2e8bc0;
+    --ocean-light-button-text-color: #ffffff;
+    --ocean-light-button-hover-color: #40a1d8;
     --ocean-light-button-border-color: none;
 
     /* Dark mode - Deep Ocean */
-    --ocean-dark-text-color: #b8e3ff;            /* Light blue */
-    --ocean-dark-background-color: #0a2133;       /* Deep ocean */
-    --ocean-dark-alt-background-color: #1a4b6e;   /* Navy */
-    --ocean-dark-button-background-color: #2e8bc0; /* Ocean blue */
-    --ocean-dark-button-text-color: #ffffff;      /* White */
-    --ocean-dark-button-hover-color: #40a1d8;     /* Light ocean blue */
+    --ocean-dark-text-color: #b8e3ff;
+    --ocean-dark-background-color: #0a2133;
+    --ocean-dark-alt-background-color: #1a4b6e;
+    --ocean-dark-button-background-color: #2e8bc0;
+    --ocean-dark-button-text-color: #ffffff;
+    --ocean-dark-button-hover-color: #40a1d8;
     --ocean-dark-button-border-color: none;
 
     /* Light mode - Morning Glow */
-    --sunset-light-text-color: #78340f;          /* Burnt orange */
-    --sunset-light-background-color: #fff9f5;     /* Pale peach */
-    --sunset-light-alt-background-color: #ffe8d6; /* Light coral */
-    --sunset-light-button-background-color: #ff6b35; /* Sunset orange */
-    --sunset-light-button-text-color: #ffffff;    /* White */
-    --sunset-light-button-hover-color: #ff855e;   /* Light orange */
+    --sunset-light-text-color: #78340f;
+    --sunset-light-background-color: #fff9f5;
+    --sunset-light-alt-background-color: #ffe8d6;
+    --sunset-light-button-background-color: #ff6b35;
+    --sunset-light-button-text-color: #ffffff;
+    --sunset-light-button-hover-color: #ff855e;
     --sunset-light-button-border-color: none;
 
     /* Dark mode - Evening Sky */
-    --sunset-dark-text-color: #ffc4b0;           /* Light coral */
-    --sunset-dark-background-color: #2b1810;      /* Deep burgundy */
-    --sunset-dark-alt-background-color: #78340f;  /* Dark orange */
-    --sunset-dark-button-background-color: #ff6b35; /* Sunset orange */
-    --sunset-dark-button-text-color: #ffffff;     /* White */
-    --sunset-dark-button-hover-color: #ff855e;    /* Light orange */
+    --sunset-dark-text-color: #ffc4b0;
+    --sunset-dark-background-color: #2b1810;
+    --sunset-dark-alt-background-color: #78340f;
+    --sunset-dark-button-background-color: #ff6b35;
+    --sunset-dark-button-text-color: #ffffff;
+    --sunset-dark-button-hover-color: #ff855e;
     --sunset-dark-button-border-color: none;
 
     /* Light mode - Morning Lavender */
-    --lavender-light-text-color: #4a3b63;        /* Deep purple */
-    --lavender-light-background-color: #f9f6ff;   /* Pale lavender */
-    --lavender-light-alt-background-color: #efe8ff; /* Light purple */
-    --lavender-light-button-background-color: #8c72cb; /* Lavender */
-    --lavender-light-button-text-color: #ffffff;  /* White */
-    --lavender-light-button-hover-color: #a08fd8; /* Light lavender */
+    --lavender-light-text-color: #4a3b63;
+    --lavender-light-background-color: #f9f6ff;
+    --lavender-light-alt-background-color: #efe8ff;
+    --lavender-light-button-background-color: #8c72cb;
+    --lavender-light-button-text-color: #ffffff;
+    --lavender-light-button-hover-color: #a08fd8;
     --lavender-light-button-border-color: none;
 
     /* Dark mode - Evening Lavender */
-    --lavender-dark-text-color: #e0d6ff;         /* Light purple */
-    --lavender-dark-background-color: #1d1736;    /* Deep purple */
-    --lavender-dark-alt-background-color: #4a3b63; /* Medium purple */
-    --lavender-dark-button-background-color: #8c72cb; /* Lavender */
-    --lavender-dark-button-text-color: #ffffff;   /* White */
-    --lavender-dark-button-hover-color: #a08fd8;  /* Light lavender */
+    --lavender-dark-text-color: #e0d6ff;
+    --lavender-dark-background-color: #1d1736;
+    --lavender-dark-alt-background-color: #4a3b63;
+    --lavender-dark-button-background-color: #8c72cb;
+    --lavender-dark-button-text-color: #ffffff;
+    --lavender-dark-button-hover-color: #a08fd8;
     --lavender-dark-button-border-color: none;
 
     /* Light mode - Fresh Mint */
-    --mint-light-text-color: #1d4d4f;            /* Dark teal */
-    --mint-light-background-color: #f2fffd;       /* Pale mint */
-    --mint-light-alt-background-color: #e0f5f1;   /* Light mint */
-    --mint-light-button-background-color: #4fb3a9; /* Mint */
-    --mint-light-button-text-color: #ffffff;      /* White */
-    --mint-light-button-hover-color: #65c7bd;     /* Light mint */
+    --mint-light-text-color: #1d4d4f;
+    --mint-light-background-color: #f2fffd;
+    --mint-light-alt-background-color: #e0f5f1;
+    --mint-light-button-background-color: #4fb3a9;
+    --mint-light-button-text-color: #ffffff;
+    --mint-light-button-hover-color: #65c7bd;
     --mint-light-button-border-color: none;
 
     /* Dark mode - Deep Mint */
-    --mint-dark-text-color: #b8ede7;             /* Light mint */
-    --mint-dark-background-color: #0a2728;        /* Deep teal */
-    --mint-dark-alt-background-color: #1d4d4f;    /* Dark teal */
-    --mint-dark-button-background-color: #4fb3a9;  /* Mint */
-    --mint-dark-button-text-color: #ffffff;       /* White */
-    --mint-dark-button-hover-color: #65c7bd;      /* Light mint */
+    --mint-dark-text-color: #b8ede7;
+    --mint-dark-background-color: #0a2728;
+    --mint-dark-alt-background-color: #1d4d4f;
+    --mint-dark-button-background-color: #4fb3a9;
+    --mint-dark-button-text-color: #ffffff;
+    --mint-dark-button-hover-color: #65c7bd;
     --mint-dark-button-border-color: none;
 
-    --cherry-light-text-color: #814759;          /* Deep pink */
-    --cherry-light-background-color: #fff5f8;     /* Pale pink */
-    --cherry-light-alt-background-color: #ffe1eb; /* Light pink */
-    --cherry-light-button-background-color: #ff8ba7; /* Cherry pink */
-    --cherry-light-button-text-color: #ffffff;    /* White */
-    --cherry-light-button-hover-color: #ffb5c7;   /* Light cherry */
+    --cherry-light-text-color: #814759;
+    --cherry-light-background-color: #fff5f8;
+    --cherry-light-alt-background-color: #ffe1eb;
+    --cherry-light-button-background-color: #ff8ba7;
+    --cherry-light-button-text-color: #ffffff;
+    --cherry-light-button-hover-color: #ffb5c7;
     --cherry-light-button-border-color: none;
 
     /* Dark mode - Evening Sakura */
-    --cherry-dark-text-color: #ffd6e0;           /* Light pink */
-    --cherry-dark-background-color: #2b1820;      /* Deep burgundy */
-    --cherry-dark-alt-background-color: #814759;  /* Dark pink */
-    --cherry-dark-button-background-color: #ff8ba7; /* Cherry pink */
-    --cherry-dark-button-text-color: #ffffff;     /* White */
-    --cherry-dark-button-hover-color: #ffb5c7;    /* Light cherry */
+    --cherry-dark-text-color: #ffd6e0;
+    --cherry-dark-background-color: #2b1820;
+    --cherry-dark-alt-background-color: #814759;
+    --cherry-dark-button-background-color: #ff8ba7;
+    --cherry-dark-button-text-color: #ffffff;
+    --cherry-dark-button-hover-color: #ffb5c7;
     --cherry-dark-button-border-color: none;
 
     /* Light mode - Latte */
-    --coffee-light-text-color: #4a3525;          /* Dark roast */
-    --coffee-light-background-color: #fff9f5;     /* Cream */
-    --coffee-light-alt-background-color: #f2e2d3; /* Light coffee */
-    --coffee-light-button-background-color: #8b593e; /* Coffee */
-    --coffee-light-button-text-color: #ffffff;    /* White */
-    --coffee-light-button-hover-color: #a66f51;   /* Light coffee */
+    --coffee-light-text-color: #4a3525;
+    --coffee-light-background-color: #fff9f5;
+    --coffee-light-alt-background-color: #f2e2d3;
+    --coffee-light-button-background-color: #8b593e;
+    --coffee-light-button-text-color: #ffffff;
+    --coffee-light-button-hover-color: #a66f51;
     --coffee-light-button-border-color: none;
 
     /* Dark mode - Espresso */
-    --coffee-dark-text-color: #d9b99b;           /* Light coffee */
-    --coffee-dark-background-color: #1a0f0a;      /* Dark espresso */
-    --coffee-dark-alt-background-color: #4a3525;  /* Medium roast */
-    --coffee-dark-button-background-color: #8b593e; /* Coffee */
-    --coffee-dark-button-text-color: #ffffff;     /* White */
-    --coffee-dark-button-hover-color: #a66f51;    /* Light coffee */
+    --coffee-dark-text-color: #d9b99b;
+    --coffee-dark-background-color: #1a0f0a;
+    --coffee-dark-alt-background-color: #4a3525;
+    --coffee-dark-button-background-color: #8b593e;
+    --coffee-dark-button-text-color: #ffffff;
+    --coffee-dark-button-hover-color: #a66f51;
     --coffee-dark-button-border-color: none;
 
     /* Light mode - Snow Day */
-    --arctic-light-text-color: #394655;          /* Steel blue */
-    --arctic-light-background-color: #f8faff;     /* Ice white */
-    --arctic-light-alt-background-color: #edf2fc; /* Glacier blue */
-    --arctic-light-button-background-color: #6d90b9; /* Arctic blue */
-    --arctic-light-button-text-color: #ffffff;    /* White */
-    --arctic-light-button-hover-color: #89a7c8;   /* Light arctic */
+    --arctic-light-text-color: #394655;
+    --arctic-light-background-color: #f8faff;
+    --arctic-light-alt-background-color: #edf2fc;
+    --arctic-light-button-background-color: #6d90b9;
+    --arctic-light-button-text-color: #ffffff;
+    --arctic-light-button-hover-color: #89a7c8;
     --arctic-light-button-border-color: none;
 
     /* Dark mode - Polar Night */
-    --arctic-dark-text-color: #c5d5e9;           /* Ice blue */
-    --arctic-dark-background-color: #1a1f26;      /* Deep arctic */
-    --arctic-dark-alt-background-color: #394655;  /* Dark ice */
-    --arctic-dark-button-background-color: #6d90b9; /* Arctic blue */
-    --arctic-dark-button-text-color: #ffffff;     /* White */
-    --arctic-dark-button-hover-color: #89a7c8;    /* Light arctic */
+    --arctic-dark-text-color: #c5d5e9;
+    --arctic-dark-background-color: #1a1f26;
+    --arctic-dark-alt-background-color: #394655;
+    --arctic-dark-button-background-color: #6d90b9;
+    --arctic-dark-button-text-color: #ffffff;
+    --arctic-dark-button-hover-color: #89a7c8;
     --arctic-dark-button-border-color: none;
 
     /* Light mode - Desert Day */
-    --desert-light-text-color: #6b4423;          /* Desert brown */
-    --desert-light-background-color: #fff8ec;     /* Sand */
-    --desert-light-alt-background-color: #f5e6d3; /* Light sand */
-    --desert-light-button-background-color: #c17f59; /* Desert orange */
-    --desert-light-button-text-color: #ffffff;    /* White */
-    --desert-light-button-hover-color: #d4997a;   /* Light desert */
+    --desert-light-text-color: #6b4423;
+    --desert-light-background-color: #fff8ec;
+    --desert-light-alt-background-color: #f5e6d3;
+    --desert-light-button-background-color: #c17f59;
+    --desert-light-button-text-color: #ffffff;
+    --desert-light-button-hover-color: #d4997a;
     --desert-light-button-border-color: none;
 
     /* Dark mode - Desert Night */
-    --desert-dark-text-color: #ffd7bc;           /* Light sand */
-    --desert-dark-background-color: #251811;      /* Deep desert */
-    --desert-dark-alt-background-color: #6b4423;  /* Dark sand */
-    --desert-dark-button-background-color: #c17f59; /* Desert orange */
-    --desert-dark-button-text-color: #ffffff;     /* White */
-    --desert-dark-button-hover-color: #d4997a;    /* Light desert */
+    --desert-dark-text-color: #ffd7bc;
+    --desert-dark-background-color: #251811;
+    --desert-dark-alt-background-color: #6b4423;
+    --desert-dark-button-background-color: #c17f59;
+    --desert-dark-button-text-color: #ffffff;
+    --desert-dark-button-hover-color: #d4997a;
     --desert-dark-button-border-color: none;
 
     /* Light mode - Star Cluster */
-    --galaxy-light-text-color: #2d2357;          /* Deep space */
-    --galaxy-light-background-color: #f5f3ff;     /* Stardust */
-    --galaxy-light-alt-background-color: #e6e0ff; /* Light nebula */
-    --galaxy-light-button-background-color: #7b4fff; /* Galaxy purple */
-    --galaxy-light-button-text-color: #ffffff;    /* White */
-    --galaxy-light-button-hover-color: #9775ff;   /* Light galaxy */
+    --galaxy-light-text-color: #2d2357;
+    --galaxy-light-background-color: #f5f3ff;
+    --galaxy-light-alt-background-color: #e6e0ff;
+    --galaxy-light-button-background-color: #7b4fff;
+    --galaxy-light-button-text-color: #ffffff;
+    --galaxy-light-button-hover-color: #9775ff;
     --galaxy-light-button-border-color: none;
 
     /* Dark mode - Deep Space */
-    --galaxy-dark-text-color: #d1c4ff;           /* Star light */
-    --galaxy-dark-background-color: #0f0b26;      /* Space */
-    --galaxy-dark-alt-background-color: #2d2357;  /* Dark nebula */
-    --galaxy-dark-button-background-color: #7b4fff; /* Galaxy purple */
-    --galaxy-dark-button-text-color: #ffffff;     /* White */
-    --galaxy-dark-button-hover-color: #9775ff;    /* Light galaxy */
+    --galaxy-dark-text-color: #d1c4ff;
+    --galaxy-dark-background-color: #0f0b26;
+    --galaxy-dark-alt-background-color: #2d2357;
+    --galaxy-dark-button-background-color: #7b4fff;
+    --galaxy-dark-button-text-color: #ffffff;
+    --galaxy-dark-button-hover-color: #9775ff;
     --galaxy-dark-button-border-color: none;
 
     /* Light mode - Cotton Candy */
-    --bubblegum-light-text-color: #ff1493;         /* Hot pink */
-    --bubblegum-light-background-color: #ffeeff;    /* Baby pink */
-    --bubblegum-light-alt-background-color: #ffccff; /* Soft pink */
-    --bubblegum-light-button-background-color: #ff69b4; /* Pink */
-    --bubblegum-light-button-text-color: #ffffff;   /* White */
-    --bubblegum-light-button-hover-color: #ff8ac1;  /* Light pink */
+    --bubblegum-light-text-color: #ff1493;
+    --bubblegum-light-background-color: #ffeeff;
+    --bubblegum-light-alt-background-color: #ffccff;
+    --bubblegum-light-button-background-color: #ff69b4;
+    --bubblegum-light-button-text-color: #ffffff;
+    --bubblegum-light-button-hover-color: #ff8ac1;
     --bubblegum-light-button-border-color: none;
 
     /* Dark mode - Neon Night */
-    --bubblegum-dark-text-color: #ff8ac1;          /* Light pink */
-    --bubblegum-dark-background-color: #660066;     /* Deep purple */
-    --bubblegum-dark-alt-background-color: #990099; /* Bright purple */
-    --bubblegum-dark-button-background-color: #ff1493; /* Hot pink */
-    --bubblegum-dark-button-text-color: #ffffff;    /* White */
-    --bubblegum-dark-button-hover-color: #ff69b4;   /* Pink */
+    --bubblegum-dark-text-color: #ff8ac1;
+    --bubblegum-dark-background-color: #660066;
+    --bubblegum-dark-alt-background-color: #990099;
+    --bubblegum-dark-button-background-color: #ff1493;
+    --bubblegum-dark-button-text-color: #ffffff;
+    --bubblegum-dark-button-hover-color: #ff69b4;
     --bubblegum-dark-button-border-color: none;
 
     /* Light mode - Fresh Brains */
-    --zombie-light-text-color: #3d6e3d;           /* Moldy green */
-    --zombie-light-background-color: #e6ffe6;      /* Pale flesh */
-    --zombie-light-alt-background-color: #ccffcc;  /* Light flesh */
-    --zombie-light-button-background-color: #8b0000; /* Blood red */
-    --zombie-light-button-text-color: #98fb98;     /* Toxic green */
-    --zombie-light-button-hover-color: #a52a2a;    /* Rotting red */
+    --zombie-light-text-color: #3d6e3d;
+    --zombie-light-background-color: #e6ffe6;
+    --zombie-light-alt-background-color: #ccffcc;
+    --zombie-light-button-background-color: #8b0000;
+    --zombie-light-button-text-color: #98fb98;
+    --zombie-light-button-hover-color: #a52a2a;
     --zombie-light-button-border-color: none;
 
     /* Dark mode - Graveyard */
-    --zombie-dark-text-color: #98fb98;            /* Toxic green */
-    --zombie-dark-background-color: #1a331a;       /* Deep rot */
-    --zombie-dark-alt-background-color: #2d4d2d;   /* Dark moss */
-    --zombie-dark-button-background-color: #8b0000; /* Blood red */
-    --zombie-dark-button-text-color: #98fb98;      /* Toxic green */
-    --zombie-dark-button-hover-color: #a52a2a;     /* Rotting red */
+    --zombie-dark-text-color: #98fb98;
+    --zombie-dark-background-color: #1a331a;
+    --zombie-dark-alt-background-color: #2d4d2d;
+    --zombie-dark-button-background-color: #8b0000;
+    --zombie-dark-button-text-color: #98fb98;
+    --zombie-dark-button-hover-color: #a52a2a;
     --zombie-dark-button-border-color: none;
 
     /* Light mode - Magic Sparkles */
-    --unicorn-light-text-color: #ff1493;          /* Pink */
-    --unicorn-light-background-color: #e6e6ff;     /* Sparkle white */
-    --unicorn-light-alt-background-color: #ffccff;  /* Magic pink */
-    --unicorn-light-button-background-color: #8a2be2; /* Purple */
-    --unicorn-light-button-text-color: #ffffff;    /* White */
-    --unicorn-light-button-hover-color: #9400d3;   /* Violet */
+    --unicorn-light-text-color: #ff1493;
+    --unicorn-light-background-color: #e6e6ff;
+    --unicorn-light-alt-background-color: #ffccff;
+    --unicorn-light-button-background-color: #8a2be2;
+    --unicorn-light-button-text-color: #ffffff;
+    --unicorn-light-button-hover-color: #9400d3;
     --unicorn-light-button-border-color: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
 
     /* Dark mode - Rainbow Dreams */
-    --unicorn-dark-text-color: #00ffff;           /* Cyan */
-    --unicorn-dark-background-color: #4b0082;      /* Indigo */
-    --unicorn-dark-alt-background-color: #8b008b;  /* Dark magenta */
-    --unicorn-dark-button-background-color: #ff69b4; /* Hot pink */
-    --unicorn-dark-button-text-color: #ffffff;     /* White */
-    --unicorn-dark-button-hover-color: #ff1493;    /* Deep pink */
+    --unicorn-dark-text-color: #00ffff;
+    --unicorn-dark-background-color: #4b0082;
+    --unicorn-dark-alt-background-color: #8b008b;
+    --unicorn-dark-button-background-color: #ff69b4;
+    --unicorn-dark-button-text-color: #ffffff;
+    --unicorn-dark-button-hover-color: #ff1493;
     --unicorn-dark-button-border-color: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
 
     /* Light mode - 8-bit Day */
-    --retro-light-text-color: #000000;            /* Black */
-    --retro-light-background-color: #c0ffee;       /* Mint pixel */
-    --retro-light-alt-background-color: #90ee90;   /* Light pixel */
-    --retro-light-button-background-color: #ff4500; /* Orange-red */
-    --retro-light-button-text-color: #ffffff;      /* White */
-    --retro-light-button-hover-color: #ff6347;     /* Tomato */
-    --retro-light-button-border-color: #000000;    /* Black pixel border */
+    --retro-light-text-color: #000000;
+    --retro-light-background-color: #c0ffee;
+    --retro-light-alt-background-color: #90ee90;
+    --retro-light-button-background-color: #ff4500;
+    --retro-light-button-text-color: #ffffff;
+    --retro-light-button-hover-color: #ff6347;
+    --retro-light-button-border-color: #000000;
 
     /* Dark mode - Arcade Night */
-    --retro-dark-text-color: #00ff00;             /* Matrix green */
-    --retro-dark-background-color: #000000;        /* Black */
-    --retro-dark-alt-background-color: #1a1a1a;    /* Dark gray */
-    --retro-dark-button-background-color: #ff0000;  /* Red */
-    --retro-dark-button-text-color: #ffffff;       /* White */
-    --retro-dark-button-hover-color: #ff4500;      /* Orange-red */
-    --retro-dark-button-border-color: #00ff00;     /* Green pixel border */
+    --retro-dark-text-color: #00ff00;
+    --retro-dark-background-color: #000000;
+    --retro-dark-alt-background-color: #1a1a1a;
+    --retro-dark-button-background-color: #ff0000;
+    --retro-dark-button-text-color: #ffffff;
+    --retro-dark-button-hover-color: #ff4500;
+    --retro-dark-button-border-color: #00ff00;
 
     /* Light mode - UFO Bright */
-    --alien-light-text-color: #39ff14;            /* Neon green */
-    --alien-light-background-color: #f0fff0;       /* Alien white */
-    --alien-light-alt-background-color: #ccffcc;   /* Light alien */
-    --alien-light-button-background-color: #6a5acd; /* UFO purple */
-    --alien-light-button-text-color: #00ff00;      /* Alien green */
-    --alien-light-button-hover-color: #836fff;     /* Light UFO */
+    --alien-light-text-color: #39ff14;
+    --alien-light-background-color: #f0fff0;
+    --alien-light-alt-background-color: #ccffcc;
+    --alien-light-button-background-color: #6a5acd;
+    --alien-light-button-text-color: #00ff00;
+    --alien-light-button-hover-color: #836fff;
     --alien-light-button-border-color: none;
 
     /* Dark mode - Area 51 */
-    --alien-dark-text-color: #39ff14;             /* Neon green */
-    --alien-dark-background-color: #0a0a0a;        /* Space black */
-    --alien-dark-alt-background-color: #1f1f1f;    /* Dark matter */
-    --alien-dark-button-background-color: #9400d3;  /* Alien purple */
-    --alien-dark-button-text-color: #00ff00;       /* Alien green */
-    --alien-dark-button-hover-color: #8a2be2;      /* Deep purple */
+    --alien-dark-text-color: #39ff14;
+    --alien-dark-background-color: #0a0a0a;
+    --alien-dark-alt-background-color: #1f1f1f;
+    --alien-dark-button-background-color: #9400d3;
+    --alien-dark-button-text-color: #00ff00;
+    --alien-dark-button-hover-color: #8a2be2;
     --alien-dark-button-border-color: none;
 
     /* Light mode - Synthwave Day */
-    --neon-light-text-color: #ff00ff;            /* Magenta */
-    --neon-light-background-color: #1a1a2e;       /* Deep blue */
-    --neon-light-alt-background-color: #16213e;   /* Medium blue */
-    --neon-light-button-background-color: #00ffff; /* Cyan */
-    --neon-light-button-text-color: #000000;      /* Black */
-    --neon-light-button-hover-color: #00f7ff;     /* Light cyan */
-    --neon-light-button-border-color: #ff00ff;    /* Magenta border */
+    --neon-light-text-color: #ff00ff;
+    --neon-light-background-color: #1a1a2e;
+    --neon-light-alt-background-color: #16213e;
+    --neon-light-button-background-color: #00ffff;
+    --neon-light-button-text-color: #000000;
+    --neon-light-button-hover-color: #00f7ff;
+    --neon-light-button-border-color: #ff00ff;
 
     /* Dark mode - Cyberpunk Night */
-    --neon-dark-text-color: #0fff0f;             /* Neon green */
-    --neon-dark-background-color: #000000;        /* Pure black */
-    --neon-dark-alt-background-color: #0a0a0a;    /* Near black */
-    --neon-dark-button-background-color: #ff00ff;  /* Magenta */
-    --neon-dark-button-text-color: #000000;       /* Black */
-    --neon-dark-button-hover-color: #ff33ff;      /* Light magenta */
-    --neon-dark-button-border-color: #00ffff;     /* Cyan border */
+    --neon-dark-text-color: #0fff0f;
+    --neon-dark-background-color: #000000;
+    --neon-dark-alt-background-color: #0a0a0a;
+    --neon-dark-button-background-color: #ff00ff;
+    --neon-dark-button-text-color: #000000;
+    --neon-dark-button-hover-color: #ff33ff;
+    --neon-dark-button-border-color: #00ffff;
 
     /* Classic B&W */
-    --mono-classic-light-text-color: #000000;           /* Pure black */
-    --mono-classic-light-background-color: #ffffff;      /* Pure white */
-    --mono-classic-light-alt-background-color: #f0f0f0;  /* Light gray */
-    --mono-classic-light-button-background-color: #000000; /* Black */
-    --mono-classic-light-button-text-color: #ffffff;     /* White */
-    --mono-classic-light-button-hover-color: #333333;    /* Dark gray */
+    --mono-classic-light-text-color: #000000;
+    --mono-classic-light-background-color: #ffffff;
+    --mono-classic-light-alt-background-color: #f0f0f0;
+    --mono-classic-light-button-background-color: #000000;
+    --mono-classic-light-button-text-color: #ffffff;
+    --mono-classic-light-button-hover-color: #333333;
     --mono-classic-light-button-border-color: none;
 
-    --mono-classic-dark-text-color: #ffffff;            /* White */
-    --mono-classic-dark-background-color: #000000;       /* Black */
-    --mono-classic-dark-alt-background-color: #1a1a1a;   /* Very dark gray */
-    --mono-classic-dark-button-background-color: #ffffff; /* White */
-    --mono-classic-dark-button-text-color: #000000;      /* Black */
-    --mono-classic-dark-button-hover-color: #e0e0e0;     /* Light gray */
+    --mono-classic-dark-text-color: #ffffff;
+    --mono-classic-dark-background-color: #000000;
+    --mono-classic-dark-alt-background-color: #1a1a1a;
+    --mono-classic-dark-button-background-color: #ffffff;
+    --mono-classic-dark-button-text-color: #000000;
+    --mono-classic-dark-button-hover-color: #e0e0e0;
     --mono-classic-dark-button-border-color: none;
 
       /* Light mode - Happy Classroom */
-      --playschool-light-text-color: #2B3467;         /* Crayon blue */
-      --playschool-light-background-color: #FFFAA0;    /* Soft yellow */
-      --playschool-light-alt-background-color: #FFF677; /* Bright yellow */
-      --playschool-light-button-background-color: #FF6B6B; /* Crayon red */
-      --playschool-light-button-text-color: #ffffff;   /* White */
-      --playschool-light-button-hover-color: #FF8E8E;  /* Light red */
-      --playschool-light-button-border-color: #4D96FF; /* Bright blue border */
+      --playschool-light-text-color: #2B3467;
+      --playschool-light-background-color: #FFFAA0;
+      --playschool-light-alt-background-color: #FFF677;
+      --playschool-light-button-background-color: #FF6B6B;
+      --playschool-light-button-text-color: #ffffff;
+      --playschool-light-button-hover-color: #FF8E8E;
+      --playschool-light-button-border-color: #4D96FF;
   
       /* Dark mode - Art Room */
-      --playschool-dark-text-color: #FFE15D;          /* Bright yellow */
-      --playschool-dark-background-color: #4D96FF;     /* Bright blue */
-      --playschool-dark-alt-background-color: #6BA6FF; /* Light blue */
-      --playschool-dark-button-background-color: #FF6B6B; /* Crayon red */
-      --playschool-dark-button-text-color: #ffffff;    /* White */
-      --playschool-dark-button-hover-color: #FF8E8E;   /* Light red */
+      --playschool-dark-text-color: #FFE15D;
+      --playschool-dark-background-color: #4D96FF;
+      --playschool-dark-alt-background-color: #6BA6FF;
+      --playschool-dark-button-background-color: #FF6B6B;
+      --playschool-dark-button-text-color: #ffffff;
+      --playschool-dark-button-hover-color: #FF8E8E;
       --playschool-dark-button-border-color: #FFE15D;
 } 
