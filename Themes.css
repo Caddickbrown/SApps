@@ -70,18 +70,35 @@
 
     /* GX Theme - Light Mode */
     --gx-light-text-color: #333;
-    --gx-light-background-color: #ffffff;
+    --gx-light-background-color: #ffffe7;
     --gx-light-alt-background-color: #f0f0f0;
-    --gx-light-button-background-color: #4bc67c;
+    --gx-light-button-background-color: #273457;
     --gx-light-button-text-color: #ffffff;
-    --gx-light-button-hover-color: #348b57;
+    --gx-light-button-hover-color: #bb5e47;
     --gx-light-button-border-color: none;
     /* GX Theme - Dark Mode */
-    --gx-dark-text-color: #e0e0e0;
-    --gx-dark-background-color: #1d1d1d;
-    --gx-dark-alt-background-color: #2d2d2d;
-    --gx-dark-button-background-color: #58319f;
+    --gx-dark-text-color: #ffffe7;
+    --gx-dark-background-color: #16213d;
+    --gx-dark-alt-background-color: #273457;
+    --gx-dark-button-background-color: #bb5e47;
     --gx-dark-button-text-color: #ffffff;
-    --gx-dark-button-hover-color: #6d45b8;
+    --gx-dark-button-hover-color: #d67a63;
     --gx-dark-button-border-color: none;
+
+    /* Honey Bee Theme - Light Mode */
+    --honeybee-light-text-color: #4b3b2c;
+    --honeybee-light-background-color: #fff7e6;
+    --honeybee-light-alt-background-color: #ffedb3;
+    --honeybee-light-button-background-color: #ffa600;
+    --honeybee-light-button-text-color: #000000;
+    --honeybee-light-button-hover-color: #ffb730;
+    --honeybee-light-button-border-color: none;
+    /* Honey Bee Theme - Dark Mode */
+    --honeybee-dark-text-color: #ffd700;
+    --honeybee-dark-background-color: #1a1a1a;
+    --honeybee-dark-alt-background-color: #332200;
+    --honeybee-dark-button-background-color: #ffd700;
+    --honeybee-dark-button-text-color: #000000;
+    --honeybee-dark-button-hover-color: #ffed4a;
+    --honeybee-dark-button-border-color: none;
 } 

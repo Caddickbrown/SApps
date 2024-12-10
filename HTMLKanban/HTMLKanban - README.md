@@ -26,23 +26,22 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
-### [1.1.0] - 2024-12-09
+### [3.0.0] - 2024-12-
 
 #### Changed
 
-- [x] Removed overly questioning deletion for Columns and Cards
-- [ ] Smoothed Adding/Renaming of Cards
+- [ ] Text Area Dark Mode Colours
 
 ### Planned Functionality
 - Cleaned Up Style Menu
+- Export via Clipboard
+- Change Tab Name
 - Easier Dragging
 - Imported File Fixes?
 - More Themes
-- Change Theme with Imported File
-- Change App Name with Imported File
-- Change Settings with Imported File
-- Auto Complete in Column
 - Custom CSS
+- Theme Buttons (Cleaner)
+- Font Change Buttons (Cleaner)
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
@@ -67,6 +66,28 @@ This project is licensed under the MIT License.
 
 ## Change Log
 
+### [2.0.0] - 2024-12-10
+
+#### Added
+
+- [x] Change Theme with Imported File
+- [x] Change App Name with Imported File
+- [x] Change Settings with Imported File
+- [x] GX Theme
+- [x] Honey Bee Theme
+- [x] Renamable Kanban Board Title
+- [x] Export Board Title
+- [x] Export Board Settings
+
+#### Fixed
+
+- [x] Version Info Pop-up Background
+
+#### Changed
+
+- [x] Removed overly questioning deletion for Columns and Cards
+- [x] Smoothed Adding/Renaming of Cards
+
 ### [1.0.0] - 2024-12-09
 
 #### Added
@@ -79,4 +100,4 @@ This project is licensed under the MIT License.
 - [x] Settings Pop-Up
 - [x] Export to and import from Markdown
 - [x] Default Cards (Change in File)
-- [x] 
+
