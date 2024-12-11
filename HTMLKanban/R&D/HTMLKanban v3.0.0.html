@@ -22,6 +22,23 @@
             --default-dark-button-hover-color: #6d45b8;
             --default-dark-button-border-color: none;
 
+            /* Sepia Theme - Light Mode */
+            --sepia-light-text-color: #5b4636;
+            --sepia-light-background-color: #f4ecd8;
+            --sepia-light-alt-background-color: #fbf0d9;
+            --sepia-light-button-background-color: #c19a6b;
+            --sepia-light-button-text-color: #ffffff;
+            --sepia-light-button-hover-color: #a67c52;
+            --sepia-light-button-border-color: none;
+            /* Sepia Theme - Dark Mode */
+            --sepia-dark-text-color: #d3c4a9;
+            --sepia-dark-background-color: #433422;
+            --sepia-dark-alt-background-color: #2c2417;
+            --sepia-dark-button-background-color: #8b6b4a;
+            --sepia-dark-button-text-color: #ffffff;
+            --sepia-dark-button-hover-color: #6d5438;
+            --sepia-dark-button-border-color: none;
+
             /* Cool Theme - Light Mode */
             --cool-light-text-color: #2c3e50;
             --cool-light-background-color: #ecf0f1;
@@ -39,6 +56,23 @@
             --cool-dark-button-hover-color: #3498db;
             --cool-dark-button-border-color: none;
 
+            /* Terminal Theme - Light Mode */
+            --terminal-light-text-color: #59b822;
+            --terminal-light-background-color: #0e290e;
+            --terminal-light-alt-background-color: #0c2108;
+            --terminal-light-button-background-color: #13451a;
+            --terminal-light-button-text-color: #59b822;
+            --terminal-light-button-hover-color: #186d1d;
+            --terminal-light-button-border-color: none;
+            /* Terminal Theme - Dark Mode */
+            --terminal-dark-text-color: #c20000;
+            --terminal-dark-background-color: #000000;
+            --terminal-dark-alt-background-color: #320000;
+            --terminal-dark-button-background-color: #000000;
+            --terminal-dark-button-text-color: #c20000;
+            --terminal-dark-button-hover-color: #690000;
+            --terminal-dark-button-border-color: 1px solid #c20000;
+
             /* GX Theme - Light Mode */
             --gx-light-text-color: #333;
             --gx-light-background-color: #ffffe7;
@@ -55,8 +89,8 @@
             --gx-dark-button-text-color: #ffffff;
             --gx-dark-button-hover-color: #d67a63;
             --gx-dark-button-border-color: none;
-            
-            /* HoneyBee Theme - Light Mode */
+
+            /* Honey Bee Theme - Light Mode */
             --honeybee-light-text-color: #4b3b2c;
             --honeybee-light-background-color: #fff7e6;
             --honeybee-light-alt-background-color: #ffedb3;
@@ -64,7 +98,7 @@
             --honeybee-light-button-text-color: #000000;
             --honeybee-light-button-hover-color: #ffb730;
             --honeybee-light-button-border-color: none;
-            /* HoneyBee Theme - Dark Mode */
+            /* Honey Bee Theme - Dark Mode */
             --honeybee-dark-text-color: #ffd700;
             --honeybee-dark-background-color: #1a1a1a;
             --honeybee-dark-alt-background-color: #332200;
@@ -488,6 +522,50 @@
             cursor: pointer;
         }
 
+        input, textarea {
+            background-color: var(--card-color);
+            color: var(--card-text-color);
+            border: 1px solid var(--button-background-color);
+        }
+
+        .card-edit-input, .title-input, .card-input, .board-title-input {
+            background-color: var(--card-color);
+            color: var(--card-text-color);
+            border: 1px solid var(--button-background-color);
+        }
+
+        /* For the markdown import textarea */
+        textarea {
+            background-color: var(--card-color);
+            color: var(--card-text-color);
+            border: 1px solid var(--button-background-color);
+        }
+
+        .modal-content h3 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .modal-content input[type="file"] {
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        .modal-content input[type="file"]::file-selector-button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: var(--button-border-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-content input[type="file"]::file-selector-button:hover {
+            background-color: var(--button-hover-color);
+        }
+
     </style>
 </head>
 
@@ -506,6 +584,7 @@
             <div id="menuContent" class="menu-content">
                 <button onclick="openThemePopup()">Theme</button>
                 <button onclick="exportToMarkdown()">Export MD</button>
+                <button onclick="exportToClipboard()">Copy to Clipboard</button>
                 <button onclick="showImportModal()">Import MD</button>
             </div>
         </div>
@@ -515,14 +594,7 @@
         <button class="add-column" onclick="createColumn()">+ Add column</button>
     </div>
 
-    <div id="importModal" class="modal">
-        <div class="modal-content">
-            <h2>Import MD</h2>
-            <textarea id="markdownInput" placeholder="Paste your markdown here..."></textarea>
-            <button onclick="importFromMarkdown()">Import</button>
-            <button onclick="closeImportModal()">Cancel</button>
-        </div>
-    </div>
+    <div id="importModal" class="modal"></div>
 
     <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
     <div class="modal-popup" id="theme-popup">
@@ -530,24 +602,26 @@
         <h3>Style Settings</h3>
         <div class="theme-options">
             <div class="theme-row">
-                <label for="theme-select">Style:</label>
-                <select id="theme-select" onchange="changeTheme()">
-                    <option value="default">Default</option>
-                    <option value="cool">Cool</option>
-                    <option value="gx">GX</option>
-                    <option value="honeybee">Honey Bee</option>
-                </select>
+                <label>Style:</label>
+                <div class="theme-buttons">
+                    <button class="theme-button" data-theme="default" onclick="changeTheme('default')">Default</button>
+                    <button class="theme-button" data-theme="sepia" onclick="changeTheme('sepia')">Sepia</button>
+                    <button class="theme-button" data-theme="cool" onclick="changeTheme('cool')">Cool</button>
+                    <button class="theme-button" data-theme="terminal" onclick="changeTheme('terminal')">Terminal</button>
+                    <button class="theme-button" data-theme="gx" onclick="changeTheme('gx')">GX</button>
+                    <button class="theme-button" data-theme="honeybee" onclick="changeTheme('honeybee')">Honey Bee</button>
+                </div>
             </div>
             <div class="theme-row">
                 <button onclick="toggleDarkMode()">Light/Dark Mode</button>
             </div>
             <div class="theme-row">
-                <label for="theme-select">Font:</label>
-                <select id="font-select" onchange="changeFont()">
-                    <option value="monospace">Mono</option>
-                    <option value="serif">Serif</option>
-                    <option value="sans-serif">Sans-Serif</option>
-                </select>
+                <label>Font:</label>
+                <div class="font-buttons">
+                    <button class="font-button" data-font="monospace" onclick="changeFont('monospace')">Mono</button>
+                    <button class="font-button" data-font="serif" onclick="changeFont('serif')">Serif</button>
+                    <button class="font-button" data-font="sans-serif" onclick="changeFont('sans-serif')">Sans-Serif</button>
+                </div>
             </div>
         </div>
     </div>
@@ -601,7 +675,7 @@
             ;
 
         var appName = "HTMLKanban";
-        var versionNumber = "1.0.0";
+        var versionNumber = "3.0.0";
 
         document.querySelectorAll("#pageName").forEach(function(element) {element.innerHTML = appName;});
 
@@ -669,28 +743,27 @@
             applyTheme();
         }
 
-        function changeTheme() {
-            currentTheme = themeSelect.value;
+        function changeTheme(themeName) {
+            currentTheme = themeName;
             applyTheme();
         }
 
-        function changeFont() {
-            currentFont = fontSelect.value;
+        function changeFont(fontName) {
+            currentFont = fontName;
+            
+            // Update button states
+            document.querySelectorAll('.font-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.font === fontName) {
+                    button.classList.add('active');
+                }
+            });
+            
             applyFont();
         }
 
         function applyFont() {
             document.body.style.fontFamily = currentFont;
-        }
-
-        function showNotification(message) {
-            notification.textContent = message;
-            notification.style.zIndex = '1';
-            notification.style.opacity = '1';
-            setTimeout(function() {
-                notification.style.opacity = '0';
-                notification.style.zIndex = '-1';
-            }, 2000);
         }
 
         document.addEventListener('keydown', function(event) {
@@ -700,23 +773,21 @@
         });
 
         function setInitialStates() {
-            // Set initial theme selection
-            for (let i = 0; i < themeSelect.options.length; i++) {
-                if (themeSelect.options[i].value === currentTheme) {
-                    themeSelect.selectedIndex = i;
-                    break;
+            // Set initial theme button state
+            document.querySelectorAll('.theme-button').forEach(button => {
+                if (button.dataset.theme === currentTheme) {
+                    button.classList.add('active');
                 }
-            }
+            });
 
-            // Set initial font selection
-            for (let i = 0; i < fontSelect.options.length; i++) {
-                if (fontSelect.options[i].value === currentFont) {
-                    fontSelect.selectedIndex = i;
-                    break;
+            // Set initial font button state
+            document.querySelectorAll('.font-button').forEach(button => {
+                if (button.dataset.font === currentFont) {
+                    button.classList.add('active');
                 }
-            }
-    
-            // Previous initial states
+            });
+
+            // Apply initial states
             applyTheme();
             applyFont();
         }
@@ -943,9 +1014,9 @@
             markdown += "---\n";
             
             // Get current theme settings from the select elements and isDarkMode variable
-            const style = document.getElementById('theme-select').value;
-            const theme = isDarkMode ? 'Dark' : 'Light';
-            const font = document.getElementById('font-select').value;
+            const style = currentTheme;
+            const theme = isDarkMode ? 'dark' : 'light';
+            const font = currentFont;
             
             // Add configuration settings
             markdown += `style: ${style}\n`;
@@ -981,14 +1052,88 @@
             toggleMenu();
         }
 
+        function exportToClipboard() {
+            let markdown = "";
+            
+            // Add metadata section
+            markdown += "---\n";
+            
+            // Add configuration settings
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += "---\n\n";
+            
+            // Add board content
+            const boardTitle = document.querySelector('h1').textContent;
+            markdown += `# ${boardTitle}\n\n`;
+            
+            const columns = document.querySelectorAll('.column');
+            
+            columns.forEach(column => {
+                const columnHeader = column.querySelector('.column-title').textContent;
+                markdown += `## ${columnHeader}\n\n`;
+                
+                const cards = column.querySelectorAll('.card');
+                cards.forEach(card => {
+                    const cardText = card.querySelector('.card-content').textContent.trim();
+                    markdown += `- ${cardText}\n`;
+                });
+                markdown += '\n';
+            });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(markdown)
+                .then(() => {
+                    showNotification('Board copied to clipboard!');
+                    toggleMenu();
+                })
+                .catch(err => {
+                    showNotification('Failed to copy to clipboard');
+                    console.error('Failed to copy: ', err);
+                });
+        }
+
+        function createImportModal() {
+            document.getElementById('importModal').innerHTML = `
+                <div class="modal-content">
+                    <h2>Import MD</h2>
+                    <div style="margin-bottom: 20px;">
+                        <h3>Option 1: Upload File</h3>
+                        <input type="file" id="mdFileInput" accept=".md" style="margin: 10px 0;">
+                    </div>
+                    <div>
+                        <h3>Option 2: Paste Text</h3>
+                        <textarea id="markdownInput" placeholder="Paste your markdown here..."></textarea>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button onclick="importFromMarkdown()">Import</button>
+                        <button onclick="closeImportModal()">Cancel</button>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listener for file input after creating the element
+            document.getElementById('mdFileInput').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFileUpload(e.target.files[0]);
+                }
+            });
+        }
+
         function showImportModal() {
-            document.getElementById('importModal').style.display = 'block';
+            const modal = document.getElementById('importModal');
+            modal.style.display = 'block';
+            // Clear both inputs when opening modal
+            document.getElementById('markdownInput').value = '';
+            document.getElementById('mdFileInput').value = '';
             toggleMenu();
         }
 
         function closeImportModal() {
             document.getElementById('importModal').style.display = 'none';
             document.getElementById('markdownInput').value = '';
+            document.getElementById('mdFileInput').value = '';
         }
 
         function importFromMarkdown() {
@@ -1015,7 +1160,7 @@
                     if (value) {
                         switch(key.toLowerCase()) {
                             case 'style':
-                                document.getElementById('theme-select').value = value.toLowerCase();
+                                changeTheme(value.toLowerCase());
                                 currentTheme = value.toLowerCase(); // Add this line
                                 console.log('Set currentTheme to:', currentTheme);
                                 break;
@@ -1024,7 +1169,7 @@
                                 console.log('Set isDarkMode to:', isDarkMode);
                                 break;
                             case 'font':
-                                document.getElementById('font-select').value = value.toLowerCase();
+                                changeFont(value.toLowerCase());
                                 document.body.style.fontFamily = value.toLowerCase();
                                 break;
                         }
@@ -1034,9 +1179,13 @@
 
                 if (!inMetadata) {
                     if (line.startsWith('# ')) {
-                        // Set board title
+                        // Set board title and update page title
                         const boardTitle = line.substring(2).trim();
                         document.querySelector('h1').textContent = boardTitle;
+                        document.title = `${boardTitle} - Kanban`; // Update page title
+                        document.querySelectorAll("#pageName").forEach(function(element) {
+                            element.innerHTML = `${boardTitle} - Kanban`; // Update any page name elements
+                        });
                     } else if (line.startsWith('## ')) {
                         const columnName = line.substring(3).trim();
                         createColumn(columnName);
@@ -1055,6 +1204,14 @@
             closeImportModal();
         }
 
+        function handleFileUpload(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('markdownInput').value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+
         function showBoardTitleInput(titleElement) {
             const currentText = titleElement.textContent;
             const input = document.createElement('input');
@@ -1064,13 +1221,21 @@
             
             input.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    titleElement.textContent = this.value.trim() || 'Kanban Board'; // Default if empty
+                    const newTitle = this.value.trim() || 'Kanban Board'; // Default if empty
+                    titleElement.textContent = newTitle;
+                    document.querySelectorAll("#pageName").forEach(function(element) {
+                        element.innerHTML = `${newTitle} - Kanban`; // Update any page name elements
+                    });
                     this.remove();
                 }
             });
             
             input.addEventListener('blur', function() {
-                titleElement.textContent = this.value.trim() || 'Kanban Board'; // Default if empty
+                const newTitle = this.value.trim() || 'Kanban Board'; // Default if empty
+                titleElement.textContent = newTitle;
+                document.querySelectorAll("#pageName").forEach(function(element) {
+                    element.innerHTML = `${newTitle} - Kanban`; // Update any page name elements
+                });
                 this.remove();
             });
             
@@ -1083,6 +1248,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const defaultColumns = ['To Do', 'Doing', 'Done'];
             defaultColumns.forEach(name => createColumn(name));
+            createImportModal(); // Add this line
         });
 
         // Initialize

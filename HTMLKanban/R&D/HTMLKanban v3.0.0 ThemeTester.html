@@ -887,32 +887,32 @@
         <div class="theme-options">
             <div class="theme-row">
                 <label for="theme-select">Style:</label>
-                <select id="theme-select" onchange="changeTheme()">
-                    <option value="default">Default</option>
-                    <option value="sepia">Sepia</option>
-                    <option value="cool">Cool</option>
-                    <option value="terminal">Terminal</option>
-                    <option value="gx">GX</option>
-                    <option value="honeybee">Honey Bee</option>
-                    <option value="forest">Forest</option>
-                    <option value="ocean">Ocean</option>
-                    <option value="sunset">Sunset</option>
-                    <option value="lavender">Lavender</option>
-                    <option value="mint">Mint</option>
-                    <option value="cherry">Cherry Blossom</option>
-                    <option value="coffee">Coffee</option>
-                    <option value="arctic">Arctic</option>
-                    <option value="desert">Desert</option>
-                    <option value="galaxy">Galaxy</option>
-                    <option value="bubblegum">Bubblegum</option>
-                    <option value="zombie">Zombie</option>
-                    <option value="unicorn">Rainbow Unicorn</option>
-                    <option value="retro">Retro Gaming</option>
-                    <option value="alien">Space Alien</option>
-                    <option value="neon">Neon</option>
-                    <option value="mono-classic">Monochrome Classic</option>
-                    <option value="playschool">Play School</option>
-                </select>
+                <div class="theme-buttons">
+                  <button onclick="changeTheme('default')">Default</button>
+                  <button onclick="changeTheme('sepia')">Sepia</button>
+                  <button onclick="changeTheme('cool')">Cool</button>
+                  <button onclick="changeTheme('terminal')">Terminal</button>
+                  <button onclick="changeTheme('gx')">GX</button>
+                  <button onclick="changeTheme('honeybee')">Honey Bee</button>
+                  <button onclick="changeTheme('forest')">Forest</button>
+                  <button onclick="changeTheme('ocean')">Ocean</button>
+                  <button onclick="changeTheme('sunset')">Sunset</button>
+                  <button onclick="changeTheme('lavender')">Lavender</button>
+                  <button onclick="changeTheme('mint')">Mint</button>
+                  <button onclick="changeTheme('cherry')">Cherry Blossom</button>
+                  <button onclick="changeTheme('coffee')">Coffee</button>
+                  <button onclick="changeTheme('arctic')">Arctic</button>
+                  <button onclick="changeTheme('desert')">Desert</button>
+                  <button onclick="changeTheme('galaxy')">Galaxy</button>
+                  <button onclick="changeTheme('bubblegum')">Bubblegum</button>
+                  <button onclick="changeTheme('zombie')">Zombie</button>
+                  <button onclick="changeTheme('unicorn')">Rainbow Unicorn</button>
+                  <button onclick="changeTheme('retro')">Retro Gaming</button>
+                  <button onclick="changeTheme('alien')">Space Alien</button>
+                  <button onclick="changeTheme('neon')">Neon</button>
+                  <button onclick="changeTheme('mono-classic')">Monochrome Classic</button>
+                  <button onclick="changeTheme('playschool')">Play School</button>
+                </div>
             </div>
             <div class="theme-row">
                 <button onclick="toggleDarkMode()">Light/Dark Mode</button>
@@ -976,7 +976,7 @@
             "sans-serif"
             ;
 
-        var appName = "HTMLKanban";
+        var appName = "HTMLKanban Theme Tester";
         var versionNumber = "1.0.0";
 
         document.querySelectorAll("#pageName").forEach(function(element) {element.innerHTML = appName;});
@@ -1045,8 +1045,8 @@
             applyTheme();
         }
 
-        function changeTheme() {
-            currentTheme = themeSelect.value;
+        function changeTheme(themeName) {
+            currentTheme = themeName;
             applyTheme();
         }
 
@@ -1076,13 +1076,14 @@
         });
 
         function setInitialStates() {
-            // Set initial theme selection
-            for (let i = 0; i < themeSelect.options.length; i++) {
-                if (themeSelect.options[i].value === currentTheme) {
-                    themeSelect.selectedIndex = i;
-                    break;
+            // Set initial theme button state
+            const themeButtons = document.querySelectorAll('.theme-button');
+            themeButtons.forEach(button => {
+                const themeName = button.getAttribute('onclick').match(/'(.*?)'/)[1];
+                if (themeName === currentTheme) {
+                    button.classList.add('active');
                 }
-            }
+            });
 
             // Set initial font selection
             for (let i = 0; i < fontSelect.options.length; i++) {
@@ -1091,7 +1092,7 @@
                     break;
                 }
             }
-    
+
             // Previous initial states
             applyTheme();
             applyFont();

@@ -28,20 +28,23 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ### [3.0.0] - 2024-12-
 
+#### Added
+
+- [x] New Theme Tester File - Test all of the installable themes in one place!
+- [x] Export via Clipboard
+- [x] Import via File
+
 #### Changed
 
-- [ ] Text Area Dark Mode Colours
+- [x] Text Area Dark Mode Colours
+- [x] Changed installed Themes to only a selection of full range. Full range can be found in Theme Tester.
+- [x] Changes Theme/Font Selection Process to Buttons rather than a Drop Down
+- [x] Change Tab Name with Title Change
 
 ### Planned Functionality
-- Cleaned Up Style Menu
-- Export via Clipboard
-- Change Tab Name
 - Easier Dragging
-- Imported File Fixes?
-- More Themes
-- Custom CSS
-- Theme Buttons (Cleaner)
-- Font Change Buttons (Cleaner)
+- Custom CSS option for import
+- Split out Theme Tester into own SApp
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
