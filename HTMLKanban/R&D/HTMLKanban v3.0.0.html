@@ -134,6 +134,7 @@
             vertical-align: middle;
             position: fixed;
             bottom: 0;
+            padding-bottom: 10px;
             width: 95%;
             transition: opacity 0.3s;
             opacity: 1;
@@ -232,11 +233,14 @@
             padding: 10px;
             height: fit-content;
             cursor: move;
+            transition: opacity 0.2s;
         }
 
         .column.dragging {
             opacity: 0.5;
             background: #c1c7d0;
+            opacity: 0.5;
+            cursor: move;
         }
 
         .column-header {
@@ -247,6 +251,7 @@
             padding: 10px;
             margin-bottom: 10px;
             cursor: move;
+            user-select: none;
         }
 
         .column-title {
@@ -813,34 +818,73 @@
                 closeImportModal();
             }
         }
-        // Drag and drop functionality
+        // Combined drag and drop functionality
+        function dragColumn(event) {
+            event.stopPropagation();
+            const column = event.target;
+            column.classList.add('dragging');
+            event.dataTransfer.setData('application/x-column', ''); // Mark as column drag
+        }
+
         function drag(event) {
             event.stopPropagation();
             event.target.classList.add('dragging');
-            // Get specifically the card content text, not the whole card
             const cardContent = event.target.querySelector('.card-content').textContent;
-            event.dataTransfer.setData("text", cardContent);
+            event.dataTransfer.setData("text/plain", cardContent);
+            event.dataTransfer.setData('application/x-card', ''); // Mark as card drag
         }
 
         function allowDrop(event) {
             event.preventDefault();
         }
 
-        function drop(event) {
+        function dropHandler(event) {
             event.preventDefault();
-            const data = event.dataTransfer.getData("text");
             
+            // Check if this is a column drag or card drag
+            if (event.dataTransfer.types.includes('application/x-column')) {
+                dropColumn(event);
+            } else if (event.dataTransfer.types.includes('application/x-card')) {
+                dropCard(event);
+            }
+        }
+
+        function dropColumn(event) {
+            const board = document.querySelector('.board');
+            const addColumnButton = document.querySelector('.add-column');
+            const draggingColumn = document.querySelector('.column.dragging');
+            
+            if (!draggingColumn) return;
+
+            const targetColumn = event.target.closest('.column');
+            if (!targetColumn || targetColumn === draggingColumn) return;
+
+            // Determine whether to place before or after the target column
+            const targetRect = targetColumn.getBoundingClientRect();
+            const targetCenter = targetRect.left + targetRect.width / 2;
+            const insertAfter = event.clientX > targetCenter;
+
+            if (insertAfter) {
+                targetColumn.nextSibling ? 
+                    board.insertBefore(draggingColumn, targetColumn.nextSibling) :
+                    board.insertBefore(draggingColumn, addColumnButton);
+            } else {
+                board.insertBefore(draggingColumn, targetColumn);
+            }
+        }
+
+        function dropCard(event) {
+            const data = event.dataTransfer.getData("text/plain");
             let targetColumn = event.target.closest('.column');
             if (!targetColumn) return;
             
-            // Get the add card button from the target column
             const addCardButton = targetColumn.querySelector('.add-card');
-            
-            // Remove the original dragged card
             document.querySelectorAll('.card.dragging').forEach(card => card.remove());
-            
-            // Use addCard to create the new card in the target column
             addCard(data, addCardButton);
+        }
+
+        function dragEnd(event) {
+            event.target.classList.remove('dragging');
         }
 
         // Add new card functionality
@@ -942,8 +986,11 @@
             
             const column = document.createElement('div');
             column.className = 'column';
-            column.ondrop = drop;
+            column.draggable = true; // Make column draggable
+            column.ondragstart = dragColumn; // Add column drag handler
+            column.ondrop = dropHandler; // Combined drop handler
             column.ondragover = allowDrop;
+            column.ondragend = dragEnd; // Add drag end handler
             
             column.innerHTML = `
                 <div class="column-header">
@@ -953,11 +1000,9 @@
                 <div class="cards"></div>
                 <button class="add-card" onclick="showCardInput(this)">+ Add a card</button>
             `;
-            
+
             board.insertBefore(column, addColumnButton);
 
-            // Trigger the title edit immediately for new columns
-            // (but not for imported columns that have a specific title)
             if (title === "New Column") {
                 const titleDiv = column.querySelector('.column-title');
                 showTitleInput(titleDiv);
@@ -965,7 +1010,6 @@
                 const titleDiv = column.querySelector('.column-title');
                 titleDiv.textContent = title;
             }
-            
             return column;
         }
 
