@@ -119,12 +119,19 @@
             color: var(--text-color);
         }
 
+        input, textarea {
+            background-color: var(--card-color);
+            color: var(--card-text-color);
+            border: 1px solid var(--button-background-color);
+        }
+
         .todo-list {
             background: var(--column-color);
             border-radius: 10px;
             padding: 20px;
             min-height: 200px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 100px;
         }
 
         .todo-item {
@@ -137,6 +144,7 @@
             transition: all 0.2s ease;
             border-left: 4px solid var(--priority-normal);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: move; /* Indicates item is draggable */
         }
 
         .todo-item:hover {
@@ -159,6 +167,15 @@
             text-decoration: line-through;
             color: var(--text-color);
             opacity: 0.6;
+        }
+
+        .todo-item.dragging {
+            opacity: 0.5;
+            border: 2px dashed var(--button-background-color);
+        }
+
+        .todo-item.drag-over {
+            border-top: 2px solid var(--button-background-color);
         }
 
         .todo-text {
@@ -341,6 +358,20 @@
             resize: vertical;
         }
 
+        .modal-content input[type="file"]::file-selector-button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: var(--button-border-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-content input[type="file"]::file-selector-button:hover {
+            background-color: var(--button-hover-color);
+        }
+
         footer {
             border-top: 1px solid var(--column-color);
             text-align: right;
@@ -355,6 +386,7 @@
             width: 80%;
             transition: opacity 0.3s;
             opacity: 1;
+            background-color: var(--background-color);
         }
 
         .overlay {
@@ -431,16 +463,22 @@
             }
         }
 
+        .theme-button.active, .font-button.active {
+            background-color: var(--button-hover-color);
+            color: var(--button-text-color);
+        }
+
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Todo List</h1>
+        <h1 onclick="editTitle()" id="listTitle">Todo List</h1>
         <div class="menu-container">
             <button class="menu-button" onclick="toggleMenu()">⋮</button>
             <div id="menuContent" class="menu-content">
                 <button onclick="openThemePopup()">Theme</button>
                 <button onclick="exportTodos()">Export</button>
+                <button onclick="exportToClipboard()">Copy to Clipboard</button>
                 <button onclick="showImportModal()">Import</button>
             </div>
         </div>
@@ -462,14 +500,7 @@
         <!-- Todos will be added here dynamically -->
     </div>
 
-    <div id="importModal" class="modal">
-        <div class="modal-content">
-            <h2>Import Todos</h2>
-            <textarea id="importInput" placeholder="Paste your todo list here..."></textarea>
-            <button onclick="importTodos()">Import</button>
-            <button onclick="closeImportModal()">Cancel</button>
-        </div>
-    </div>
+    <div id="importModal" class="modal"></div>
 
     <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
     <div class="modal-popup" id="theme-popup">
@@ -477,42 +508,69 @@
         <h3>Style Settings</h3>
         <div class="theme-options">
             <div class="theme-row">
-                <label for="theme-select">Style:</label>
-                <select id="theme-select" onchange="changeTheme()">
-                    <option value="default">Default</option>
-                    <option value="cool">Cool</option>
-                    <option value="gx">GX</option>
-                    <option value="honeybee">Honey Bee</option>
-                </select>
+                <label>Style:</label>
+                <div class="theme-buttons">
+                    <button class="theme-button" data-theme="default" onclick="changeTheme('default')">Default</button>
+                    <button class="theme-button" data-theme="cool" onclick="changeTheme('cool')">Cool</button>
+                    <button class="theme-button" data-theme="gx" onclick="changeTheme('gx')">GX</button>
+                    <button class="theme-button" data-theme="honeybee" onclick="changeTheme('honeybee')">Honey Bee</button>
+                </div>
             </div>
             <div class="theme-row">
                 <button onclick="toggleDarkMode()">Light/Dark Mode</button>
             </div>
             <div class="theme-row">
-                <label for="font-select">Font:</label>
-                <select id="font-select" onchange="changeFont()">
-                    <option value="monospace">Mono</option>
-                    <option value="serif">Serif</option>
-                    <option value="sans-serif">Sans-Serif</option>
-                </select>
+                <label>Font:</label>
+                <div class="font-buttons">
+                    <button class="font-button" data-font="monospace" onclick="changeFont('monospace')">Mono</button>
+                    <button class="font-button" data-font="serif" onclick="changeFont('serif')">Serif</button>
+                    <button class="font-button" data-font="sans-serif" onclick="changeFont('sans-serif')">Sans-Serif</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <div class="modal-popup" id="version-info-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h2>Version Info</h2>
+        <div class="version-info-content">
+            <h3>v2.0.0 - 2024-12-13</h3>
+            
+            <h3>Added:</h3>
+            <ul>
+                <li>Drag and drop reordering</li>
+                <li>"Copy to Clipboard" functionality</li>
+                <li>File upload option for imports</li>
+                <li>Editable list title</li>
+                <li>Theme settings to import/export</li>
+                <li>Notification system</li>
+            </ul>
+    
+            <h3>Changed:</h3>
+            <ul>
+                <li>Theme/Font Buttons instead of Drop Downs</li>
+            </ul>
+    
+            <h3>Fixed:</h3>
+            <ul>
+                <li>Font Selection</li>
+            </ul>
+        </div>
+    </div>
+
     <script>
-        const themeSelect = document.getElementById('theme-select');
-        const fontSelect = document.getElementById('font-select');
-        const notification = document.getElementById('notification');
 
         let isDarkMode = true;
         let todos = [];
         let versionNumber = "2.0.0";
-        let currentTheme ='default';
+        let currentTheme = 'default';
+        let currentFont = 'monospace';
 
         // Initialize app
         function initialize() {
             applyTheme();
             renderTodos();
+            initializeDragAndDrop();
         }
 
         // Theme management
@@ -538,14 +596,60 @@
             toggleMenu();
         }
 
-        function changeTheme() {
-            currentTheme = themeSelect.value;
+        function changeTheme(themeName) {
+            currentTheme = themeName;
+            
+            // Update button states
+            document.querySelectorAll('.theme-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.theme === themeName) {
+                    button.classList.add('active');
+                }
+            });
+            
             applyTheme();
+        }
+
+        function changeFont(fontName) {
+            currentFont = fontName;
+            
+            // Update button states
+            document.querySelectorAll('.font-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.font === fontName) {
+                    button.classList.add('active');
+                }
+            });
+            
+            applyFont();
+        }
+
+        function applyFont() {
+            document.body.style.fontFamily = currentFont;
         }
 
         // Menu functionality
         function toggleMenu() {
             document.getElementById("menuContent").classList.toggle("show");
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '10px';
+            notification.style.background = 'var(--button-background-color)';
+            notification.style.color = 'var(--button-text-color)';
+            notification.style.borderRadius = '5px';
+            notification.style.zIndex = '1000';
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
         }
 
         // Todo management
@@ -563,7 +667,7 @@
                 });
                 input.value = '';
                 renderTodos();
-                saveToLocalStorage();
+                
             }
         }
 
@@ -578,7 +682,7 @@
                 todo.id === id ? {...todo, completed: !todo.completed} : todo
             );
             renderTodos();
-            saveToLocalStorage();
+            
         }
 
         function togglePriority(id) {
@@ -588,13 +692,13 @@
                     : todo
             );
             renderTodos();
-            saveToLocalStorage();
+            
         }
 
         function deleteTodo(id) {
             todos = todos.filter(todo => todo.id !== id);
             renderTodos();
-            saveToLocalStorage();
+            
         }
 
         // Rendering
@@ -632,12 +736,22 @@
                 const todoItem = document.createElement('div');
                 todoItem.className = `todo-item ${todo.completed ? 'completed' : ''} ${todo.priority === 'high' ? 'high-priority' : ''}`;
                 
+                // Add drag attributes
+                todoItem.draggable = true;
+                todoItem.setAttribute('data-id', todo.id);
+                
+                // Add drag event listeners
+                todoItem.addEventListener('dragstart', handleDragStart);
+                todoItem.addEventListener('dragend', handleDragEnd);
+                todoItem.addEventListener('dragover', handleDragOver);
+                todoItem.addEventListener('drop', handleDrop);
+                
                 todoItem.innerHTML = `
                     <input type="checkbox" ${todo.completed ? 'checked' : ''} 
-                           onchange="toggleTodo(${todo.id})">
+                        onchange="toggleTodo(${todo.id})">
                     <span class="todo-text">${todo.text}</span>
                     <span class="priority-flag" onclick="togglePriority(${todo.id})" 
-                          title="${todo.priority === 'high' ? 'High Priority' : 'Normal Priority'}">
+                        title="${todo.priority === 'high' ? 'High Priority' : 'Normal Priority'}">
                         ⚑
                     </span>
                     <button class="delete-btn" onclick="deleteTodo(${todo.id})">×</button>
@@ -653,7 +767,17 @@
 
         // Import/Export functionality
         function exportTodos() {
-            let markdown = "# Todo List\n\n";
+            let markdown = "";
+            
+            // Add metadata section
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += "---\n\n";
+            
+            // Add title and content
+            markdown += `# ${listTitle}\n\n`;
             
             // Add high priority tasks first
             markdown += "## High Priority\n\n";
@@ -677,6 +801,42 @@
             toggleMenu();
         }
 
+        function exportToClipboard() {
+            let markdown = "";
+            
+            // Add metadata section
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += "---\n\n";
+            
+            markdown += `# ${listTitle}\n\n`;
+            
+            // Add high priority tasks first
+            markdown += "## High Priority\n\n";
+            todos.filter(todo => todo.priority === 'high').forEach(todo => {
+                markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+            });
+
+            // Add normal priority tasks
+            markdown += "\n## Normal Priority\n\n";
+            todos.filter(todo => todo.priority === 'normal').forEach(todo => {
+                markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+            });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(markdown)
+                .then(() => {
+                    showNotification('Todo list copied to clipboard!');
+                    toggleMenu();
+                })
+                .catch(err => {
+                    showNotification('Failed to copy to clipboard');
+                    console.error('Failed to copy: ', err);
+                });
+        }
+
         function openThemePopup() {
             showPopup('theme-popup');
         }
@@ -692,50 +852,93 @@
         }
 
         function importTodos() {
-            try {
-                const markdownText = document.getElementById('importInput').value;
-                const lines = markdownText.split('\n');
-                const newTodos = [];
-                let currentPriority = 'normal';
+            const markdownText = document.getElementById('markdownInput').value;
+            const lines = markdownText.split('\n');
+            const newTodos = [];
+            let currentPriority = 'normal';
+            let foundContent = false;
+            let inMetadata = false;
 
-                lines.forEach(line => {
-                    // Check for priority headers
-                    if (line.startsWith('## High Priority')) {
-                        currentPriority = 'high';
-                        return;
-                    }
-                    if (line.startsWith('## Normal Priority')) {
-                        currentPriority = 'normal';
-                        return;
-                    }
+            // Process lines
+            lines.forEach(line => {
+                line = line.trim();
 
-                    // Parse todo items
-                    if (line.startsWith('- [')) {
-                        const completed = line[3] === 'x';
-                        const text = line.substring(5).trim();
-                        if (text) {
-                            newTodos.push({
-                                id: Date.now() + Math.random(), // Ensure unique ID
-                                text: text,
-                                completed: completed,
-                                priority: currentPriority,
-                                createdAt: new Date().toISOString()
-                            });
+                // Handle metadata section
+                if (line === '---') {
+                    inMetadata = !inMetadata;
+                    foundContent = true;
+                    return;
+                }
+
+                if (inMetadata) {
+                    // Parse configuration settings
+                    const [key, value] = line.split(':').map(part => part.trim());
+                    if (value) {
+                        switch(key.toLowerCase()) {
+                            case 'style':
+                                currentTheme = value.toLowerCase();
+                                break;
+                            case 'theme':
+                                isDarkMode = (value.toLowerCase() === 'dark');
+                                break;
+                            case 'font':
+                                currentFont = value.toLowerCase();
+                                break;
                         }
                     }
-                });
-
-                if (newTodos.length > 0) {
-                    todos = newTodos;
-                    renderTodos();
-                    closeImportModal();
-                    saveToLocalStorage();
-                } else {
-                    alert('No valid todos found in the imported text. Please check the format.');
+                    return;
                 }
-            } catch (e) {
-                alert('Error importing todos. Please check the format and try again.');
+                
+                // Regular content processing
+                if (line.startsWith('# ')) {
+                    listTitle = line.substring(2).trim();
+                    document.getElementById('listTitle').textContent = listTitle;
+                    foundContent = true;
+                    return;
+                }
+
+                if (line.startsWith('## High Priority')) {
+                    currentPriority = 'high';
+                    foundContent = true;
+                    return;
+                }
+                if (line.startsWith('## Normal Priority')) {
+                    currentPriority = 'normal';
+                    foundContent = true;
+                    return;
+                }
+
+                if (line.startsWith('- [')) {
+                    const completed = line[3] === 'x';
+                    const text = line.substring(5).trim();
+                    if (text) {
+                        newTodos.push({
+                            id: Date.now() + Math.random(),
+                            text: text,
+                            completed: completed,
+                            priority: currentPriority,
+                            createdAt: new Date().toISOString()
+                        });
+                        foundContent = true;
+                    }
+                }
+            });
+
+            if (!foundContent) {
+                alert('No valid content found in the imported text. Please check the format.');
+                return;
             }
+
+            if (newTodos.length > 0) {
+                todos = newTodos;
+            }
+            
+            // Update theme buttons and apply settings
+            setInitialStates();
+            applyTheme();
+            applyFont();
+            renderTodos();
+            closeImportModal();
         }
 
         function showPopup(popupId) {
@@ -750,6 +953,181 @@
                 popup.style.display = 'none';
             });
             document.body.classList.remove('overlay-active');
+        }
+
+        function createImportModal() {
+            document.getElementById('importModal').innerHTML = `
+                <div class="modal-content">
+                    <h2>Import Todos</h2>
+                    <div style="margin-bottom: 20px;">
+                        <h3>Option 1: Upload File</h3>
+                        <input type="file" id="mdFileInput" accept=".md" style="margin: 10px 0;">
+                    </div>
+                    <div>
+                        <h3>Option 2: Paste Text</h3>
+                        <textarea id="markdownInput" placeholder="# Todo List
+
+        ## High Priority
+        - [ ] Important task
+        - [x] Completed important task
+
+        ## Normal Priority
+        - [ ] Regular task
+        - [x] Completed regular task"></textarea>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button onclick="importTodos()">Import</button>
+                        <button onclick="closeImportModal()">Cancel</button>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listener for file input
+            document.getElementById('mdFileInput').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFileUpload(e.target.files[0]);
+                }
+            });
+        }
+
+        let draggedItem = null;
+
+        function handleDragStart(e) {
+            draggedItem = this;
+            this.classList.add('dragging');
+            
+            // Prevent drag on certain elements
+            if (e.target.matches('input, button, .priority-flag')) {
+                e.preventDefault();
+                return false;
+            }
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            
+            // Remove drag-over class from all items
+            document.querySelectorAll('.todo-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            if (this === draggedItem) return;
+            
+            // Add visual indicator
+            this.classList.add('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            if (this === draggedItem) return;
+            
+            // Remove visual indicator
+            this.classList.remove('drag-over');
+            
+            // Get the IDs of the items being reordered
+            const fromId = Number(draggedItem.getAttribute('data-id')); // Changed from parseInt
+            const toId = Number(this.getAttribute('data-id')); // Changed from parseInt
+            
+            // Find the indices of the items
+            const fromIndex = todos.findIndex(todo => todo.id === fromId);
+            const toIndex = todos.findIndex(todo => todo.id === toId);
+            
+            // Make sure we found both items
+            if (fromIndex === -1 || toIndex === -1) return;
+            
+            // Reorder the array
+            const [removed] = todos.splice(fromIndex, 1);
+            todos.splice(toIndex, 0, removed);
+            
+            // Re-render
+            renderTodos();
+        }
+
+        // Add this to initialize event listeners on the todo list container
+        function initializeDragAndDrop() {
+            const todoList = document.getElementById('todoList');
+            todoList.addEventListener('dragover', e => e.preventDefault());
+        }
+
+        function setInitialStates() {
+            // Set initial theme button state
+            document.querySelectorAll('.theme-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.theme === currentTheme) {
+                    button.classList.add('active');
+                }
+            });
+
+            // Set initial font button state
+            document.querySelectorAll('.font-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.font === currentFont) {
+                    button.classList.add('active');
+                }
+            });
+
+            // Apply both theme and font
+            applyTheme();
+            applyFont();
+        }
+
+        // Add to your initialize function:
+        function initialize() {
+            setInitialStates();
+            renderTodos();
+            initializeDragAndDrop();
+        }
+
+        let listTitle = "Todo List";
+
+        function editTitle() {
+            const titleElement = document.getElementById('listTitle');
+            const currentTitle = titleElement.textContent;
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentTitle;
+            input.className = 'title-input';
+            input.style.fontSize = '1em';
+            input.style.fontWeight = '700';
+            input.style.width = '100%';
+            input.style.padding = '5px';
+            input.style.border = '2px solid var(--button-background-color)';
+            input.style.borderRadius = '6px';
+            input.style.backgroundColor = 'var(--card-color)';
+            input.style.color = 'var(--text-color)';
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveTitle(this.value);
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                saveTitle(this.value);
+            });
+            
+            titleElement.innerHTML = '';
+            titleElement.appendChild(input);
+            input.focus();
+            input.select();
+        }
+
+        function saveTitle(newTitle) {
+            listTitle = newTitle.trim() || "Todo List";
+            document.getElementById('listTitle').textContent = listTitle;
+            
+        }
+
+        function handleFileUpload(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('markdownInput').value = e.target.result;
+            };
+            reader.readAsText(file);
         }
 
         // Close menu when clicking outside
@@ -770,9 +1148,7 @@
 
         // Initialize app when page loads
         window.addEventListener('load', initialize);
-
-        // Initialize app when page loads
-        window.addEventListener('load', initialize);
+        createImportModal();
 
     </script>
 </body>

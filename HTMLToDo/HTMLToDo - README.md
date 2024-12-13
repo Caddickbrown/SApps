@@ -26,13 +26,16 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
+### [2.1.0] - 2024-12-
+
+#### Changed
+
+- [x] Import via File Section Prettied up
+- [ ] Tab Title changes on Title Update
+- [ ] Edit To Do
+
 ### Planned Functionality
-- Reorder ToDos
-- Fix Import
-- Version Info
-- Font Selection
 - More Themes
-- Rename Page
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
@@ -56,6 +59,25 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+
+### [2.0.0] - 2024-12-13
+
+#### Added
+
+- [x] Drag and drop reordering
+- [x] "Copy to Clipboard" functionality
+- [x] File upload option for imports
+- [x] Editable list title
+- [x] Theme settings to import/export
+- [x] Notification system
+
+#### Changed
+
+- [x] Theme/Font Buttons instead of Drop Downs
+
+#### Fixed
+
+- [x] Font Selection
 
 ### [1.0.0] - 2024-12-10
 
