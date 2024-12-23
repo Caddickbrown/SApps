@@ -1,5 +1,5 @@
 # OSlogan
-A Single Page HTML, Solgan Generator
+A Single Page HTML, Slogan Generator
 
 ## Background
 
