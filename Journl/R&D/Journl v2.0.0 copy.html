@@ -585,13 +585,16 @@
         function addEntry(content) {
             if (!content.trim()) return;
 
+            const { title, content: bodyContent } = splitIntoTitleAndContent(content);
+            const fullContent = bodyContent ? `${title}\n${bodyContent}` : title;
+
             const newEntry = {
                 id: Date.now(),
                 timestamp: new Date().toISOString(),
-                content: content,
+                content: fullContent,
                 isHighlight: false,
-                tags: extractTags(content),
-                mentions: extractMentions(content)
+                tags: extractTags(fullContent),
+                mentions: extractMentions(fullContent)
             };
 
             entries.unshift(newEntry);
@@ -1069,6 +1072,25 @@
 
             applyTheme();
             applyFont();
+        }
+
+        function splitIntoTitleAndContent(text) {
+            // Match for common sentence endings (.!?) followed by a space and capital letter
+            const sentenceRegex = /[.!?]\s+(?=[A-Z])/;
+            const firstSentenceEnd = text.search(sentenceRegex);
+            
+            if (firstSentenceEnd === -1) {
+                // If no clear sentence break is found, treat all as title
+                return {
+                    title: text.trim(),
+                    content: ''
+                };
+            }
+            
+            const title = text.slice(0, firstSentenceEnd + 1).trim();
+            const content = text.slice(firstSentenceEnd + 1).trim();
+            
+            return { title, content };
         }
 
         // Event listeners and initialization
