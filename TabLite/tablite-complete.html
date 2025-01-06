@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TabLite</title>
+    <style>
+        :root {
+            /* Default Theme - Light Mode */
+            --default-light-text-color: #333;
+            --default-light-background-color: #ffffff;
+            --default-light-alt-background-color: #f0f0f0;
+            --default-light-button-background-color: #4bc67c;
+            --default-light-button-text-color: #ffffff;
+            --default-light-button-hover-color: #348b57;
+            --default-light-button-border-color: none;
+            
+            /* Default Theme - Dark Mode */
+            --default-dark-text-color: #e0e0e0;
+            --default-dark-background-color: #1d1d1d;
+            --default-dark-alt-background-color: #2d2d2d;
+            --default-dark-button-background-color: #58319f;
+            --default-dark-button-text-color: #ffffff;
+            --default-dark-button-hover-color: #6d45b8;
+            --default-dark-button-border-color: none;
+
+            /* Sepia Theme - Light Mode */
+            --sepia-light-text-color: #5b4636;
+            --sepia-light-background-color: #f4ecd8;
+            --sepia-light-alt-background-color: #fbf0d9;
+            --sepia-light-button-background-color: #c19a6b;
+            --sepia-light-button-text-color: #ffffff;
+            --sepia-light-button-hover-color: #a67c52;
+            --sepia-light-button-border-color: none;
+            /* Sepia Theme - Dark Mode */
+            --sepia-dark-text-color: #d3c4a9;
+            --sepia-dark-background-color: #433422;
+            --sepia-dark-alt-background-color: #2c2417;
+            --sepia-dark-button-background-color: #8b6b4a;
+            --sepia-dark-button-text-color: #ffffff;
+            --sepia-dark-button-hover-color: #6d5438;
+            --sepia-dark-button-border-color: none;
+
+            /* Cool Theme - Light Mode */
+            --cool-light-text-color: #2c3e50;
+            --cool-light-background-color: #ecf0f1;
+            --cool-light-alt-background-color: #ffffff;
+            --cool-light-button-background-color: #3498db;
+            --cool-light-button-text-color: #ffffff;
+            --cool-light-button-hover-color: #2980b9;
+            --cool-light-button-border-color: none;
+            /* Cool Theme - Dark Mode */
+            --cool-dark-text-color: #bdc3c7;
+            --cool-dark-background-color: #2c3e50;
+            --cool-dark-alt-background-color: #34495e;
+            --cool-dark-button-background-color: #2980b9;
+            --cool-dark-button-text-color: #ffffff;
+            --cool-dark-button-hover-color: #3498db;
+            --cool-dark-button-border-color: none;
+
+            /* Terminal Theme - Light Mode */
+            --terminal-light-text-color: #59b822;
+            --terminal-light-background-color: #0e290e;
+            --terminal-light-alt-background-color: #0c2108;
+            --terminal-light-button-background-color: #13451a;
+            --terminal-light-button-text-color: #59b822;
+            --terminal-light-button-hover-color: #186d1d;
+            --terminal-light-button-border-color: none;
+            /* Terminal Theme - Dark Mode */
+            --terminal-dark-text-color: #c20000;
+            --terminal-dark-background-color: #000000;
+            --terminal-dark-alt-background-color: #320000;
+            --terminal-dark-button-background-color: #000000;
+            --terminal-dark-button-text-color: #c20000;
+            --terminal-dark-button-hover-color: #690000;
+            --terminal-dark-button-border-color: 1px solid #c20000;
+
+            /* GX Theme - Light Mode */
+            --gx-light-text-color: #333;
+            --gx-light-background-color: #ffffe7;
+            --gx-light-alt-background-color: #f0f0f0;
+            --gx-light-button-background-color: #273457;
+            --gx-light-button-text-color: #ffffff;
+            --gx-light-button-hover-color: #bb5e47;
+            --gx-light-button-border-color: none;
+            /* GX Theme - Dark Mode */
+            --gx-dark-text-color: #ffffe7;
+            --gx-dark-background-color: #16213d;
+            --gx-dark-alt-background-color: #273457;
+            --gx-dark-button-background-color: #bb5e47;
+            --gx-dark-button-text-color: #ffffff;
+            --gx-dark-button-hover-color: #d67a63;
+            --gx-dark-button-border-color: none;
+
+            /* Honey Bee Theme - Light Mode */
+            --honeybee-light-text-color: #4b3b2c;
+            --honeybee-light-background-color: #fff7e6;
+            --honeybee-light-alt-background-color: #ffedb3;
+            --honeybee-light-button-background-color: #ffa600;
+            --honeybee-light-button-text-color: #000000;
+            --honeybee-light-button-hover-color: #ffb730;
+            --honeybee-light-button-border-color: none;
+            /* Honey Bee Theme - Dark Mode */
+            --honeybee-dark-text-color: #ffd700;
+            --honeybee-dark-background-color: #1a1a1a;
+            --honeybee-dark-alt-background-color: #332200;
+            --honeybee-dark-button-background-color: #ffd700;
+            --honeybee-dark-button-text-color: #000000;
+            --honeybee-dark-button-hover-color: #ffed4a;
+            --honeybee-dark-button-border-color: none;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            height: 40px;
+            color: var(--text-color);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: var(--button-border-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid var(--button-background-color);
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--alt-background-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th::after {
+            content: '↕';
+            margin-left: 5px;
+            opacity: 0.3;
+        }
+
+        th.sort-asc::after {
+            content: '↑';
+            opacity: 1;
+        }
+
+        th.sort-desc::after {
+            content: '↓';
+            opacity: 1;
+        }
+
+        td input {
+            width: 100%;
+            padding: 4px;
+            border: none;
+            background: transparent;
+            color: var(--text-color);
+        }
+
+        td input:focus {
+            outline: 2px solid var(--button-background-color);
+            background: var(--background-color);
+        }
+
+        .modal-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--background-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1001;
+            min-width: 300px;
+            color: var(--text-color);
+        }
+
+        .theme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .theme-buttons, .font-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        input[type="file"] {
+            padding: 8px;
+            background: var(--background-color);
+            color: var(--text-color);
+            border: 1px solid var(--button-background-color);
+            border-radius: 4px;
+        }
+
+        .search-box {
+            padding: 8px;
+            border: 1px solid var(--button-background-color);
+            border-radius: 4px;
+            background: var(--background-color);
+            color: var(--text-color);
+            min-width: 200px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--button-background-color);
+            color: var(--button-text-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1002;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--background-color);
+            color: var(--text-color);
+            margin: 15% auto;
+            padding: 20px;
+            width: 70%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin: 10px 0;
+            padding: 10px;
+            background: var(--background-color);
+            color: var(--text-color);
+            border: 1px solid var(--button-background-color);
+            border-radius: 4px;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 5px 10px;
+        }
+
+        .invalid {
+            background-color: #fee2e2;
+        }
+
+        .add-record-container {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .add-record-btn {
+            min-width: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" width="120">
+                <style>.logo-text { font-family: -apple-system, system-ui, sans-serif; font-weight: bold; } .accent { fill: currentColor; }</style>
+                <path class="accent" d="M10,25 L40,25 M25,10 L25,40" stroke-width="4" stroke="currentColor" stroke-linecap="round"/>
+                <text x="50" y="35" class="logo-text" font-size="24" fill="currentColor">TabLite</text>
+            </svg>
+        </div>
+        <div class="controls">
+            <button onclick="openSchemaModal()">Configure Schema</button>
+            <button onclick="openThemePopup()">Theme</button>
+            <button onclick="exportToMarkdown()">Export</button>
+            <button onclick="exportToClipboard()">Copy</button>
+            <button onclick="showImportModal()">Import</button>
+        </div>
+    </div>
+
+    <div class="search-controls">
+        <input type="file" id="fileInput" accept=".csv">
+        <input type="text" class="search-box" placeholder="Search..." onkeyup="filterData(this.value)">
+    </div>
+
+    <div class="table-container">
+        <table id="csvTable"></table>
+        <div class="add-record-container">
+            <button onclick="addRecord()" class="add-record-btn">Add Record</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
+    
+    <!-- Theme Popup -->
+    <div class="modal-popup" id="theme-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h3>Style Settings</h3>
+        <div class="theme-options">
+            <div class="theme-row">
+                <label>Style:</label>
+                <div class="theme-buttons">
+                    <button class="theme-button" data-theme="default" onclick="changeTheme('default')">Default</button>
+                    <button class="theme-button" data-theme="sepia" onclick="changeTheme('sepia')">Sepia</button>
+                    <button class="theme-button" data-theme="cool" onclick="changeTheme('cool')">Cool</button>
+                    <button class="theme-button" data-theme="terminal" onclick="changeTheme('terminal')">Terminal</button>
+                    <button class="theme-button" data-theme="gx" onclick="changeTheme('gx')">GX</button>
+                    <button class="theme-button" data-theme="honeybee" onclick="changeTheme('honeybee')">Honey Bee</button>
+                </div>
+            </div>
+            <div class="theme-row">
+                <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+            </div>
+            <div class="theme-row">
+                <label>Font:</label>
+                <div class="font-buttons">
+                    <button class="font-button" data-font="monospace" onclick="changeFont('monospace')">Mono</button>
+                    <button class="font-button" data-font="serif" onclick="changeFont('serif')">Serif</button>
+                    <button class="font-button" data-font="sans-serif" onclick="changeFont('sans-serif')">Sans-Serif</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal" id="importModal"></div>
+
+    <div class="notification" id="notification"></div>
+
+    <div class="modal-popup" id="schema-modal">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h3>Configure Schema</h3>
+        <div id="schema-fields"></div>
+        <div class="modal-buttons">
+            <button onclick="applySchema()">Apply</button>
+            <button onclick="closeAllPopups()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let headers = [];
+        let data = [];
+        let schema = {};
+        let filteredData = [];
+        let currentSort = {
+            column: null,
+            direction: 'asc'
+        };
+
+        // Theme state
+        let isDarkMode = true;
+        let currentTheme = 'default';
+        let currentFont = "sans-serif";
+
+        // CSV Parser
+        function parseCSV(text) {
+            const lines = text.split(/\r\n|\n/);
+            return lines.map(line => {
+                const fields = [];
+                let field = '';
+                let inQuotes = false;
+                
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    if (char === '"') {
+                        if (inQuotes && line[i + 1] === '"') {
+                            field += '"';
+                            i++;
+                        } else {
+                            inQuotes = !inQuotes;
+                        }
+                    } else if (char === ',' && !inQuotes) {
+                        fields.push(field);
+                        field = '';
+                    } else {
+                        field += char;
+                    }
+                }
+                fields.push(field);
+                return fields;
+            });
+        }
+
+        // File handling
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const parsed = parseCSV(e.target.result);
+                    headers = parsed[0];
+                    data = parsed.slice(1).filter(row => row.some(cell => cell !== ''));
+                    filteredData = [...data];
+                    renderTable();
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Table rendering
+        function renderTable() {
+            const table = document.getElementById('csvTable');
+            table.innerHTML = '';
+
+            // Headers
+            const headerRow = document.createElement('tr');
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                th.onclick = () => sortTable(header);
+                headerRow.appendChild(th);
+            });
+            table.appendChild(headerRow);
+
+            // Data
+            filteredData.forEach((row, rowIndex) => {
+                const tr = document.createElement('tr');
+                row.forEach((cell, colIndex) => {
+                    const td = document.createElement('td');
+                    const input = document.createElement('input');
+                    input.value = cell;
+                    
+                    const fieldType = schema[headers[colIndex]];
+                    if (!validateField(cell, fieldType)) {
+                        input.classList.add('invalid');
+                    }
+
+                    input.onchange = (e) => {
+                        const newValue = e.target.value;
+                        if (!validateField(newValue, fieldType)) {
+                            input.classList.add('invalid');
+                        } else {
+                            input.classList.remove('invalid');
+                            const dataIndex = data.indexOf(row);
+                            if (dataIndex !== -1) {
+                                data[dataIndex][colIndex] = newValue;
+                            }
+                        }
+                    };
+                    
+                    td.appendChild(input);
+                    tr.appendChild(td);
+                });
+                table.appendChild(tr);
+            });
+        }
+
+        // Sorting
+        function sortTable(column) {
+            const columnIndex = headers.indexOf(column);
+            const type = schema[column];
+            
+            // Update sort direction
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+            
+            // Update header indicators
+            document.querySelectorAll('th').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            const th = document.querySelector(`th:nth-child(${columnIndex + 1})`);
+            th.classList.add(`sort-${currentSort.direction}`);
+
+            // Sort function
+            filteredData.sort((a, b) => {
+                let valueA = a[columnIndex];
+                let valueB = b[columnIndex];
+
+                if (type === 'number' || type === 'currency') {
+                    valueA = parseFloat(valueA.replace(/[$,€£¥]/g, ''));
+                    valueB = parseFloat(valueB.replace(/[$,€£¥]/g, ''));
+                    if (isNaN(valueA)) return 1;
+                    if (isNaN(valueB)) return -1;
+                } else if (type === 'date') {
+                    valueA = new Date(valueA).getTime();
+                    valueB = new Date(valueB).getTime();
+                    if (isNaN(valueA)) return 1;
+                    if (isNaN(valueB)) return -1;
+                }
+
+                if (valueA < valueB) return currentSort.direction === 'asc' ? -1 : 1;
+                if (valueA > valueB) return currentSort.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            renderTable();
+        }
+
+        // Search/Filter
+        function filterData(query) {
+            if (!query) {
+                filteredData = [...data];
+            } else {
+                query = query.toLowerCase();
+                filteredData = data.filter(row =>
+                    row.some(cell => cell.toLowerCase().includes(query))
+                );
+            }
+            renderTable();
+        }
+
+        // Validation
+        function validateField(value, type) {
+            if (!type) return true;
+            if (type === 'required' && !value) return false;
+            if (type === 'number' && isNaN(value)) return false;
+            if (type === 'email' && !/\S+@\S+\.\S+/.test(value)) return false;
+            if (type === 'date' && !isValidDateFormat(value)) return false;
+            if (type === 'time' && !isValidTimeFormat(value)) return false;
+            if (type === 'currency') {
+                if (!value) return true;
+                const cleanValue = value.replace(/[$,€£¥]/g, '').trim();
+                return !isNaN(parseFloat(cleanValue)) && cleanValue.match(/^\d*\.?\d{0,2}$/);
+            }
+            return true;
+        }
+
+        // Theme handling
+        function applyTheme() {
+            const mode = isDarkMode ? 'dark' : 'light';
+    
+            document.documentElement.style.setProperty('--text-color', `var(--${currentTheme}-${mode}-text-color)`);
+            document.documentElement.style.setProperty('--background-color', `var(--${currentTheme}-${mode}-background-color)`);
+            document.documentElement.style.setProperty('--alt-background-color', `var(--${currentTheme}-${mode}-alt-background-color)`);
+            document.documentElement.style.setProperty('--button-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--button-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+            document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
+            document.documentElement.style.setProperty('--button-border-color', `var(--${currentTheme}-${mode}-button-border-color)`);
+            
+            localStorage.setItem('tablite-theme', JSON.stringify({
+                theme: currentTheme,
+                isDarkMode: isDarkMode,
+                font: currentFont
+            }));
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            applyTheme();
+        }
+
+        function changeTheme(themeName) {
+            currentTheme = themeName;
+            applyTheme();
+        }
+
+        function changeFont(fontName) {
+            currentFont = fontName;
+            document.body.style.fontFamily = currentFont;
+            localStorage.setItem('tablite-font', fontName);
+        }
+
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('tablite-theme');
+            if (savedTheme) {
+                const theme = JSON.parse(savedTheme);
+                currentTheme = theme.theme;
+                isDarkMode = theme.isDarkMode;
+                currentFont = theme.font;
+            }
+            applyTheme();
+            document.body.style.fontFamily = currentFont;
+        }
+
+        // Modal handling
+        function openThemePopup() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('theme-popup').style.display = 'block';
+        }
+
+        function closeAllPopups() {
+            document.getElementById('overlay').style.display = 'none';
+            document.querySelectorAll('.modal-popup').forEach(popup => {
+                popup.style.display = 'none';
+            });
+            document.getElementById('importModal').style.display = 'none';
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.opacity = '1';
+            setTimeout(() => {
+                notification.style.opacity = '0';
+            }, 2000);
+        }
+
+        // Export functionality
+        function exportToMarkdown() {
+            let markdown = "";
+            
+            // Add metadata
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += "---\n\n";
+            
+            // Add data
+            markdown += headers.join(',') + '\n';
+            data.forEach(row => {
+                markdown += row.map(cell => {
+                    cell = cell.replace(/"/g, '""');
+                    return cell.includes(',') ? `"${cell}"` : cell;
+                }).join(',') + '\n';
+            });
+
+            // Download
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tablite-export.md';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function exportToClipboard() {
+            let csv = headers.join(',') + '\n';
+            data.forEach(row => {
+                csv += row.map(cell => {
+                    cell = cell.replace(/"/g, '""');
+                    return cell.includes(',') ? `"${cell}"` : cell;
+                }).join(',') + '\n';
+            });
+
+            navigator.clipboard.writeText(csv)
+                .then(() => showNotification('Copied to clipboard!'))
+                .catch(() => showNotification('Failed to copy'));
+        }
+
+        // Import functionality
+        function showImportModal() {
+            const modal = document.getElementById('importModal');
+            modal.style.display = 'block';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3>Import Data</h3>
+                    <textarea placeholder="Paste your CSV data here..."></textarea>
+                    <button onclick="importData()">Import</button>
+                    <button onclick="closeAllPopups()">Cancel</button>
+                </div>
+            `;
+        }
+        function addRecord() {
+            if (headers.length === 0) {
+                showNotification('Please import data first');
+                return;
+            }
+            
+            const newRow = new Array(headers.length).fill('');
+            data.push(newRow);
+            filteredData = [...data];
+            renderTable();
+            
+            // Scroll to the bottom of the table
+            const tableContainer = document.querySelector('.table-container');
+            tableContainer.scrollTop = tableContainer.scrollHeight;
+        }
+
+        function importData() {
+            const textarea = document.querySelector('#importModal textarea');
+            const content = textarea.value;
+            
+            if (content) {
+                const parsed = parseCSV(content);
+                headers = parsed[0];
+                data = parsed.slice(1).filter(row => row.some(cell => cell !== ''));
+                filteredData = [...data];
+                renderTable();
+                closeAllPopups();
+                showNotification('Data imported successfully!');
+            }
+        }
+
+        function isValidDateFormat(dateStr) {
+            // Check for YYYY-MM-DD format
+            const regex = /^\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$/;
+            if (!regex.test(dateStr)) return false;
+            
+            // Validate the date is real
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return false;
+            
+            // Check if the date matches the input (handles invalid dates like 2024-02-31)
+            const parts = dateStr.split('-');
+            return date.getFullYear() === parseInt(parts[0]) &&
+                date.getMonth() + 1 === parseInt(parts[1]) &&
+                date.getDate() === parseInt(parts[2]);
+        }
+
+        function isValidTimeFormat(timeStr) {
+            // Check for HH:MM format in 24-hour time
+            const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+            if (!regex.test(timeStr)) return false;
+            return true;
+        }
+
+        function openSchemaModal() {
+            if (headers.length === 0) {
+                showNotification('Please import data first');
+                return;
+            }
+
+            const schemaFields = document.getElementById('schema-fields');
+            schemaFields.innerHTML = headers.map(header => `
+                <div class="schema-field">
+                    <label>${header}:</label>
+                    <select name="${header}">
+                        <option value="">Text</option>
+                        <option value="number">Number</option>
+                        <option value="currency">Currency</option>
+                        <option value="email">Email</option>
+                        <option value="date">Date</option>
+                        <option value="time">Time (24hr)</option>
+                        <option value="required">Required</option>
+                    </select>
+                </div>
+            `).join('');
+
+            // Set existing schema values if any
+            Object.entries(schema).forEach(([field, type]) => {
+                const select = schemaFields.querySelector(`select[name="${field}"]`);
+                if (select) select.value = type;
+            });
+
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('schema-modal').style.display = 'block';
+        }
+
+        function applySchema() {
+            schema = {};
+            const fields = document.getElementById('schema-fields').querySelectorAll('.schema-field');
+            fields.forEach(field => {
+                const select = field.querySelector('select');
+                const type = select.value;
+                if (type) {
+                    schema[select.name] = type;
+                }
+            });
+            renderTable();
+            closeAllPopups();
+            showNotification('Schema updated');
+        }
+
+        // Initialize
+        loadSavedTheme();
+    </script>
+</body>
+</html>
