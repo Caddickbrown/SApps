@@ -478,6 +478,7 @@
                 <button onclick="openThemePopup()">Theme</button>
                 <button onclick="exportTodos()">Export</button>
                 <button onclick="exportToClipboard()">Copy to Clipboard</button>
+                <button onclick="copyRemainingTasks()">Copy Remaining Tasks</button>
                 <button onclick="showImportModal()">Import</button>
             </div>
         </div>
@@ -748,7 +749,7 @@
                 todoItem.innerHTML = `
                     <input type="checkbox" ${todo.completed ? 'checked' : ''} 
                         onchange="toggleTodo(${todo.id})">
-                    <span class="todo-text">${todo.text}</span>
+                    <span class="todo-text" ondblclick="editTodo(${todo.id})">${todo.text}</span>
                     <span class="priority-flag" onclick="togglePriority(${todo.id})" 
                         title="${todo.priority === 'high' ? 'High Priority' : 'Normal Priority'}">
                         ⚑
@@ -836,6 +837,49 @@
                 });
         }
 
+        function copyRemainingTasks() {
+            let markdown = "";
+            
+            // Add metadata section like in the original export
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += "---\n\n";
+            
+            markdown += `# ${listTitle} (Remaining Tasks)\n\n`;
+            
+            // Filter for incomplete tasks only
+            const remainingTodos = todos.filter(todo => !todo.completed);
+            
+            // Add high priority tasks first
+            markdown += "## High Priority\n\n";
+            remainingTodos
+                .filter(todo => todo.priority === 'high')
+                .forEach(todo => {
+                    markdown += `- [ ] ${todo.text}\n`;
+                });
+
+            // Add normal priority tasks
+            markdown += "\n## Normal Priority\n\n";
+            remainingTodos
+                .filter(todo => todo.priority === 'normal')
+                .forEach(todo => {
+                    markdown += `- [ ] ${todo.text}\n`;
+                });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(markdown)
+                .then(() => {
+                    showNotification('Remaining tasks copied to clipboard!');
+                    toggleMenu();
+                })
+                .catch(err => {
+                    showNotification('Failed to copy to clipboard');
+                    console.error('Failed to copy: ', err);
+                });
+        }
+
         function openThemePopup() {
             showPopup('theme-popup');
         }
@@ -892,6 +936,7 @@
                 if (line.startsWith('# ')) {
                     listTitle = line.substring(2).trim();
                     document.getElementById('listTitle').textContent = listTitle;
+                    document.title = listTitle;
                     foundContent = true;
                     return;
                 }
@@ -1118,7 +1163,7 @@
         function saveTitle(newTitle) {
             listTitle = newTitle.trim() || "Todo List";
             document.getElementById('listTitle').textContent = listTitle;
-            
+            document.title = listTitle;
         }
 
         function handleFileUpload(file) {
@@ -1127,6 +1172,49 @@
                 document.getElementById('markdownInput').value = e.target.result;
             };
             reader.readAsText(file);
+        }
+
+        function editTodo(id) {
+            const todoSpan = event.target;
+            if (!todoSpan.classList.contains('todo-text')) return;
+            
+            const currentText = todoSpan.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentText;
+            input.className = 'edit-todo-input';
+            input.style.width = '100%';
+            input.style.padding = '5px';
+            input.style.border = '2px solid var(--button-background-color)';
+            input.style.borderRadius = '6px';
+            input.style.backgroundColor = 'var(--card-color)';
+            input.style.color = 'var(--text-color)';
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveTodoEdit(id, this.value);
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                saveTodoEdit(id, this.value);
+            });
+            
+            todoSpan.innerHTML = '';
+            todoSpan.appendChild(input);
+            input.focus();
+            input.select();
+        }
+
+        function saveTodoEdit(id, newText) {
+            if (newText.trim()) {
+                todos = todos.map(todo =>
+                    todo.id === id ? {...todo, text: newText.trim()} : todo
+                );
+                renderTodos();
+            } else {
+                renderTodos(); // If empty, just rerender to restore original text
+            }
         }
 
         // Close menu when clicking outside

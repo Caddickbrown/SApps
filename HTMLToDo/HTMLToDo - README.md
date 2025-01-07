@@ -26,14 +26,6 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
-### [2.1.0] - 2024-12-
-
-#### Changed
-
-- [x] Import via File Section Prettied up
-- [ ] Tab Title changes on Title Update
-- [ ] Edit To Do
-
 ### Planned Functionality
 - More Themes
 
@@ -59,6 +51,17 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+
+### [2.1.0] - 2025-01-07
+
+#### Added
+- [x] Tab Title changes on Title Update
+- [x] Edit To Do with double click
+- [x] Copy Remaining ToDos to Clipboard
+
+#### Changed
+
+- [x] Import via File Section Prettied up
 
 ### [2.0.0] - 2024-12-13
 
