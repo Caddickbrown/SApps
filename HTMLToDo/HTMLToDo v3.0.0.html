@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo App</title>
+    
+    <style>
+        :root {
+            /* Default Theme - Light Mode */
+            --default-light-text-color: #333;
+            --default-light-background-color: #ffffff;
+            --default-light-alt-background-color: #f0f0f0;
+            --default-light-button-background-color: #4bc67c;
+            --default-light-button-text-color: #ffffff;
+            --default-light-button-hover-color: #348b57;
+            --default-light-button-border-color: none;
+
+            /* Default Theme - Dark Mode */
+            --default-dark-text-color: #e0e0e0;
+            --default-dark-background-color: #1d1d1d;
+            --default-dark-alt-background-color: #2d2d2d;
+            --default-dark-button-background-color: #58319f;
+            --default-dark-button-text-color: #ffffff;
+            --default-dark-button-hover-color: #6d45b8;
+            --default-dark-button-border-color: none;
+
+            /* Cool Theme - Light Mode */
+            --cool-light-text-color: #2c3e50;
+            --cool-light-background-color: #ecf0f1;
+            --cool-light-alt-background-color: #ffffff;
+            --cool-light-button-background-color: #3498db;
+            --cool-light-button-text-color: #ffffff;
+            --cool-light-button-hover-color: #2980b9;
+            --cool-light-button-border-color: none;
+            /* Cool Theme - Dark Mode */
+            --cool-dark-text-color: #bdc3c7;
+            --cool-dark-background-color: #2c3e50;
+            --cool-dark-alt-background-color: #34495e;
+            --cool-dark-button-background-color: #2980b9;
+            --cool-dark-button-text-color: #ffffff;
+            --cool-dark-button-hover-color: #3498db;
+            --cool-dark-button-border-color: none;
+
+            /* GX Theme - Light Mode */
+            --gx-light-text-color: #333;
+            --gx-light-background-color: #ffffe7;
+            --gx-light-alt-background-color: #f0f0f0;
+            --gx-light-button-background-color: #273457;
+            --gx-light-button-text-color: #ffffff;
+            --gx-light-button-hover-color: #bb5e47;
+            --gx-light-button-border-color: none;
+            /* GX Theme - Dark Mode */
+            --gx-dark-text-color: #ffffe7;
+            --gx-dark-background-color: #16213d;
+            --gx-dark-alt-background-color: #273457;
+            --gx-dark-button-background-color: #bb5e47;
+            --gx-dark-button-text-color: #ffffff;
+            --gx-dark-button-hover-color: #d67a63;
+            --gx-dark-button-border-color: none;
+
+            /* Honey Bee Theme - Light Mode */
+            --honeybee-light-text-color: #4b3b2c;
+            --honeybee-light-background-color: #fff7e6;
+            --honeybee-light-alt-background-color: #ffedb3;
+            --honeybee-light-button-background-color: #ffa600;
+            --honeybee-light-button-text-color: #000000;
+            --honeybee-light-button-hover-color: #ffb730;
+            --honeybee-light-button-border-color: none;
+            /* Honey Bee Theme - Dark Mode */
+            --honeybee-dark-text-color: #ffd700;
+            --honeybee-dark-background-color: #1a1a1a;
+            --honeybee-dark-alt-background-color: #332200;
+            --honeybee-dark-button-background-color: #ffd700;
+            --honeybee-dark-button-text-color: #000000;
+            --honeybee-dark-button-hover-color: #ffed4a;
+            --honeybee-dark-button-border-color: none;
+
+            /* Light mode - Star Cluster */
+            --galaxy-light-text-color: #2d2357;
+            --galaxy-light-background-color: #f5f3ff;
+            --galaxy-light-alt-background-color: #e6e0ff;
+            --galaxy-light-button-background-color: #7b4fff;
+            --galaxy-light-button-text-color: #ffffff;
+            --galaxy-light-button-hover-color: #9775ff;
+            --galaxy-light-button-border-color: none;
+
+            /* Dark mode - Deep Space */
+            --galaxy-dark-text-color: #d1c4ff;
+            --galaxy-dark-background-color: #0f0b26;
+            --galaxy-dark-alt-background-color: #2d2357;
+            --galaxy-dark-button-background-color: #7b4fff;
+            --galaxy-dark-button-text-color: #ffffff;
+            --galaxy-dark-button-hover-color: #9775ff;
+            --galaxy-dark-button-border-color: none;
+            
+
+            /* Light mode - Fresh Mint */
+            --mint-light-text-color: #1d4d4f;
+            --mint-light-background-color: #f2fffd;
+            --mint-light-alt-background-color: #e0f5f1;
+            --mint-light-button-background-color: #4fb3a9;
+            --mint-light-button-text-color: #ffffff;
+            --mint-light-button-hover-color: #65c7bd;
+            --mint-light-button-border-color: none;
+            /* Dark mode - Deep Mint */
+            --mint-dark-text-color: #b8ede7;
+            --mint-dark-background-color: #0a2728;
+            --mint-dark-alt-background-color: #1d4d4f;
+            --mint-dark-button-background-color: #4fb3a9;
+            --mint-dark-button-text-color: #ffffff;
+            --mint-dark-button-hover-color: #65c7bd;
+            --mint-dark-button-border-color: none;
+
+            /* Priority colors */
+            --priority-high: #ff4757;
+            --priority-normal: transparent;
+            --tag-colour: #10b981;
+            --mention-colour: #3b82f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        body a:link, body a:visited {
+            color: var(--default-text-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body a:hover {
+            color: var(--link-hover-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            border-bottom: 2px solid var(--column-color);
+        }
+
+        h1 {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        h3 {
+            padding-top: 20px;
+        }
+
+        h4 {
+            padding-top: 10px;
+        }
+
+        input, textarea {
+            background-color: var(--card-color);
+            color: var(--card-text-color);
+            border: 1px solid var(--button-background-color);
+        }
+
+        .todo-list {
+            background: var(--column-color);
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 100px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 100px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            background: var(--card-color);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            border-left: 4px solid var(--priority-normal);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: move; /* Indicates item is draggable */
+        }
+
+        .todo-item:hover {
+            transform: translateX(2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .todo-item.high-priority {
+            border-left-color: var(--priority-high);
+        }
+
+        .todo-item input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            color: var(--text-color);
+            opacity: 0.6;
+        }
+
+        .todo-item.dragging {
+            opacity: 0.5;
+            border: 2px dashed var(--button-background-color);
+        }
+
+        .todo-item.drag-over {
+            border-top: 2px solid var(--button-background-color);
+        }
+
+        .todo-text {
+            flex-grow: 1;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+
+        .priority-flag {
+            margin: 0 10px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.2s ease;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .priority-flag:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .high-priority .priority-flag {
+            color: var(--priority-high);
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            padding: 5px 8px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+            font-size: 1.2em;
+        }
+
+        .delete-btn:hover {
+            color: #ff4757;
+            background-color: rgba(255, 71, 87, 0.1);
+        }
+
+        .add-todo {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .add-todo input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 2px solid var(--column-color);
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            background: var(--card-color);
+            color: var(--text-color);
+        }
+
+        .add-todo input:focus {
+            outline: none;
+            border-color: var(--button-background-color);
+        }
+
+        button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: var(--button-border-color);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background-color: var(--button-hover-color);
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .menu-button:hover {
+            background-color: var(--column-color);
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: var(--column-color);
+            min-width: 180px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border-radius: 6px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .menu-content button {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 0;
+            transition: background-color 0.2s ease;
+        }
+
+        .menu-content button:hover {
+            background-color: var(--card-color);
+            transform: none;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--column-color);
+            color: var(--text-color);
+            margin: 15% auto;
+            padding: 25px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 15px;
+        }
+
+        .modal-content textarea {
+            width: 100%;
+            height: 200px;
+            margin: 10px 0 20px 0;
+            padding: 15px;
+            background: var(--card-color);
+            color: var(--text-color);
+            border: 2px solid var(--button-background-color);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9em;
+            resize: vertical;
+        }
+
+        .modal-content input[type="file"]::file-selector-button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: var(--button-border-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-content input[type="file"]::file-selector-button:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        footer {
+            border-top: 1px solid var(--column-color);
+            text-align: right;
+            font-size: 0.8em;
+            vertical-align: middle;
+            position: fixed;
+            bottom: 0;
+            margin-top: 40px;
+            left: 10%;
+            right: 0;
+            padding: 10px 20px;
+            width: 80%;
+            transition: opacity 0.3s;
+            opacity: 1;
+            background-color: var(--background-color);
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .modal-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--column-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            color: var(--text-color);
+            min-width: 30%;
+        }
+
+        .theme-popup {
+            max-width: 500px;
+        }
+
+        .theme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filters button {
+                width: 100%;
+            }
+
+            .add-todo {
+                flex-direction: column;
+            }
+
+            .add-todo button {
+                width: 100%;
+            }
+        }
+
+        .theme-button.active, .font-button.active {
+            background-color: var(--button-hover-color);
+            color: var(--button-text-color);
+        }
+        .tag {
+            color: var(--tag-colour);
+            font-weight: 500;
+        }
+
+        .mention {
+            color: var(--mention-colour);
+            font-weight: 500;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 10px 10px 40px;
+            border: 1px solid var(--button-background-color);
+            border-radius: 6px;
+            font-size: 16px;
+            background: var(--card-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 onclick="editTitle()" id="listTitle">Todo List</h1>
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search todos, #tags, and @mentions..." oninput="handleSearch()">
+        </div>
+        <div class="menu-container">
+            <button class="menu-button" onclick="toggleMenu()">⋮</button>
+            <div id="menuContent" class="menu-content">
+                <button onclick="openThemePopup()">Theme</button>
+                <button onclick="exportTodos()">Export</button>
+                <button onclick="exportToClipboard()">Copy to Clipboard</button>
+                <button onclick="copyRemainingTasks()">Copy Remaining Tasks</button>
+                <button onclick="showImportModal()">Import</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="filters">
+        <button data-filter="all" onclick="filterTodos('all')">All</button>
+        <button data-filter="active" onclick="filterTodos('active')">Active</button>
+        <button data-filter="completed" onclick="filterTodos('completed')">Completed</button>
+        <button data-filter="high-priority" onclick="filterTodos('high-priority')">High Priority</button>
+    </div>
+
+    <div class="add-todo">
+        <input type="text" id="newTodo" placeholder="Add a new todo... Use #tags and @mentions" onkeypress="handleKeyPress(event)">
+        <button onclick="addTodo()">Add Task</button>
+    </div>
+
+    <div class="todo-list" id="todoList">
+    </div>
+
+    <div id="importModal" class="modal"></div>
+
+    <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
+    <div class="modal-popup" id="theme-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h3>Style Settings</h3>
+        <div class="theme-options">
+            <div class="theme-row">
+                <label>Style:</label>
+                <div class="theme-buttons">
+                    <button class="theme-button" data-theme="default" onclick="changeTheme('default')">Default</button>
+                    <button class="theme-button" data-theme="cool" onclick="changeTheme('cool')">Cool</button>
+                    <button class="theme-button" data-theme="gx" onclick="changeTheme('gx')">GX</button>
+                    <button class="theme-button" data-theme="honeybee" onclick="changeTheme('honeybee')">Honey Bee</button>
+                    <button class="theme-button" data-theme="galaxy" onclick="changeTheme('galaxy')">Galaxy</button>
+                    <button class="theme-button" data-theme="mint" onclick="changeTheme('mint')">Mint</button>
+                </div>
+            </div>
+            <div class="theme-row">
+                <button onclick="toggleDarkMode()">Light/Dark Mode</button>
+            </div>
+            <div class="theme-row">
+                <label>Font:</label>
+                <div class="font-buttons">
+                    <button class="font-button" data-font="monospace" onclick="changeFont('monospace')">Mono</button>
+                    <button class="font-button" data-font="serif" onclick="changeFont('serif')">Serif</button>
+                    <button class="font-button" data-font="sans-serif" onclick="changeFont('sans-serif')">Sans-Serif</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-popup" id="version-info-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <div class = "version-info-container" style="margin-left: 50px; margin-right: 50px;">
+            <h2>Version Info</h2>
+            <div class="version-info-content">
+                <h3>v3.0.0 - 2025-01-08</h3>
+                
+                <h4>Added:</h4>
+                <ul>
+                    <li>Tags Highlighting</li>
+                    <li>Mentions Highlighting</li>
+                    <li>Search Functionality</li>
+                    <li>New Theme: Galaxy</li>
+                    <li>New Theme: Mint</li>
+                </ul>
+
+                <h3>v2.1.0 - 2025-01-07</h3>
+                
+                <h4>Added:</h4>
+                <ul>
+                    <li>Tab Title changes on Title Update</li>
+                    <li>Edit To Do with double click</li>
+                    <li>Copy Remaining ToDos to Clipboard</li>
+                </ul>
+        
+                <h4>Changed:</h4>
+                <ul>
+                    <li>Import via File Section Prettied up</li>
+                </ul>
+
+                <h3>v2.0.0 - 2024-12-13</h3>
+                
+                <h4>Added:</h4>
+                <ul>
+                    <li>Drag and drop reordering</li>
+                    <li>"Copy to Clipboard" functionality</li>
+                    <li>File upload option for imports</li>
+                    <li>Editable list title</li>
+                    <li>Theme settings to import/export</li>
+                    <li>Notification system</li>
+                </ul>
+        
+                <h4>Changed:</h4>
+                <ul>
+                    <li>Theme/Font Buttons instead of Drop Downs</li>
+                </ul>
+        
+                <h4>Fixed:</h4>
+                <ul>
+                    <li>Font Selection</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        let isDarkMode = true;
+        let todos = [];
+        let versionNumber = "3.0.0";
+        let currentTheme = 'default';
+        let currentFont = 'monospace';
+
+        // Initialize app
+        function initialize() {
+            applyTheme();
+            renderTodos();
+            initializeDragAndDrop();
+        }
+
+        // Theme management
+        function applyTheme() {
+            const mode = isDarkMode ? 'dark' : 'light';
+            
+            document.body.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+            document.body.style.backgroundColor = `var(--${currentTheme}-${mode}-background-color)`;
+
+            document.documentElement.style.setProperty('--text-color', `var(--${currentTheme}-${mode}-text-color)`);
+            document.documentElement.style.setProperty('--background-color', `var(--${currentTheme}-${mode}-background-color)`);
+            document.documentElement.style.setProperty('--column-color', `var(--${currentTheme}-${mode}-alt-background-color)`);
+            document.documentElement.style.setProperty('--card-color', `var(--${currentTheme}-${mode}-background-color)`);
+            document.documentElement.style.setProperty('--button-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--button-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+            document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
+            document.documentElement.style.setProperty('--link-hover-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+
+            updateFavicon();
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            applyTheme();
+            toggleMenu();
+        }
+
+        function changeTheme(themeName) {
+            currentTheme = themeName;
+            
+            // Update button states
+            document.querySelectorAll('.theme-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.theme === themeName) {
+                    button.classList.add('active');
+                }
+            });
+            
+            applyTheme();
+        }
+
+        function changeFont(fontName) {
+            currentFont = fontName;
+            
+            // Update button states
+            document.querySelectorAll('.font-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.font === fontName) {
+                    button.classList.add('active');
+                }
+            });
+            
+            applyFont();
+        }
+
+        function applyFont() {
+            document.body.style.fontFamily = currentFont;
+        }
+
+        // Menu functionality
+        function toggleMenu() {
+            document.getElementById("menuContent").classList.toggle("show");
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '10px';
+            notification.style.background = 'var(--button-background-color)';
+            notification.style.color = 'var(--button-text-color)';
+            notification.style.borderRadius = '5px';
+            notification.style.zIndex = '1000';
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+
+        // Todo management
+        function addTodo() {
+            const input = document.getElementById('newTodo');
+            const text = input.value.trim();
+            
+            if (text) {
+                todos.push({
+                    id: Date.now(),
+                    text: text,
+                    completed: false,
+                    priority: 'normal',
+                    createdAt: new Date().toISOString(),
+                    tags: extractTags(text),
+                    mentions: extractMentions(text)
+                });
+                input.value = '';
+                renderTodos();
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                addTodo();
+            }
+        }
+
+        function toggleTodo(id) {
+            todos = todos.map(todo =>
+                todo.id === id ? {...todo, completed: !todo.completed} : todo
+            );
+            renderTodos();
+            
+        }
+
+        function togglePriority(id) {
+            todos = todos.map(todo =>
+                todo.id === id 
+                    ? {...todo, priority: todo.priority === 'normal' ? 'high' : 'normal'}
+                    : todo
+            );
+            renderTodos();
+            
+        }
+
+        function deleteTodo(id) {
+            todos = todos.filter(todo => todo.id !== id);
+            renderTodos();
+            
+        }
+
+        // Rendering
+        function renderTodos(filter = 'all') {
+            const todoList = document.getElementById('todoList');
+            todoList.innerHTML = '';
+
+            let filteredTodos = todos;
+            switch(filter) {
+                case 'active':
+                    filteredTodos = todos.filter(todo => !todo.completed);
+                    break;
+                case 'completed':
+                    filteredTodos = todos.filter(todo => todo.completed);
+                    break;
+                case 'high-priority':
+                    filteredTodos = todos.filter(todo => todo.priority === 'high');
+                    break;
+            }
+
+            filteredTodos.sort((a, b) => {
+                // First sort by completion status
+                if (a.completed !== b.completed) {
+                    return a.completed ? 1 : -1;  // Completed items go to bottom
+                }
+                // Then sort by priority for non-completed items
+                if (!a.completed && !b.completed) {
+                    if (a.priority === 'high' && b.priority !== 'high') return -1;
+                    if (a.priority !== 'high' && b.priority === 'high') return 1;
+                }
+                return 0;
+            });
+
+            filteredTodos.forEach(todo => {
+                const todoItem = document.createElement('div');
+                todoItem.className = `todo-item ${todo.completed ? 'completed' : ''} ${todo.priority === 'high' ? 'high-priority' : ''}`;
+                
+                // Add drag attributes
+                todoItem.draggable = true;
+                todoItem.setAttribute('data-id', todo.id);
+                
+                // Add drag event listeners
+                todoItem.addEventListener('dragstart', handleDragStart);
+                todoItem.addEventListener('dragend', handleDragEnd);
+                todoItem.addEventListener('dragover', handleDragOver);
+                todoItem.addEventListener('drop', handleDrop);
+                
+                todoItem.innerHTML = `
+                    <input type="checkbox" ${todo.completed ? 'checked' : ''} 
+                        onchange="toggleTodo(${todo.id})">
+                    <span class="todo-text" ondblclick="editTodo(${todo.id})">${formatContent(todo.text)}</span>
+                    <span class="priority-flag" onclick="togglePriority(${todo.id})" 
+                        title="${todo.priority === 'high' ? 'High Priority' : 'Normal Priority'}">
+                        ⚑
+                    </span>
+                    <button class="delete-btn" onclick="deleteTodo(${todo.id})">×</button>
+                `;
+                
+                todoList.appendChild(todoItem);
+            });
+        }
+
+        function filterTodos(filter) {
+            // Update active state of filter buttons
+            document.querySelectorAll('.filters button').forEach(button => {
+                button.classList.remove('active');
+                if (button.getAttribute('data-filter') === filter) {
+                    button.classList.add('active');
+                }
+            });
+            
+            renderTodos(filter);
+        }
+
+        // Import/Export functionality
+        function exportTodos() {
+            let markdown = "";
+            
+            // Add metadata section
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += "---\n\n";
+            
+            // Add title and content
+            markdown += `# ${listTitle}\n\n`;
+            
+            // Add high priority tasks first
+            markdown += "## High Priority\n\n";
+            todos.filter(todo => todo.priority === 'high').forEach(todo => {
+                markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+            });
+
+            // Add normal priority tasks
+            markdown += "\n## Normal Priority\n\n";
+            todos.filter(todo => todo.priority === 'normal').forEach(todo => {
+                markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+            });
+
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'todo-list.md';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            toggleMenu();
+        }
+
+        function exportToClipboard() {
+            let markdown = "";
+            
+            // Add metadata section
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += "---\n\n";
+            
+            markdown += `# ${listTitle}\n\n`;
+            
+            // Add high priority tasks first
+            markdown += "## High Priority\n\n";
+            todos.filter(todo => todo.priority === 'high').forEach(todo => {
+                markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+            });
+
+            // Add normal priority tasks
+            markdown += "\n## Normal Priority\n\n";
+            todos.filter(todo => todo.priority === 'normal').forEach(todo => {
+                markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+            });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(markdown)
+                .then(() => {
+                    showNotification('Todo list copied to clipboard!');
+                    toggleMenu();
+                })
+                .catch(err => {
+                    showNotification('Failed to copy to clipboard');
+                    console.error('Failed to copy: ', err);
+                });
+        }
+
+        function copyRemainingTasks() {
+            let markdown = "";
+            
+            // Add metadata section like in the original export
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += "---\n\n";
+            
+            markdown += `# ${listTitle}\n\n`;
+            
+            // Filter for incomplete tasks only
+            const remainingTodos = todos.filter(todo => !todo.completed);
+            
+            // Add high priority tasks first
+            markdown += "## High Priority\n\n";
+            remainingTodos
+                .filter(todo => todo.priority === 'high')
+                .forEach(todo => {
+                    markdown += `- [ ] ${todo.text}\n`;
+                });
+
+            // Add normal priority tasks
+            markdown += "\n## Normal Priority\n\n";
+            remainingTodos
+                .filter(todo => todo.priority === 'normal')
+                .forEach(todo => {
+                    markdown += `- [ ] ${todo.text}\n`;
+                });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(markdown)
+                .then(() => {
+                    showNotification('Remaining tasks copied to clipboard!');
+                    toggleMenu();
+                })
+                .catch(err => {
+                    showNotification('Failed to copy to clipboard');
+                    console.error('Failed to copy: ', err);
+                });
+        }
+
+        function openThemePopup() {
+            showPopup('theme-popup');
+        }
+
+        function showImportModal() {
+            document.getElementById('importModal').style.display = 'block';
+            toggleMenu();
+        }
+
+        function closeImportModal() {
+            document.getElementById('importModal').style.display = 'none';
+            document.getElementById('importInput').value = '';
+        }
+
+        function importTodos() {
+            const markdownText = document.getElementById('markdownInput').value;
+            const lines = markdownText.split('\n');
+            const newTodos = [];
+            let currentPriority = 'normal';
+            let foundContent = false;
+            let inMetadata = false;
+
+            // Process lines
+            lines.forEach(line => {
+                line = line.trim();
+
+                // Handle metadata section
+                if (line === '---') {
+                    inMetadata = !inMetadata;
+                    foundContent = true;
+                    return;
+                }
+
+                if (inMetadata) {
+                    // Parse configuration settings
+                    const [key, value] = line.split(':').map(part => part.trim());
+                    if (value) {
+                        switch(key.toLowerCase()) {
+                            case 'style':
+                                currentTheme = value.toLowerCase();
+                                break;
+                            case 'theme':
+                                isDarkMode = (value.toLowerCase() === 'dark');
+                                break;
+                            case 'font':
+                                currentFont = value.toLowerCase();
+                                break;
+                        }
+                    }
+                    return;
+                }
+                
+                // Regular content processing
+                if (line.startsWith('# ')) {
+                    listTitle = line.substring(2).trim();
+                    document.getElementById('listTitle').textContent = listTitle;
+                    document.title = listTitle;
+                    foundContent = true;
+                    return;
+                }
+
+                if (line.startsWith('## High Priority')) {
+                    currentPriority = 'high';
+                    foundContent = true;
+                    return;
+                }
+                if (line.startsWith('## Normal Priority')) {
+                    currentPriority = 'normal';
+                    foundContent = true;
+                    return;
+                }
+
+                if (line.startsWith('- [')) {
+                    const completed = line[3] === 'x';
+                    const text = line.substring(5).trim();
+                    if (text) {
+                        newTodos.push({
+                            id: Date.now() + Math.random(),
+                            text: text,
+                            completed: completed,
+                            priority: currentPriority,
+                            createdAt: new Date().toISOString()
+                        });
+                        foundContent = true;
+                    }
+                }
+            });
+
+            if (!foundContent) {
+                alert('No valid content found in the imported text. Please check the format.');
+                return;
+            }
+
+            if (newTodos.length > 0) {
+                todos = newTodos;
+            }
+            
+            // Update theme buttons and apply settings
+            setInitialStates();
+            applyTheme();
+            applyFont();
+            renderTodos();
+            closeImportModal();
+            updateFavicon();
+        }
+
+        function showPopup(popupId) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById(popupId).style.display = 'block';
+            document.body.classList.add('overlay-active');
+        }
+
+        function closeAllPopups() {
+            document.getElementById('overlay').style.display = 'none';
+            document.querySelectorAll('.modal-popup').forEach(popup => {
+                popup.style.display = 'none';
+            });
+            document.body.classList.remove('overlay-active');
+        }
+
+        function createImportModal() {
+            document.getElementById('importModal').innerHTML = `
+                <div class="modal-content">
+                    <h2>Import Todos</h2>
+                    <div style="margin-bottom: 20px;">
+                        <h3>Option 1: Upload File</h3>
+                        <input type="file" id="mdFileInput" accept=".md" style="margin: 10px 0;">
+                    </div>
+                    <div>
+                        <h3>Option 2: Paste Text</h3>
+                        <textarea id="markdownInput" placeholder="# Todo List
+
+        ## High Priority
+        - [ ] Important task
+        - [x] Completed important task
+
+        ## Normal Priority
+        - [ ] Regular task
+        - [x] Completed regular task"></textarea>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button onclick="importTodos()">Import</button>
+                        <button onclick="closeImportModal()">Cancel</button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('mdFileInput').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFileUpload(e.target.files[0]);
+                }
+            });
+        }
+
+        let draggedItem = null;
+
+        function handleDragStart(e) {
+            draggedItem = this;
+            this.classList.add('dragging');
+            
+            // Prevent drag on certain elements
+            if (e.target.matches('input, button, .priority-flag')) {
+                e.preventDefault();
+                return false;
+            }
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            
+            // Remove drag-over class from all items
+            document.querySelectorAll('.todo-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            if (this === draggedItem) return;
+            
+            // Add visual indicator
+            this.classList.add('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            if (this === draggedItem) return;
+            
+            // Remove visual indicator
+            this.classList.remove('drag-over');
+            
+            // Get the IDs of the items being reordered
+            const fromId = Number(draggedItem.getAttribute('data-id')); // Changed from parseInt
+            const toId = Number(this.getAttribute('data-id')); // Changed from parseInt
+            
+            // Find the indices of the items
+            const fromIndex = todos.findIndex(todo => todo.id === fromId);
+            const toIndex = todos.findIndex(todo => todo.id === toId);
+            
+            // Make sure we found both items
+            if (fromIndex === -1 || toIndex === -1) return;
+            
+            // Reorder the array
+            const [removed] = todos.splice(fromIndex, 1);
+            todos.splice(toIndex, 0, removed);
+            
+            // Re-render
+            renderTodos();
+        }
+
+        function initializeDragAndDrop() {
+            const todoList = document.getElementById('todoList');
+            todoList.addEventListener('dragover', e => e.preventDefault());
+        }
+
+        function handleSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const currentFilter = getActiveFilter();
+            
+            // First filter by search term
+            let filteredTodos = todos.filter(todo => {
+                const textMatch = todo.text.toLowerCase().includes(searchTerm);
+                const tagMatch = todo.tags && Array.from(todo.tags).some(tag => 
+                    tag.toLowerCase().includes(searchTerm));
+                const mentionMatch = todo.mentions && Array.from(todo.mentions).some(mention => 
+                    mention.toLowerCase().includes(searchTerm));
+                
+                return textMatch || tagMatch || mentionMatch;
+            });
+
+            // Then apply the current filter
+            switch(currentFilter) {
+                case 'active':
+                    filteredTodos = filteredTodos.filter(todo => !todo.completed);
+                    break;
+                case 'completed':
+                    filteredTodos = filteredTodos.filter(todo => todo.completed);
+                    break;
+                case 'high-priority':
+                    filteredTodos = filteredTodos.filter(todo => todo.priority === 'high');
+                    break;
+            }
+
+            // Use the existing renderTodos function to display the filtered results
+            const todoList = document.getElementById('todoList');
+            todoList.innerHTML = '';
+            
+            // Use the existing todo rendering logic
+            filteredTodos.forEach(todo => {
+                const todoItem = document.createElement('div');
+                todoItem.className = `todo-item ${todo.completed ? 'completed' : ''} ${todo.priority === 'high' ? 'high-priority' : ''}`;
+                todoItem.draggable = true;
+                todoItem.setAttribute('data-id', todo.id);
+                
+                todoItem.addEventListener('dragstart', handleDragStart);
+                todoItem.addEventListener('dragend', handleDragEnd);
+                todoItem.addEventListener('dragover', handleDragOver);
+                todoItem.addEventListener('drop', handleDrop);
+                
+                todoItem.innerHTML = `
+                    <input type="checkbox" ${todo.completed ? 'checked' : ''} 
+                        onchange="toggleTodo(${todo.id})">
+                    <span class="todo-text" ondblclick="editTodo(${todo.id})">${formatContent(todo.text)}</span>
+                    <span class="priority-flag" onclick="togglePriority(${todo.id})" 
+                        title="${todo.priority === 'high' ? 'High Priority' : 'Normal Priority'}">
+                        ⚑
+                    </span>
+                    <button class="delete-btn" onclick="deleteTodo(${todo.id})">×</button>
+                `;
+                
+                todoList.appendChild(todoItem);
+            });
+        }
+
+        function getActiveFilter() {
+            const buttons = document.querySelectorAll('.filters button');
+            for (let button of buttons) {
+                if (button.classList.contains('active')) {
+                    return button.getAttribute('data-filter');
+                }
+            }
+            return 'all'; // Default filter
+        }
+
+        function setInitialStates() {
+            // Set initial theme button state
+            document.querySelectorAll('.theme-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.theme === currentTheme) {
+                    button.classList.add('active');
+                }
+            });
+
+            // Set initial font button state
+            document.querySelectorAll('.font-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.font === currentFont) {
+                    button.classList.add('active');
+                }
+            });
+
+            // Apply both theme and font
+            applyTheme();
+            applyFont();
+        }
+
+        // Add to your initialize function:
+        function initialize() {
+            setInitialStates();
+            renderTodos();
+            initializeDragAndDrop();
+        }
+
+        let listTitle = "Todo List";
+
+        function editTitle() {
+            const titleElement = document.getElementById('listTitle');
+            const currentTitle = titleElement.textContent;
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentTitle;
+            input.className = 'title-input';
+            input.style.fontSize = '1em';
+            input.style.fontWeight = '700';
+            input.style.width = '100%';
+            input.style.padding = '5px';
+            input.style.border = '2px solid var(--button-background-color)';
+            input.style.borderRadius = '6px';
+            input.style.backgroundColor = 'var(--card-color)';
+            input.style.color = 'var(--text-color)';
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveTitle(this.value);
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                saveTitle(this.value);
+            });
+            
+            titleElement.innerHTML = '';
+            titleElement.appendChild(input);
+            input.focus();
+            input.select();
+        }
+
+        function saveTitle(newTitle) {
+            listTitle = newTitle.trim() || "Todo List";
+            document.getElementById('listTitle').textContent = listTitle;
+            document.title = listTitle;
+        }
+
+        function handleFileUpload(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('markdownInput').value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+
+        function editTodo(id) {
+            const todoSpan = event.target;
+            if (!todoSpan.classList.contains('todo-text')) return;
+            
+            const currentText = todoSpan.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentText;
+            input.className = 'edit-todo-input';
+            input.style.width = '100%';
+            input.style.padding = '5px';
+            input.style.border = '2px solid var(--button-background-color)';
+            input.style.borderRadius = '6px';
+            input.style.backgroundColor = 'var(--card-color)';
+            input.style.color = 'var(--text-color)';
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveTodoEdit(id, this.value);
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                saveTodoEdit(id, this.value);
+            });
+            
+            todoSpan.innerHTML = '';
+            todoSpan.appendChild(input);
+            input.focus();
+            input.select();
+        }
+
+        function saveTodoEdit(id, newText) {
+            if (newText.trim()) {
+                todos = todos.map(todo =>
+                    todo.id === id ? {
+                        ...todo, 
+                        text: newText.trim(),
+                        tags: extractTags(newText),
+                        mentions: extractMentions(newText)
+                    } : todo
+                );
+                renderTodos();
+            } else {
+                renderTodos(); // If empty, just rerender to restore original text
+            }
+        }
+
+        function updateFavicon() {
+            try {
+                const mode = isDarkMode ? 'dark' : 'light';
+                
+                // Get the current theme's text color
+                const style = getComputedStyle(document.documentElement);
+                const colorVar = `--${currentTheme}-${mode}-text-color`;
+                const computedColor = style.getPropertyValue(colorVar).trim() || '#ffffff';
+                
+                // Get the SVG element and clone it
+                const originalSvg = document.getElementById('faviconSvg');
+                const svg = originalSvg.cloneNode(true);
+                
+                // Remove the display:none style
+                svg.removeAttribute('style');
+                
+                // Update all stroke and fill attributes that are #ffffff
+                const elementsToUpdate = svg.querySelectorAll('[stroke="#ffffff"], [fill="#ffffff"]');
+                elementsToUpdate.forEach(element => {
+                    if (element.hasAttribute('stroke')) {
+                        element.setAttribute('stroke', computedColor);
+                    }
+                    if (element.hasAttribute('fill')) {
+                        element.setAttribute('fill', computedColor);
+                    }
+                });
+
+                // Serialize the SVG
+                const serializer = new XMLSerializer();
+                let svgStr = serializer.serializeToString(svg);
+                
+                // Encode the SVG properly
+                const encodedSvg = encodeURIComponent(svgStr)
+                    .replace(/%20/g, ' ')
+                    .replace(/%3D/g, '=')
+                    .replace(/%3A/g, ':')
+                    .replace(/%2F/g, '/')
+                    .replace(/%22/g, "'");
+                    
+                // Create the URL
+                const svgUrl = `data:image/svg+xml;charset=utf-8,${encodedSvg}`;
+                
+                // Update favicon
+                const favicon = document.getElementById('favicon');
+                favicon.href = svgUrl;
+                
+                // For debugging
+                console.log('Favicon updated successfully');
+                console.log('Color:', computedColor);
+                console.log('SVG URL length:', svgUrl.length);
+            } catch (error) {
+                console.error('Error updating favicon:', error);
+                console.error('Error details:', {
+                    message: error.message,
+                    stack: error.stack
+                });
+            }
+        }
+
+        function extractTags(text) {
+            const matches = text.match(/#[\w-]+/g) || [];
+            return new Set(matches);
+        }
+
+        function extractMentions(text) {
+            const matches = text.match(/@[\w-]+/g) || [];
+            return new Set(matches);
+        }
+
+        function formatContent(content) {
+            return content
+                .replace(/#[\w-]+/g, match => `<span class="tag">${match}</span>`)
+                .replace(/@[\w-]+/g, match => `<span class="mention">${match}</span>`);
+        }
+
+        // Close menu when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.menu-button')) {
+                const dropdowns = document.getElementsByClassName("menu-content");
+                for (let dropdown of dropdowns) {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                }
+            }
+
+            if (event.target.classList.contains('modal')) {
+                closeImportModal();
+            }
+        }
+
+        // Initialize app when page loads
+        window.addEventListener('load', initialize);
+        createImportModal();
+
+    </script>
+</body>
+
+<footer>
+    <p id="versionNumber"></p>
+    <p>Find this project on <a href="https://github.com/Caddickbrown/SApps/">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
+  
+    <script>
+        document.querySelectorAll("#versionNumber").forEach(function(element) {
+            element.innerHTML = "v" + versionNumber;
+            element.onclick = () => showPopup('version-info-popup');
+        });
+    </script>
+</footer>
+</html>

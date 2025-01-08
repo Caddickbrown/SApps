@@ -26,6 +26,26 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
+### [3.1.0] - 2025-01-
+
+#### Added
+
+- [ ] Favicon
+
+#### Fixed
+
+- [ ] Editing Todo no longer resets Search
+
+#### Changed
+
+- [ ] Cleaned Up Excessive Comments
+
+### [4.0.0] - 2025-01-
+
+#### Added
+
+- [ ] Markdown Mode (Review Current ToDos in Markdown)
+
 ### Planned Functionality
 - More Themes
 
@@ -52,9 +72,20 @@ This project is licensed under the MIT License.
 
 ## Change Log
 
+### [3.0.0] - 2025-01-08
+
+#### Added
+
+- [x] Tags
+- [x] Mentions
+- [x] Search
+- [x] Galaxy Theme
+- [x] Mint Theme
+
 ### [2.1.0] - 2025-01-07
 
 #### Added
+
 - [x] Tab Title changes on Title Update
 - [x] Edit To Do with double click
 - [x] Copy Remaining ToDos to Clipboard
