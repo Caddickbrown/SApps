@@ -547,80 +547,151 @@
             transform: translateY(-50%);
             color: var(--text-color);
         }
+        .markdown-mode {
+            display: none;
+            padding: 20px;
+            margin-bottom: 100px;
+        }
+
+        .markdown-editor {
+            width: 100%;
+            min-height: 500px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background: var(--card-color);
+            color: var(--text-color);
+            border: 2px solid var(--button-background-color);
+            border-radius: 6px;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+
+        .markdown-toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: flex-end;
+        }
+
+        .mode-toggle {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            z-index: 1000;
+            padding: 12px 24px;
+            border-radius: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .mode-toggle:hover {
+            background-color: var(--button-hover-color);
+            transform: translateY(-2px);
+        }
+
+        .standard-mode {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1 onclick="editTitle()" id="listTitle">Todo List</h1>
-        <div class="search-container">
-            <span class="search-icon">🔍</span>
-            <input type="text" class="search-input" id="searchInput" placeholder="Search todos, #tags, and @mentions..." oninput="handleSearch()">
-        </div>
-        <div class="menu-container">
-            <button class="menu-button" onclick="toggleMenu()">⋮</button>
-            <div id="menuContent" class="menu-content">
-                <button onclick="openThemePopup()">Theme</button>
-                <button onclick="exportTodos()">Export</button>
-                <button onclick="exportToClipboard()">Copy to Clipboard</button>
-                <button onclick="copyRemainingTasks()">Copy Remaining Tasks</button>
-                <button onclick="showImportModal()">Import</button>
+    <div class="standard-mode">
+        <div class="header">
+            <h1 onclick="editTitle()" id="listTitle">Todo List</h1>
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search todos, #tags, and @mentions..." oninput="handleSearch()">
             </div>
-        </div>
-    </div>
-
-    <div class="filters">
-        <button data-filter="all" onclick="filterTodos('all')">All</button>
-        <button data-filter="active" onclick="filterTodos('active')">Active</button>
-        <button data-filter="completed" onclick="filterTodos('completed')">Completed</button>
-        <button data-filter="high-priority" onclick="filterTodos('high-priority')">High Priority</button>
-    </div>
-
-    <div class="add-todo">
-        <input type="text" id="newTodo" placeholder="Add a new todo... Use #tags and @mentions" onkeypress="handleKeyPress(event)">
-        <button onclick="addTodo()">Add Task</button>
-    </div>
-
-    <div class="todo-list" id="todoList">
-    </div>
-
-    <div id="importModal" class="modal"></div>
-
-    <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
-    <div class="modal-popup" id="theme-popup">
-        <button class="close-popup" onclick="closeAllPopups()">×</button>
-        <h3>Style Settings</h3>
-        <div class="theme-options">
-            <div class="theme-row">
-                <label>Style:</label>
-                <div class="theme-buttons">
-                    <button class="theme-button" data-theme="default" onclick="changeTheme('default')">Default</button>
-                    <button class="theme-button" data-theme="cool" onclick="changeTheme('cool')">Cool</button>
-                    <button class="theme-button" data-theme="gx" onclick="changeTheme('gx')">GX</button>
-                    <button class="theme-button" data-theme="honeybee" onclick="changeTheme('honeybee')">Honey Bee</button>
-                    <button class="theme-button" data-theme="galaxy" onclick="changeTheme('galaxy')">Galaxy</button>
-                    <button class="theme-button" data-theme="mint" onclick="changeTheme('mint')">Mint</button>
-                </div>
-            </div>
-            <div class="theme-row">
-                <button onclick="toggleDarkMode()">Light/Dark Mode</button>
-            </div>
-            <div class="theme-row">
-                <label>Font:</label>
-                <div class="font-buttons">
-                    <button class="font-button" data-font="monospace" onclick="changeFont('monospace')">Mono</button>
-                    <button class="font-button" data-font="serif" onclick="changeFont('serif')">Serif</button>
-                    <button class="font-button" data-font="sans-serif" onclick="changeFont('sans-serif')">Sans-Serif</button>
+            <div class="menu-container">
+                <button class="menu-button" onclick="toggleMenu()">⋮</button>
+                <div id="menuContent" class="menu-content">
+                    <button onclick="openThemePopup()">Theme</button>
+                    <button onclick="exportTodos()">Export</button>
+                    <button onclick="exportToClipboard()">Copy to Clipboard</button>
+                    <button onclick="copyRemainingTasks()">Copy Remaining Tasks</button>
+                    <button onclick="showImportModal()">Import</button>
                 </div>
             </div>
         </div>
+
+        <div class="filters">
+            <button data-filter="all" onclick="filterTodos('all')">All</button>
+            <button data-filter="active" onclick="filterTodos('active')">Active</button>
+            <button data-filter="completed" onclick="filterTodos('completed')">Completed</button>
+            <button data-filter="high-priority" onclick="filterTodos('high-priority')">High Priority</button>
+        </div>
+
+        <div class="add-todo">
+            <input type="text" id="newTodo" placeholder="Add a new todo... Use #tags and @mentions" onkeypress="handleKeyPress(event)">
+            <button onclick="addTodo()">Add Task</button>
+        </div>
+
+        <div class="todo-list" id="todoList">
+        </div>
+
+        <div id="importModal" class="modal"></div>
+
+        <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
+        <div class="modal-popup" id="theme-popup">
+            <button class="close-popup" onclick="closeAllPopups()">×</button>
+            <h3>Style Settings</h3>
+            <div class="theme-options">
+                <div class="theme-row">
+                    <label>Style:</label>
+                    <div class="theme-buttons">
+                        <button class="theme-button" data-theme="default" onclick="changeTheme('default')">Default</button>
+                        <button class="theme-button" data-theme="cool" onclick="changeTheme('cool')">Cool</button>
+                        <button class="theme-button" data-theme="gx" onclick="changeTheme('gx')">GX</button>
+                        <button class="theme-button" data-theme="honeybee" onclick="changeTheme('honeybee')">Honey Bee</button>
+                        <button class="theme-button" data-theme="galaxy" onclick="changeTheme('galaxy')">Galaxy</button>
+                        <button class="theme-button" data-theme="mint" onclick="changeTheme('mint')">Mint</button>
+                    </div>
+                </div>
+                <div class="theme-row">
+                    <button onclick="toggleDarkMode()">Light/Dark Mode</button>
+                </div>
+                <div class="theme-row">
+                    <label>Font:</label>
+                    <div class="font-buttons">
+                        <button class="font-button" data-font="monospace" onclick="changeFont('monospace')">Mono</button>
+                        <button class="font-button" data-font="serif" onclick="changeFont('serif')">Serif</button>
+                        <button class="font-button" data-font="sans-serif" onclick="changeFont('sans-serif')">Sans-Serif</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    
+    <div class="markdown-mode">
+        <div class="markdown-toolbar">
+            <button onclick="applyMarkdownChanges()">Apply Changes</button>
+            <button onclick="discardMarkdownChanges()">Discard Changes</button>
+        </div>
+        <textarea class="markdown-editor" id="markdownEditor"></textarea>
+    </div>
+
+    <button class="mode-toggle" onclick="toggleMarkdownMode()">Markdown Mode</button>
 
     <div class="modal-popup" id="version-info-popup">
         <button class="close-popup" onclick="closeAllPopups()">×</button>
         <div class = "version-info-container" style="margin-left: 50px; margin-right: 50px;">
             <h2>Version Info</h2>
             <div class="version-info-content">
-                <h3>v3.0.0 - 2025-01-</h3>
+                <h3>v4.0.0 - 2025-01-</h3>
+                
+                <h4>Added:</h4>
+                <ul>
+                    <li>Markdown Mode! View/edit your todos in Markdown</li>
+                </ul>
+
+                <h3>v3.0.0 - 2025-01-08</h3>
                 
                 <h4>Added:</h4>
                 <ul>
@@ -674,18 +745,18 @@
 
         let isDarkMode = true;
         let todos = [];
-        let versionNumber = "3.1.0";
+        let versionNumber = "4.1.0";
         let currentTheme = 'default';
         let currentFont = 'monospace';
+        let isMarkdownMode = false;
 
-        // Initialize app
         function initialize() {
-            applyTheme();
+            setInitialStates();
             renderTodos();
             initializeDragAndDrop();
+            createImportModal();
         }
 
-        // Theme management
         function applyTheme() {
             const mode = isDarkMode ? 'dark' : 'light';
             
@@ -713,7 +784,6 @@
         function changeTheme(themeName) {
             currentTheme = themeName;
             
-            // Update button states
             document.querySelectorAll('.theme-button').forEach(button => {
                 button.classList.remove('active');
                 if (button.dataset.theme === themeName) {
@@ -727,7 +797,6 @@
         function changeFont(fontName) {
             currentFont = fontName;
             
-            // Update button states
             document.querySelectorAll('.font-button').forEach(button => {
                 button.classList.remove('active');
                 if (button.dataset.font === fontName) {
@@ -742,7 +811,6 @@
             document.body.style.fontFamily = currentFont;
         }
 
-        // Menu functionality
         function toggleMenu() {
             document.getElementById("menuContent").classList.toggle("show");
         }
@@ -766,7 +834,6 @@
             }, 2000);
         }
 
-        // Todo management
         function addTodo() {
             const input = document.getElementById('newTodo');
             const text = input.value.trim();
@@ -816,7 +883,6 @@
             
         }
 
-        // Rendering
         function renderTodos(filter = 'all') {
             const todoList = document.getElementById('todoList');
             todoList.innerHTML = '';
@@ -835,11 +901,9 @@
             }
 
             filteredTodos.sort((a, b) => {
-                // First sort by completion status
                 if (a.completed !== b.completed) {
-                    return a.completed ? 1 : -1;  // Completed items go to bottom
+                    return a.completed ? 1 : -1;
                 }
-                // Then sort by priority for non-completed items
                 if (!a.completed && !b.completed) {
                     if (a.priority === 'high' && b.priority !== 'high') return -1;
                     if (a.priority !== 'high' && b.priority === 'high') return 1;
@@ -851,11 +915,9 @@
                 const todoItem = document.createElement('div');
                 todoItem.className = `todo-item ${todo.completed ? 'completed' : ''} ${todo.priority === 'high' ? 'high-priority' : ''}`;
                 
-                // Add drag attributes
                 todoItem.draggable = true;
                 todoItem.setAttribute('data-id', todo.id);
                 
-                // Add drag event listeners
                 todoItem.addEventListener('dragstart', handleDragStart);
                 todoItem.addEventListener('dragend', handleDragEnd);
                 todoItem.addEventListener('dragover', handleDragOver);
@@ -877,7 +939,6 @@
         }
 
         function filterTodos(filter) {
-            // Update active state of filter buttons
             document.querySelectorAll('.filters button').forEach(button => {
                 button.classList.remove('active');
                 if (button.getAttribute('data-filter') === filter) {
@@ -888,27 +949,22 @@
             renderTodos(filter);
         }
 
-        // Import/Export functionality
         function exportTodos() {
             let markdown = "";
             
-            // Add metadata section
             markdown += "---\n";
             markdown += `style: ${currentTheme}\n`;
             markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
             markdown += `font: ${currentFont}\n`;
             markdown += "---\n\n";
             
-            // Add title and content
             markdown += `# ${listTitle}\n\n`;
             
-            // Add high priority tasks first
             markdown += "## High Priority\n\n";
             todos.filter(todo => todo.priority === 'high').forEach(todo => {
                 markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
             });
 
-            // Add normal priority tasks
             markdown += "\n## Normal Priority\n\n";
             todos.filter(todo => todo.priority === 'normal').forEach(todo => {
                 markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
@@ -927,7 +983,6 @@
         function exportToClipboard() {
             let markdown = "";
             
-            // Add metadata section
             markdown += "---\n";
             markdown += `style: ${currentTheme}\n`;
             markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
@@ -936,19 +991,16 @@
             
             markdown += `# ${listTitle}\n\n`;
             
-            // Add high priority tasks first
             markdown += "## High Priority\n\n";
             todos.filter(todo => todo.priority === 'high').forEach(todo => {
                 markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
             });
 
-            // Add normal priority tasks
             markdown += "\n## Normal Priority\n\n";
             todos.filter(todo => todo.priority === 'normal').forEach(todo => {
                 markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
             });
 
-            // Copy to clipboard
             navigator.clipboard.writeText(markdown)
                 .then(() => {
                     showNotification('Todo list copied to clipboard!');
@@ -963,7 +1015,6 @@
         function copyRemainingTasks() {
             let markdown = "";
             
-            // Add metadata section like in the original export
             markdown += "---\n";
             markdown += `style: ${currentTheme}\n`;
             markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
@@ -972,10 +1023,8 @@
             
             markdown += `# ${listTitle}\n\n`;
             
-            // Filter for incomplete tasks only
             const remainingTodos = todos.filter(todo => !todo.completed);
             
-            // Add high priority tasks first
             markdown += "## High Priority\n\n";
             remainingTodos
                 .filter(todo => todo.priority === 'high')
@@ -983,7 +1032,6 @@
                     markdown += `- [ ] ${todo.text}\n`;
                 });
 
-            // Add normal priority tasks
             markdown += "\n## Normal Priority\n\n";
             remainingTodos
                 .filter(todo => todo.priority === 'normal')
@@ -991,7 +1039,6 @@
                     markdown += `- [ ] ${todo.text}\n`;
                 });
 
-            // Copy to clipboard
             navigator.clipboard.writeText(markdown)
                 .then(() => {
                     showNotification('Remaining tasks copied to clipboard!');
@@ -1025,11 +1072,9 @@
             let foundContent = false;
             let inMetadata = false;
 
-            // Process lines
             lines.forEach(line => {
                 line = line.trim();
 
-                // Handle metadata section
                 if (line === '---') {
                     inMetadata = !inMetadata;
                     foundContent = true;
@@ -1037,7 +1082,6 @@
                 }
 
                 if (inMetadata) {
-                    // Parse configuration settings
                     const [key, value] = line.split(':').map(part => part.trim());
                     if (value) {
                         switch(key.toLowerCase()) {
@@ -1055,7 +1099,6 @@
                     return;
                 }
                 
-                // Regular content processing
                 if (line.startsWith('# ')) {
                     listTitle = line.substring(2).trim();
                     document.getElementById('listTitle').textContent = listTitle;
@@ -1100,7 +1143,6 @@
                 todos = newTodos;
             }
             
-            // Update theme buttons and apply settings
             setInitialStates();
             applyTheme();
             applyFont();
@@ -1163,7 +1205,6 @@
             draggedItem = this;
             this.classList.add('dragging');
             
-            // Prevent drag on certain elements
             if (e.target.matches('input, button, .priority-flag')) {
                 e.preventDefault();
                 return false;
@@ -1173,7 +1214,6 @@
         function handleDragEnd(e) {
             this.classList.remove('dragging');
             
-            // Remove drag-over class from all items
             document.querySelectorAll('.todo-item').forEach(item => {
                 item.classList.remove('drag-over');
             });
@@ -1183,7 +1223,6 @@
             e.preventDefault();
             if (this === draggedItem) return;
             
-            // Add visual indicator
             this.classList.add('drag-over');
         }
 
@@ -1191,25 +1230,19 @@
             e.preventDefault();
             if (this === draggedItem) return;
             
-            // Remove visual indicator
             this.classList.remove('drag-over');
             
-            // Get the IDs of the items being reordered
-            const fromId = Number(draggedItem.getAttribute('data-id')); // Changed from parseInt
-            const toId = Number(this.getAttribute('data-id')); // Changed from parseInt
-            
-            // Find the indices of the items
+            const fromId = Number(draggedItem.getAttribute('data-id'));
+            const toId = Number(this.getAttribute('data-id'));
+
             const fromIndex = todos.findIndex(todo => todo.id === fromId);
             const toIndex = todos.findIndex(todo => todo.id === toId);
             
-            // Make sure we found both items
             if (fromIndex === -1 || toIndex === -1) return;
             
-            // Reorder the array
             const [removed] = todos.splice(fromIndex, 1);
             todos.splice(toIndex, 0, removed);
             
-            // Re-render
             renderTodos();
         }
 
@@ -1222,7 +1255,6 @@
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const currentFilter = getActiveFilter();
             
-            // First filter by search term
             let filteredTodos = todos.filter(todo => {
                 const textMatch = todo.text.toLowerCase().includes(searchTerm);
                 const tagMatch = todo.tags && Array.from(todo.tags).some(tag => 
@@ -1233,7 +1265,6 @@
                 return textMatch || tagMatch || mentionMatch;
             });
 
-            // Then apply the current filter
             switch(currentFilter) {
                 case 'active':
                     filteredTodos = filteredTodos.filter(todo => !todo.completed);
@@ -1246,11 +1277,9 @@
                     break;
             }
 
-            // Use the existing renderTodos function to display the filtered results
             const todoList = document.getElementById('todoList');
             todoList.innerHTML = '';
             
-            // Use the existing todo rendering logic
             filteredTodos.forEach(todo => {
                 const todoItem = document.createElement('div');
                 todoItem.className = `todo-item ${todo.completed ? 'completed' : ''} ${todo.priority === 'high' ? 'high-priority' : ''}`;
@@ -1284,11 +1313,10 @@
                     return button.getAttribute('data-filter');
                 }
             }
-            return 'all'; // Default filter
+            return 'all';
         }
 
         function setInitialStates() {
-            // Set initial theme button state
             document.querySelectorAll('.theme-button').forEach(button => {
                 button.classList.remove('active');
                 if (button.dataset.theme === currentTheme) {
@@ -1296,7 +1324,6 @@
                 }
             });
 
-            // Set initial font button state
             document.querySelectorAll('.font-button').forEach(button => {
                 button.classList.remove('active');
                 if (button.dataset.font === currentFont) {
@@ -1304,12 +1331,10 @@
                 }
             });
 
-            // Apply both theme and font
             applyTheme();
             applyFont();
         }
 
-        // Add to your initialize function:
         function initialize() {
             setInitialStates();
             renderTodos();
@@ -1410,7 +1435,7 @@
                 renderTodos();
                 handleSearch();
             } else {
-                renderTodos(); // If empty, just rerender to restore original text
+                renderTodos();
                 handleSearch();
             }
         }
@@ -1419,19 +1444,15 @@
             try {
                 const mode = isDarkMode ? 'dark' : 'light';
                 
-                // Get the current theme's text color
                 const style = getComputedStyle(document.documentElement);
                 const colorVar = `--${currentTheme}-${mode}-text-color`;
                 const computedColor = style.getPropertyValue(colorVar).trim() || '#ffffff';
                 
-                // Get the SVG element and clone it
                 const originalSvg = document.getElementById('faviconSvg');
                 const svg = originalSvg.cloneNode(true);
                 
-                // Remove the display:none style
                 svg.removeAttribute('style');
                 
-                // Update all stroke and fill attributes that are #ffffff
                 const elementsToUpdate = svg.querySelectorAll('[stroke="#ffffff"], [fill="#ffffff"]');
                 elementsToUpdate.forEach(element => {
                     if (element.hasAttribute('stroke')) {
@@ -1442,11 +1463,9 @@
                     }
                 });
 
-                // Serialize the SVG
                 const serializer = new XMLSerializer();
                 let svgStr = serializer.serializeToString(svg);
                 
-                // Encode the SVG properly
                 const encodedSvg = encodeURIComponent(svgStr)
                     .replace(/%20/g, ' ')
                     .replace(/%3D/g, '=')
@@ -1454,14 +1473,11 @@
                     .replace(/%2F/g, '/')
                     .replace(/%22/g, "'");
                     
-                // Create the URL
                 const svgUrl = `data:image/svg+xml;charset=utf-8,${encodedSvg}`;
                 
-                // Update favicon
                 const favicon = document.getElementById('favicon');
                 favicon.href = svgUrl;
                 
-                // For debugging
                 console.log('Favicon updated successfully');
                 console.log('Color:', computedColor);
                 console.log('SVG URL length:', svgUrl.length);
@@ -1490,7 +1506,137 @@
                 .replace(/@[\w-]+/g, match => `<span class="mention">${match}</span>`);
         }
 
-        // Close menu when clicking outside
+        function toggleMarkdownMode() {
+            isMarkdownMode = !isMarkdownMode;
+            const standardMode = document.querySelector('.standard-mode');
+            const markdownMode = document.querySelector('.markdown-mode');
+            const toggleButton = document.querySelector('.mode-toggle');
+            const markdownEditor = document.getElementById('markdownEditor');
+
+            if (isMarkdownMode) {
+                standardMode.style.display = 'none';
+                markdownMode.style.display = 'block';
+                toggleButton.textContent = 'Standard Mode';
+                markdownEditor.value = generateMarkdown();
+            } else {
+                standardMode.style.display = 'block';
+                markdownMode.style.display = 'none';
+                toggleButton.textContent = 'Markdown Mode';
+            }
+        }
+
+        function generateMarkdown() {
+            let markdown = "";
+            
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += "---\n\n";
+            
+            markdown += `# ${listTitle}\n\n`;
+            
+            markdown += "## High Priority\n\n";
+            todos.filter(todo => todo.priority === 'high')
+                .forEach(todo => {
+                    markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+                });
+
+            markdown += "\n## Normal Priority\n\n";
+            todos.filter(todo => todo.priority === 'normal')
+                .forEach(todo => {
+                    markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+                });
+
+            return markdown;
+        }
+
+        function applyMarkdownChanges() {
+            const markdownContent = document.getElementById('markdownEditor').value;
+            
+            try {
+                const lines = markdownContent.split('\n');
+                const newTodos = [];
+                let currentPriority = 'normal';
+                let inMetadata = false;
+
+                lines.forEach(line => {
+                    line = line.trim();
+
+                    if (line === '---') {
+                        inMetadata = !inMetadata;
+                        return;
+                    }
+
+                    if (inMetadata) {
+                        const [key, value] = line.split(':').map(part => part.trim());
+                        if (value) {
+                            switch(key.toLowerCase()) {
+                                case 'style':
+                                    currentTheme = value.toLowerCase();
+                                    break;
+                                case 'theme':
+                                    isDarkMode = (value.toLowerCase() === 'dark');
+                                    break;
+                                case 'font':
+                                    currentFont = value.toLowerCase();
+                                    break;
+                            }
+                        }
+                        return;
+                    }
+
+                    if (line.startsWith('# ')) {
+                        listTitle = line.substring(2).trim();
+                        document.getElementById('listTitle').textContent = listTitle;
+                        document.title = listTitle;
+                        return;
+                    }
+
+                    if (line.startsWith('## High Priority')) {
+                        currentPriority = 'high';
+                        return;
+                    }
+                    if (line.startsWith('## Normal Priority')) {
+                        currentPriority = 'normal';
+                        return;
+                    }
+
+                    if (line.startsWith('- [')) {
+                        const completed = line[3] === 'x';
+                        const text = line.substring(5).trim();
+                        if (text) {
+                            newTodos.push({
+                                id: Date.now() + Math.random(),
+                                text: text,
+                                completed: completed,
+                                priority: currentPriority,
+                                createdAt: new Date().toISOString(),
+                                tags: extractTags(text),
+                                mentions: extractMentions(text)
+                            });
+                        }
+                    }
+                });
+
+                todos = newTodos;
+                setInitialStates();
+                applyTheme();
+                applyFont();
+                renderTodos();
+                toggleMarkdownMode();
+                showNotification('Changes applied successfully!');
+            } catch (error) {
+                console.error('Error applying markdown changes:', error);
+                showNotification('Error applying changes. Please check the format.');
+            }
+        }
+
+        function discardMarkdownChanges() {
+            toggleMarkdownMode();
+            showNotification('Changes discarded');
+        }
+
         window.onclick = function(event) {
             if (!event.target.matches('.menu-button')) {
                 const dropdowns = document.getElementsByClassName("menu-content");
@@ -1506,7 +1652,6 @@
             }
         }
 
-        // Initialize app when page loads
         window.addEventListener('load', initialize);
         createImportModal();
 

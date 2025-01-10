@@ -7,11 +7,51 @@ I wanted a simple kanban app that I didn't need to install. This also brought up
 ## Usage
 1. Download the latest release.
 2. Open `HTMLToDo vx.x.x.html` in your browser of choice.
-3. Write.
+3. Add and use the todolist as required.
 4. Copy/Export as required.
 5. Enjoy!
 
 ## Features
+- Add/Complete/Edit/Flag/Delete ToDos
+- Export/Import ToDos/Themes/Settings
+- Copy Remaining ToDos to Clipboard (With or without Completed Items)
+- Edit the Title to personalise your ToDo List.
+- Drag and drop reordering.
+- Themes!
+- Tag and Mentions highlighting.
+- Search/Filters.
+
+## Behavior
+- ToDos can be edited by double clicking on them.
+- To save the edit, press Enter.
+- To cancel the edit, press Escape.
+
+- Priority tasks are marked with a red flag and are always at the top of the list.
+- Completed tasks are moved to the bottom of the list.
+
+- Tags are created by using the `#` symbol. They highlight things for easier visibility/searching.
+- Mentions are created by using the `@` symbol. They highlight things for easier visibility/searching.
+
+- Search is case insensitive and searches through the entire list including tags and mentions.
+
+- Themes are exportable/importable.
+
+- To copy the remaining ToDos to the clipboard, click the "Copy to Clipboard" button. To only copy active tasks click the "Copy Remaining Tasks" button.
+- The ToDos are copied in the order they are displayed (and the same way they are exported as a file).
+
+- To export ToDos, click the "Export" button. The ToDos are exported in the order they are displayed.
+
+- To reorder ToDos, click and drag the ToDo.
+
+- To edit the list title, double click on the title.
+- To save the edit, press Enter. To cancel the edit, press Escape.
+
+- To import ToDos, click the "Import" button. You can either upload a previously exported file, or copy and paste in the text directly.
+
+- To add a ToDo, type in the input box press Enter the ToDo is added to the bottom of the list.
+
+### Complete
+- To complete a ToDo, click the checkbox.
 
 ## Changing the Default Theme
 To change the default theme you just need to "uncomment" out the theme you want and comment out any others within the HTML file.
@@ -26,25 +66,16 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
-### [3.1.0] - 2025-01-
+### [4.1.0] - 2025-01-
 
 #### Added
 
 - [ ] Favicon
 
-#### Fixed
-
-- [ ] Editing Todo no longer resets Search
-
 #### Changed
 
-- [ ] Cleaned Up Excessive Comments
-
-### [4.0.0] - 2025-01-
-
-#### Added
-
-- [ ] Markdown Mode (Review Current ToDos in Markdown)
+- [ ] Upgraded Markdown Mode so still have Menu Access
+- [ ] Ticking while filtered now doesn't reset the filter
 
 ### Planned Functionality
 - More Themes
@@ -71,6 +102,19 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+
+### [4.0.0] - 2025-01-10
+
+#### Added
+- [x] Markdown Mode (Review Current ToDos in Markdown)
+
+#### Fixed
+
+- [x] Editing Todo no longer resets Search
+
+#### Removed
+
+- [x] Excessive Comments
 
 ### [3.0.0] - 2025-01-08
 
