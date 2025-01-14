@@ -66,19 +66,39 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
-### [4.1.0] - 2025-01-
-
-#### Added
-
-- [ ] Favicon
+### [5.5.0] - 2025-01-
 
 #### Changed
 
 - [ ] Upgraded Markdown Mode so still have Menu Access
-- [ ] Ticking while filtered now doesn't reset the filter
+- [ ] Ticking a todo while filtered now doesn't reset the filter
+
+### [6.0.0] - 2025-01-
+
+#### Added
+
+- [ ] Tips Animation
+- [ ] Filter on Tags/Mentions
+- [ ] Local Save (Shouldn't be relied on - but will save some data)
+- [ ] Version info cards
+
+#### Changed
+
+- [ ] Import by File - Now a button in Menu
+- [ ] UI Utilities now handled in one section
+- [ ] Event Handlers now handled in one section
+
+#### Fixed
+
+- [ ] Version info pop up now Scrollable
+
+#### Removed
+
+- [ ] Import by Text - Replaced by Markdown Mode
+- [ ] Import Modal
 
 ### Planned Functionality
-- More Themes
+- Favicon
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
@@ -103,9 +123,25 @@ This project is licensed under the MIT License.
 
 ## Change Log
 
+### [5.0.0] - 2025-01-14
+
+#### Added
+
+- [x] Type ! at the start of ToDo to make it a Priority
+- [x] Tips Cycle through in the Input Box background
+
+#### Changed
+
+- [x] Moved Markdown Mode button to Settings Menu
+
+#### Removed
+
+- [x] Number of pre-installed themes to reduce file size. (These can be re-added later on)
+
 ### [4.0.0] - 2025-01-10
 
 #### Added
+
 - [x] Markdown Mode (Review Current ToDos in Markdown)
 
 #### Fixed

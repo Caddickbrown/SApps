@@ -24,57 +24,6 @@
             --default-dark-button-hover-color: #6d45b8;
             --default-dark-button-border-color: none;
 
-            /* Cool Theme - Light Mode */
-            --cool-light-text-color: #2c3e50;
-            --cool-light-background-color: #ecf0f1;
-            --cool-light-alt-background-color: #ffffff;
-            --cool-light-button-background-color: #3498db;
-            --cool-light-button-text-color: #ffffff;
-            --cool-light-button-hover-color: #2980b9;
-            --cool-light-button-border-color: none;
-            /* Cool Theme - Dark Mode */
-            --cool-dark-text-color: #bdc3c7;
-            --cool-dark-background-color: #2c3e50;
-            --cool-dark-alt-background-color: #34495e;
-            --cool-dark-button-background-color: #2980b9;
-            --cool-dark-button-text-color: #ffffff;
-            --cool-dark-button-hover-color: #3498db;
-            --cool-dark-button-border-color: none;
-
-            /* GX Theme - Light Mode */
-            --gx-light-text-color: #333;
-            --gx-light-background-color: #ffffe7;
-            --gx-light-alt-background-color: #f0f0f0;
-            --gx-light-button-background-color: #273457;
-            --gx-light-button-text-color: #ffffff;
-            --gx-light-button-hover-color: #bb5e47;
-            --gx-light-button-border-color: none;
-            /* GX Theme - Dark Mode */
-            --gx-dark-text-color: #ffffe7;
-            --gx-dark-background-color: #16213d;
-            --gx-dark-alt-background-color: #273457;
-            --gx-dark-button-background-color: #bb5e47;
-            --gx-dark-button-text-color: #ffffff;
-            --gx-dark-button-hover-color: #d67a63;
-            --gx-dark-button-border-color: none;
-
-            /* Honey Bee Theme - Light Mode */
-            --honeybee-light-text-color: #4b3b2c;
-            --honeybee-light-background-color: #fff7e6;
-            --honeybee-light-alt-background-color: #ffedb3;
-            --honeybee-light-button-background-color: #ffa600;
-            --honeybee-light-button-text-color: #000000;
-            --honeybee-light-button-hover-color: #ffb730;
-            --honeybee-light-button-border-color: none;
-            /* Honey Bee Theme - Dark Mode */
-            --honeybee-dark-text-color: #ffd700;
-            --honeybee-dark-background-color: #1a1a1a;
-            --honeybee-dark-alt-background-color: #332200;
-            --honeybee-dark-button-background-color: #ffd700;
-            --honeybee-dark-button-text-color: #000000;
-            --honeybee-dark-button-hover-color: #ffed4a;
-            --honeybee-dark-button-border-color: none;
-
             /* Light mode - Star Cluster */
             --galaxy-light-text-color: #2d2357;
             --galaxy-light-background-color: #f5f3ff;
@@ -575,30 +524,6 @@
             justify-content: flex-end;
         }
 
-        .mode-toggle {
-            position: fixed;
-            bottom: 60px;
-            right: 20px;
-            z-index: 1000;
-            padding: 12px 24px;
-            border-radius: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            background-color: var(--button-background-color);
-            color: var(--button-text-color);
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .mode-toggle:hover {
-            background-color: var(--button-hover-color);
-            transform: translateY(-2px);
-        }
-
-        .standard-mode {
-            display: block;
-        }
     </style>
 </head>
 <body>
@@ -613,6 +538,7 @@
                 <button class="menu-button" onclick="toggleMenu()">⋮</button>
                 <div id="menuContent" class="menu-content">
                     <button onclick="openThemePopup()">Theme</button>
+                    <button onclick="toggleMarkdownMode()">Markdown Mode</button>
                     <button onclick="exportTodos()">Export</button>
                     <button onclick="exportToClipboard()">Copy to Clipboard</button>
                     <button onclick="copyRemainingTasks()">Copy Remaining Tasks</button>
@@ -647,9 +573,6 @@
                     <label>Style:</label>
                     <div class="theme-buttons">
                         <button class="theme-button" data-theme="default" onclick="changeTheme('default')">Default</button>
-                        <button class="theme-button" data-theme="cool" onclick="changeTheme('cool')">Cool</button>
-                        <button class="theme-button" data-theme="gx" onclick="changeTheme('gx')">GX</button>
-                        <button class="theme-button" data-theme="honeybee" onclick="changeTheme('honeybee')">Honey Bee</button>
                         <button class="theme-button" data-theme="galaxy" onclick="changeTheme('galaxy')">Galaxy</button>
                         <button class="theme-button" data-theme="mint" onclick="changeTheme('mint')">Mint</button>
                     </div>
@@ -677,66 +600,100 @@
         <textarea class="markdown-editor" id="markdownEditor"></textarea>
     </div>
 
-    <button class="mode-toggle" onclick="toggleMarkdownMode()">Markdown Mode</button>
-
     <div class="modal-popup" id="version-info-popup">
         <button class="close-popup" onclick="closeAllPopups()">×</button>
         <div class = "version-info-container" style="margin-left: 50px; margin-right: 50px;">
             <h2>Version Info</h2>
             <div class="version-info-content">
-                <h3>v4.0.0 - 2025-01-</h3>
+                <h3>v5.5.0 - 2025-01-</h3>
                 
-                <h4>Added:</h4>
-                <ul>
-                    <li>Markdown Mode! View/edit your todos in Markdown</li>
-                </ul>
+                    <h4>Changed:</h4>
+                    <ul>
+                        <li>Upgraded Markdown Mode so still have Menu Access</li>
+                        <li>Ticking a todo while filtered now doesn't reset the filter</li>
+                    </ul>
+                
+                <h3>v5.0.0 - 2025-01-14</h3>
+                
+                    <h4>Added:</h4>
+                    <ul>
+                        <li>Type ! at the start of ToDo to make it a Priority</li>
+                        <li>Tips Cycle through in the Input Box background</li>
+                    </ul>
+                    
+                    <h4>Changed:</h4>
+                    <ul>
+                        <li>Moved Markdown Mode button to Settings Menu</li>
+                    </ul>
+                    
+                    <h4>Removed:</h4>
+                    <ul>
+                        <li>Number of pre-installed themes to reduce file size. (These can be re-added later on)</li>
+                    </ul>
+
+                <h3>v4.0.0 - 2025-01-10</h3>
+                
+                    <h4>Added:</h4>
+                    <ul>
+                        <li>Markdown Mode! View/edit your todos in Markdown</li>
+                    </ul>
+                    
+                    <h4>Fixed:</h4>
+                    <ul>
+                        <li>Editing Todo no longer resets Search</li>
+                    </ul>
+                    
+                    <h4>Removed:</h4>
+                    <ul>
+                        <li>Excessive Comments</li>
+                    </ul>
 
                 <h3>v3.0.0 - 2025-01-08</h3>
                 
-                <h4>Added:</h4>
-                <ul>
-                    <li>Tags Highlighting</li>
-                    <li>Mentions Highlighting</li>
-                    <li>Search Functionality</li>
-                    <li>New Theme: Galaxy</li>
-                    <li>New Theme: Mint</li>
-                </ul>
+                    <h4>Added:</h4>
+                    <ul>
+                        <li>Tags Highlighting</li>
+                        <li>Mentions Highlighting</li>
+                        <li>Search Functionality</li>
+                        <li>New Theme: Galaxy</li>
+                        <li>New Theme: Mint</li>
+                    </ul>
 
                 <h3>v2.1.0 - 2025-01-07</h3>
                 
-                <h4>Added:</h4>
-                <ul>
-                    <li>Tab Title changes on Title Update</li>
-                    <li>Edit To Do with double click</li>
-                    <li>Copy Remaining ToDos to Clipboard</li>
-                </ul>
-        
-                <h4>Changed:</h4>
-                <ul>
-                    <li>Import via File Section Prettied up</li>
-                </ul>
+                    <h4>Added:</h4>
+                    <ul>
+                        <li>Tab Title changes on Title Update</li>
+                        <li>Edit To Do with double click</li>
+                        <li>Copy Remaining ToDos to Clipboard</li>
+                    </ul>
+            
+                    <h4>Changed:</h4>
+                    <ul>
+                        <li>Import via File Section Prettied up</li>
+                    </ul>
 
                 <h3>v2.0.0 - 2024-12-13</h3>
                 
-                <h4>Added:</h4>
-                <ul>
-                    <li>Drag and drop reordering</li>
-                    <li>"Copy to Clipboard" functionality</li>
-                    <li>File upload option for imports</li>
-                    <li>Editable list title</li>
-                    <li>Theme settings to import/export</li>
-                    <li>Notification system</li>
-                </ul>
-        
-                <h4>Changed:</h4>
-                <ul>
-                    <li>Theme/Font Buttons instead of Drop Downs</li>
-                </ul>
-        
-                <h4>Fixed:</h4>
-                <ul>
-                    <li>Font Selection</li>
-                </ul>
+                    <h4>Added:</h4>
+                    <ul>
+                        <li>Drag and drop reordering</li>
+                        <li>"Copy to Clipboard" functionality</li>
+                        <li>File upload option for imports</li>
+                        <li>Editable list title</li>
+                        <li>Theme settings to import/export</li>
+                        <li>Notification system</li>
+                    </ul>
+            
+                    <h4>Changed:</h4>
+                    <ul>
+                        <li>Theme/Font Buttons instead of Drop Downs</li>
+                    </ul>
+            
+                    <h4>Fixed:</h4>
+                    <ul>
+                        <li>Font Selection</li>
+                    </ul>
             </div>
         </div>
     </div>
@@ -744,17 +701,30 @@
     <script>
 
         let isDarkMode = true;
-        let todos = [];
-        let versionNumber = "4.1.0";
         let currentTheme = 'default';
         let currentFont = 'monospace';
         let isMarkdownMode = false;
 
+        let versionNumber = "5.0.0";
+        let todos = [];
+        let currentTipIndex = 0;
+        const placeholderTips = [
+            "Add a new todo... Use #tags and @mentions",
+            "Start with ! for high priority tasks (e.g., !Important task)",
+            "Use #project to organize related tasks",
+            "Tag people with @name to assign tasks",
+            "Double-click any task to edit it",
+            "Drag and drop to reorder your tasks",
+            "Use Markdown Mode to view/edit your todos in Markdown",
+            "Use Markdown Mode to import an old list"
+        ];
+        
         function initialize() {
             setInitialStates();
             renderTodos();
             initializeDragAndDrop();
             createImportModal();
+            cyclePlaceholder();
         }
 
         function applyTheme() {
@@ -780,6 +750,14 @@
             applyTheme();
             toggleMenu();
         }
+
+        function cyclePlaceholder() {
+            const todoInput = document.getElementById('newTodo');
+            todoInput.placeholder = placeholderTips[currentTipIndex];
+            currentTipIndex = (currentTipIndex + 1) % placeholderTips.length;
+        }
+
+        setInterval(cyclePlaceholder, 5000);
 
         function changeTheme(themeName) {
             currentTheme = themeName;
@@ -836,14 +814,21 @@
 
         function addTodo() {
             const input = document.getElementById('newTodo');
-            const text = input.value.trim();
+            let text = input.value.trim();
             
             if (text) {
+                // Check if the task starts with "!" for high priority
+                const isHighPriority = text.startsWith('!');
+                // Remove the "!" if it exists
+                if (isHighPriority) {
+                    text = text.substring(1).trim();
+                }
+                
                 todos.push({
                     id: Date.now(),
                     text: text,
                     completed: false,
-                    priority: 'normal',
+                    priority: isHighPriority ? 'high' : 'normal',
                     createdAt: new Date().toISOString(),
                     tags: extractTags(text),
                     mentions: extractMentions(text)
@@ -1510,18 +1495,15 @@
             isMarkdownMode = !isMarkdownMode;
             const standardMode = document.querySelector('.standard-mode');
             const markdownMode = document.querySelector('.markdown-mode');
-            const toggleButton = document.querySelector('.mode-toggle');
             const markdownEditor = document.getElementById('markdownEditor');
 
             if (isMarkdownMode) {
                 standardMode.style.display = 'none';
                 markdownMode.style.display = 'block';
-                toggleButton.textContent = 'Standard Mode';
                 markdownEditor.value = generateMarkdown();
             } else {
                 standardMode.style.display = 'block';
                 markdownMode.style.display = 'none';
-                toggleButton.textContent = 'Markdown Mode';
             }
         }
 
