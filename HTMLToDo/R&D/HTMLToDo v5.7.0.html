@@ -524,176 +524,229 @@
             justify-content: flex-end;
         }
 
+        .main-content {
+            margin-top: 20px;
+            margin-bottom: 100px;
+        }
+
+        .mode-content {
+            display: none;
+        }
+
+        .markdown-editor:focus {
+            outline: none;
+            border-color: var(--button-hover-color);
+        }
+
+        #listMode {
+            display: block;
+        }
+
+        #markdownMode {
+            display: none;
+        }
+
+        .mode-content {
+            width: 100%;
+        }
+
+        .version-info-container {
+            margin-left: 30px;
+            margin-right: 30px;
+            margin: 20px 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+        
+        .version-info-container::-webkit-scrollbar {
+            width: 2px;
+        }
+        
+        .version-info-container::-webkit-scrollbar-track {
+            background: var(--column-color);
+            border-radius: 2px;
+        }
+        
+        .version-info-container::-webkit-scrollbar-thumb {
+            background: var(--button-background-color);
+            border-radius: 4px;
+        }
+        
+        .version-info-container::-webkit-scrollbar-thumb:hover {
+            background: var(--button-hover-color);
+        }
+
+        .version-card {
+            background: var(--card-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--button-background-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .version-card h3 {
+            margin-top: 0;
+            padding-top: 0;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--button-background-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .version-card h4 {
+            color: var(--button-background-color);
+            margin-top: 15px;
+            padding-top: 0;
+        }
+
+        .version-card ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .version-card li {
+            margin: 5px 0;
+        }
+
     </style>
 </head>
 <body>
-    <div class="standard-mode">
-        <div class="header">
-            <h1 onclick="editTitle()" id="listTitle">Todo List</h1>
-            <div class="search-container">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" id="searchInput" placeholder="Search todos, #tags, and @mentions..." oninput="handleSearch()">
-            </div>
-            <div class="menu-container">
-                <button class="menu-button" onclick="toggleMenu()">⋮</button>
-                <div id="menuContent" class="menu-content">
-                    <button onclick="openThemePopup()">Theme</button>
-                    <button onclick="toggleMarkdownMode()">Markdown Mode</button>
-                    <button onclick="exportTodos()">Export</button>
-                    <button onclick="exportToClipboard()">Copy to Clipboard</button>
-                    <button onclick="copyRemainingTasks()">Copy Remaining Tasks</button>
-                    <button onclick="showImportModal()">Import</button>
-                </div>
-            </div>
+    <div class="header">
+        <h1 onclick="editTitle()" id="listTitle">Todo List</h1>
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search todos, #tags, and @mentions..." oninput="handleSearch()">
         </div>
-
-        <div class="filters">
-            <button data-filter="all" onclick="filterTodos('all')">All</button>
-            <button data-filter="active" onclick="filterTodos('active')">Active</button>
-            <button data-filter="completed" onclick="filterTodos('completed')">Completed</button>
-            <button data-filter="high-priority" onclick="filterTodos('high-priority')">High Priority</button>
-        </div>
-
-        <div class="add-todo">
-            <input type="text" id="newTodo" placeholder="Add a new todo... Use #tags and @mentions" onkeypress="handleKeyPress(event)">
-            <button onclick="addTodo()">Add Task</button>
-        </div>
-
-        <div class="todo-list" id="todoList">
-        </div>
-
-        <div id="importModal" class="modal"></div>
-
-        <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
-        <div class="modal-popup" id="theme-popup">
-            <button class="close-popup" onclick="closeAllPopups()">×</button>
-            <h3>Style Settings</h3>
-            <div class="theme-options">
-                <div class="theme-row">
-                    <label>Style:</label>
-                    <div class="theme-buttons">
-                        <button class="theme-button" data-theme="default" onclick="changeTheme('default')">Default</button>
-                        <button class="theme-button" data-theme="galaxy" onclick="changeTheme('galaxy')">Galaxy</button>
-                        <button class="theme-button" data-theme="mint" onclick="changeTheme('mint')">Mint</button>
-                    </div>
-                </div>
-                <div class="theme-row">
-                    <button onclick="toggleDarkMode()">Light/Dark Mode</button>
-                </div>
-                <div class="theme-row">
-                    <label>Font:</label>
-                    <div class="font-buttons">
-                        <button class="font-button" data-font="monospace" onclick="changeFont('monospace')">Mono</button>
-                        <button class="font-button" data-font="serif" onclick="changeFont('serif')">Serif</button>
-                        <button class="font-button" data-font="sans-serif" onclick="changeFont('sans-serif')">Sans-Serif</button>
-                    </div>
-                </div>
+        <div class="menu-container">
+            <button class="menu-button" onclick="toggleMenu()">⋮</button>
+            <div id="menuContent" class="menu-content">
+                <button onclick="openThemePopup()">Theme</button>
+                <button onclick="toggleMarkdownMode()" id="modeToggleBtn">Markdown Mode</button>
+                <button onclick="exportTodos()">Export</button>
+                <button onclick="exportToClipboard()">Copy to Clipboard</button>
+                <button onclick="copyRemainingTasks()">Copy Remaining Tasks</button>
+                <button onclick="document.getElementById('mdFileInput').click()">Import File</button>
+                <input type="file" id="mdFileInput" accept=".md" style="display: none;">
             </div>
         </div>
     </div>
+
+    <div class="main-content">
+        <!-- Standard mode content -->
+        <div id="listMode" class="mode-content">
+            <div class="filters">
+                <button data-filter="all" onclick="filterTodos('all')">All</button>
+                <button data-filter="active" onclick="filterTodos('active')">Active</button>
+                <button data-filter="completed" onclick="filterTodos('completed')">Completed</button>
+                <button data-filter="high-priority" onclick="filterTodos('high-priority')">High Priority</button>
+            </div>
     
-    <div class="markdown-mode">
-        <div class="markdown-toolbar">
-            <button onclick="applyMarkdownChanges()">Apply Changes</button>
-            <button onclick="discardMarkdownChanges()">Discard Changes</button>
+            <div class="add-todo">
+                <input type="text" id="newTodo" placeholder="Add a new todo... Use #tags and @mentions" onkeypress="handleKeyPress(event)">
+                <button onclick="addTodo()">Add Task</button>
+            </div>
+    
+            <div class="todo-list" id="todoList">
+                <!-- Todo items will be rendered here -->
+            </div>
         </div>
-        <textarea class="markdown-editor" id="markdownEditor"></textarea>
+    
+        <!-- Markdown mode content -->
+        <div id="markdownMode" class="mode-content">
+            <div class="markdown-toolbar">
+                <button onclick="toggleMarkdownMode()">Switch to List Mode</button>
+            </div>
+            <textarea class="markdown-editor" id="markdownEditor"></textarea>
+        </div>
+    </div>
+
+    <div id="importModal" class="modal"></div>
+
+    <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
+    <div class="modal-popup" id="theme-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h3>Style Settings</h3>
+        <div class="theme-options">
+            <div class="theme-row">
+                <label>Style:</label>
+                <div class="theme-buttons">
+                    <button class="theme-button" data-theme="default" onclick="changeTheme('default')">Default</button>
+                    <button class="theme-button" data-theme="galaxy" onclick="changeTheme('galaxy')">Galaxy</button>
+                    <button class="theme-button" data-theme="mint" onclick="changeTheme('mint')">Mint</button>
+                </div>
+            </div>
+            <div class="theme-row">
+                <button onclick="toggleDarkMode()">Light/Dark Mode</button>
+            </div>
+            <div class="theme-row">
+                <label>Font:</label>
+                <div class="font-buttons">
+                    <button class="font-button" data-font="monospace" onclick="changeFont('monospace')">Mono</button>
+                    <button class="font-button" data-font="serif" onclick="changeFont('serif')">Serif</button>
+                    <button class="font-button" data-font="sans-serif" onclick="changeFont('sans-serif')">Sans-Serif</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="modal-popup" id="version-info-popup">
         <button class="close-popup" onclick="closeAllPopups()">×</button>
         <div class = "version-info-container" style="margin-left: 50px; margin-right: 50px;">
             <h2>Version Info</h2>
-            <div class="version-info-content">
-                <h3>v5.5.0 - 2025-01-</h3>
-                
-                    <h4>Changed:</h4>
-                    <ul>
-                        <li>Upgraded Markdown Mode so still have Menu Access</li>
-                        <li>Ticking a todo while filtered now doesn't reset the filter</li>
-                    </ul>
-                
-                <h3>v5.0.0 - 2025-01-14</h3>
-                
-                    <h4>Added:</h4>
-                    <ul>
-                        <li>Type ! at the start of ToDo to make it a Priority</li>
-                        <li>Tips Cycle through in the Input Box background</li>
-                    </ul>
-                    
-                    <h4>Changed:</h4>
-                    <ul>
-                        <li>Moved Markdown Mode button to Settings Menu</li>
-                    </ul>
-                    
-                    <h4>Removed:</h4>
-                    <ul>
-                        <li>Number of pre-installed themes to reduce file size. (These can be re-added later on)</li>
-                    </ul>
 
-                <h3>v4.0.0 - 2025-01-10</h3>
+            <div class="version-card">
+                <h3>v5.6.0 - 2025-01-14</h3>
                 
-                    <h4>Added:</h4>
-                    <ul>
-                        <li>Markdown Mode! View/edit your todos in Markdown</li>
-                    </ul>
-                    
-                    <h4>Fixed:</h4>
-                    <ul>
-                        <li>Editing Todo no longer resets Search</li>
-                    </ul>
-                    
-                    <h4>Removed:</h4>
-                    <ul>
-                        <li>Excessive Comments</li>
-                    </ul>
+                        <h4>Added:</h4>
+                        <ul>
+                            <li>Link to Full Changelog in Version Info</li>
+                        </ul>
+                        
+                        <h4>Changed:</h4>
+                        <ul>
+                            <li>Import by File - Now a button in Menu</li>
+                        </ul>
+                        
+                        <h4>Removed:</h4>
+                        <ul>
+                            <li>Import by Text - Replaced by Markdown Mode</li>
+                            <li>Import Modal - Replaced by Markdown Mode</li>
+                            <li>Historical Changelog - Save Space and full history can be found in README</li>
+                        </ul>
+            </div>
 
-                <h3>v3.0.0 - 2025-01-08</h3>
+            <div class="version-card">
+                <h3>v5.5.0 - 2025-01-14</h3>
                 
-                    <h4>Added:</h4>
-                    <ul>
-                        <li>Tags Highlighting</li>
-                        <li>Mentions Highlighting</li>
-                        <li>Search Functionality</li>
-                        <li>New Theme: Galaxy</li>
-                        <li>New Theme: Mint</li>
-                    </ul>
+                        <h4>Added:</h4>
+                        <ul>
+                            <li>Markdown Mode Toggle to Export</li>
+                        </ul>
+                        
+                        <h4>Changed:</h4>
+                        <ul>
+                            <li>Upgraded Markdown Mode to be more of a "Mode" than a Pop Up</li>
+                            <li>Ticking a todo while filtered now doesn't reset the filter</li>
+                            <li>Clicking a Filter now Resets the Search bar</li>
+                        </ul>
+                        
+                        <h4>Fixed:</h4>
+                        <ul>
+                            <li>Version info pop up now Scrollable</li>
+                        </ul>
+                        
+                        <h4>Removed:</h4>
+                        <ul>
+                            <li>Duplicate Initialise function</li>
+                            <li>Favicon references</li>
+                        </ul>
+            </div>
 
-                <h3>v2.1.0 - 2025-01-07</h3>
-                
-                    <h4>Added:</h4>
-                    <ul>
-                        <li>Tab Title changes on Title Update</li>
-                        <li>Edit To Do with double click</li>
-                        <li>Copy Remaining ToDos to Clipboard</li>
-                    </ul>
-            
-                    <h4>Changed:</h4>
-                    <ul>
-                        <li>Import via File Section Prettied up</li>
-                    </ul>
-
-                <h3>v2.0.0 - 2024-12-13</h3>
-                
-                    <h4>Added:</h4>
-                    <ul>
-                        <li>Drag and drop reordering</li>
-                        <li>"Copy to Clipboard" functionality</li>
-                        <li>File upload option for imports</li>
-                        <li>Editable list title</li>
-                        <li>Theme settings to import/export</li>
-                        <li>Notification system</li>
-                    </ul>
-            
-                    <h4>Changed:</h4>
-                    <ul>
-                        <li>Theme/Font Buttons instead of Drop Downs</li>
-                    </ul>
-            
-                    <h4>Fixed:</h4>
-                    <ul>
-                        <li>Font Selection</li>
-                    </ul>
+            <div class="version-card">
+                <a href="https://github.com/Caddickbrown/SApps/blob/main/HTMLToDo/HTMLToDo%20-%20README.md">Find full version history here</a>
             </div>
         </div>
     </div>
@@ -704,17 +757,21 @@
         let currentTheme = 'default';
         let currentFont = 'monospace';
         let isMarkdownMode = false;
+        let listTitle = "Todo List";
 
-        let versionNumber = "5.0.0";
+        let versionNumber = "5.7.0";
         let todos = [];
+        let currentFilter = 'all';
+        let currentSearchTerm = '';
         let currentTipIndex = 0;
         const placeholderTips = [
             "Add a new todo... Use #tags and @mentions",
             "Start with ! for high priority tasks (e.g., !Important task)",
-            "Use #project to organize related tasks",
-            "Tag people with @name to assign tasks",
+            "Use #tags to organize related tasks",
+            "Tag people with @name",
             "Double-click any task to edit it",
             "Drag and drop to reorder your tasks",
+            "Export or copy your list to Markdown",
             "Use Markdown Mode to view/edit your todos in Markdown",
             "Use Markdown Mode to import an old list"
         ];
@@ -725,6 +782,25 @@
             initializeDragAndDrop();
             createImportModal();
             cyclePlaceholder();
+            
+            const listMode = document.getElementById('listMode');
+            const markdownMode = document.getElementById('markdownMode');
+            
+            if (isMarkdownMode) {
+                listMode.style.display = 'none';
+                markdownMode.style.display = 'block';
+                document.querySelector('.search-container').style.visibility = 'hidden';
+                document.getElementById('modeToggleBtn').textContent = 'List Mode';
+                
+                const markdownEditor = document.getElementById('markdownEditor');
+                markdownEditor.value = generateMarkdown();
+                setupMarkdownSync();
+            } else {
+                listMode.style.display = 'block';
+                markdownMode.style.display = 'none';
+                document.querySelector('.search-container').style.visibility = 'visible';
+                document.getElementById('modeToggleBtn').textContent = 'Markdown Mode';
+            }
         }
 
         function applyTheme() {
@@ -742,7 +818,6 @@
             document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
             document.documentElement.style.setProperty('--link-hover-color', `var(--${currentTheme}-${mode}-button-background-color)`);
 
-            updateFavicon();
         }
 
         function toggleDarkMode() {
@@ -817,9 +892,7 @@
             let text = input.value.trim();
             
             if (text) {
-                // Check if the task starts with "!" for high priority
                 const isHighPriority = text.startsWith('!');
-                // Remove the "!" if it exists
                 if (isHighPriority) {
                     text = text.substring(1).trim();
                 }
@@ -834,7 +907,7 @@
                     mentions: extractMentions(text)
                 });
                 input.value = '';
-                renderTodos();
+                applyFilterAndSearch();
             }
         }
 
@@ -848,8 +921,7 @@
             todos = todos.map(todo =>
                 todo.id === id ? {...todo, completed: !todo.completed} : todo
             );
-            renderTodos();
-            
+            applyFilterAndSearch();
         }
 
         function togglePriority(id) {
@@ -858,72 +930,28 @@
                     ? {...todo, priority: todo.priority === 'normal' ? 'high' : 'normal'}
                     : todo
             );
-            renderTodos();
-            
+            applyFilterAndSearch();
         }
 
         function deleteTodo(id) {
             todos = todos.filter(todo => todo.id !== id);
-            renderTodos();
-            
+            applyFilterAndSearch();
         }
 
-        function renderTodos(filter = 'all') {
-            const todoList = document.getElementById('todoList');
-            todoList.innerHTML = '';
-
-            let filteredTodos = todos;
-            switch(filter) {
-                case 'active':
-                    filteredTodos = todos.filter(todo => !todo.completed);
-                    break;
-                case 'completed':
-                    filteredTodos = todos.filter(todo => todo.completed);
-                    break;
-                case 'high-priority':
-                    filteredTodos = todos.filter(todo => todo.priority === 'high');
-                    break;
+        function renderTodos(filter = null) {
+            if (filter !== null) {
+                currentFilter = filter;
             }
-
-            filteredTodos.sort((a, b) => {
-                if (a.completed !== b.completed) {
-                    return a.completed ? 1 : -1;
-                }
-                if (!a.completed && !b.completed) {
-                    if (a.priority === 'high' && b.priority !== 'high') return -1;
-                    if (a.priority !== 'high' && b.priority === 'high') return 1;
-                }
-                return 0;
-            });
-
-            filteredTodos.forEach(todo => {
-                const todoItem = document.createElement('div');
-                todoItem.className = `todo-item ${todo.completed ? 'completed' : ''} ${todo.priority === 'high' ? 'high-priority' : ''}`;
-                
-                todoItem.draggable = true;
-                todoItem.setAttribute('data-id', todo.id);
-                
-                todoItem.addEventListener('dragstart', handleDragStart);
-                todoItem.addEventListener('dragend', handleDragEnd);
-                todoItem.addEventListener('dragover', handleDragOver);
-                todoItem.addEventListener('drop', handleDrop);
-                
-                todoItem.innerHTML = `
-                    <input type="checkbox" ${todo.completed ? 'checked' : ''} 
-                        onchange="toggleTodo(${todo.id})">
-                    <span class="todo-text" ondblclick="editTodo(${todo.id})">${formatContent(todo.text)}</span>
-                    <span class="priority-flag" onclick="togglePriority(${todo.id})" 
-                        title="${todo.priority === 'high' ? 'High Priority' : 'Normal Priority'}">
-                        ⚑
-                    </span>
-                    <button class="delete-btn" onclick="deleteTodo(${todo.id})">×</button>
-                `;
-                
-                todoList.appendChild(todoItem);
-            });
+            applyFilterAndSearch();
         }
 
         function filterTodos(filter) {
+            currentFilter = filter;
+
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = '';
+            currentSearchTerm = '';
+            
             document.querySelectorAll('.filters button').forEach(button => {
                 button.classList.remove('active');
                 if (button.getAttribute('data-filter') === filter) {
@@ -931,7 +959,7 @@
                 }
             });
             
-            renderTodos(filter);
+            applyFilterAndSearch();
         }
 
         function exportTodos() {
@@ -941,6 +969,7 @@
             markdown += `style: ${currentTheme}\n`;
             markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
             markdown += `font: ${currentFont}\n`;
+            markdown += `mode: ${isMarkdownMode ? 'markdown' : 'standard'}\n`;
             markdown += "---\n\n";
             
             markdown += `# ${listTitle}\n\n`;
@@ -972,6 +1001,7 @@
             markdown += `style: ${currentTheme}\n`;
             markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
             markdown += `font: ${currentFont}\n`;
+            markdown += `mode: ${isMarkdownMode ? 'markdown' : 'standard'}\n`;
             markdown += "---\n\n";
             
             markdown += `# ${listTitle}\n\n`;
@@ -1004,6 +1034,7 @@
             markdown += `style: ${currentTheme}\n`;
             markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
             markdown += `font: ${currentFont}\n`;
+            markdown += `mode: ${isMarkdownMode ? 'markdown' : 'standard'}\n`;
             markdown += "---\n\n";
             
             markdown += `# ${listTitle}\n\n`;
@@ -1039,103 +1070,6 @@
             showPopup('theme-popup');
         }
 
-        function showImportModal() {
-            document.getElementById('importModal').style.display = 'block';
-            toggleMenu();
-        }
-
-        function closeImportModal() {
-            document.getElementById('importModal').style.display = 'none';
-            document.getElementById('importInput').value = '';
-        }
-
-        function importTodos() {
-            const markdownText = document.getElementById('markdownInput').value;
-            const lines = markdownText.split('\n');
-            const newTodos = [];
-            let currentPriority = 'normal';
-            let foundContent = false;
-            let inMetadata = false;
-
-            lines.forEach(line => {
-                line = line.trim();
-
-                if (line === '---') {
-                    inMetadata = !inMetadata;
-                    foundContent = true;
-                    return;
-                }
-
-                if (inMetadata) {
-                    const [key, value] = line.split(':').map(part => part.trim());
-                    if (value) {
-                        switch(key.toLowerCase()) {
-                            case 'style':
-                                currentTheme = value.toLowerCase();
-                                break;
-                            case 'theme':
-                                isDarkMode = (value.toLowerCase() === 'dark');
-                                break;
-                            case 'font':
-                                currentFont = value.toLowerCase();
-                                break;
-                        }
-                    }
-                    return;
-                }
-                
-                if (line.startsWith('# ')) {
-                    listTitle = line.substring(2).trim();
-                    document.getElementById('listTitle').textContent = listTitle;
-                    document.title = listTitle;
-                    foundContent = true;
-                    return;
-                }
-
-                if (line.startsWith('## High Priority')) {
-                    currentPriority = 'high';
-                    foundContent = true;
-                    return;
-                }
-                if (line.startsWith('## Normal Priority')) {
-                    currentPriority = 'normal';
-                    foundContent = true;
-                    return;
-                }
-
-                if (line.startsWith('- [')) {
-                    const completed = line[3] === 'x';
-                    const text = line.substring(5).trim();
-                    if (text) {
-                        newTodos.push({
-                            id: Date.now() + Math.random(),
-                            text: text,
-                            completed: completed,
-                            priority: currentPriority,
-                            createdAt: new Date().toISOString()
-                        });
-                        foundContent = true;
-                    }
-                }
-            });
-
-            if (!foundContent) {
-                alert('No valid content found in the imported text. Please check the format.');
-                return;
-            }
-
-            if (newTodos.length > 0) {
-                todos = newTodos;
-            }
-            
-            setInitialStates();
-            applyTheme();
-            applyFont();
-            renderTodos();
-            closeImportModal();
-            updateFavicon();
-        }
-
         function showPopup(popupId) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById(popupId).style.display = 'block';
@@ -1148,40 +1082,6 @@
                 popup.style.display = 'none';
             });
             document.body.classList.remove('overlay-active');
-        }
-
-        function createImportModal() {
-            document.getElementById('importModal').innerHTML = `
-                <div class="modal-content">
-                    <h2>Import Todos</h2>
-                    <div style="margin-bottom: 20px;">
-                        <h3>Option 1: Upload File</h3>
-                        <input type="file" id="mdFileInput" accept=".md" style="margin: 10px 0;">
-                    </div>
-                    <div>
-                        <h3>Option 2: Paste Text</h3>
-                        <textarea id="markdownInput" placeholder="# Todo List
-
-        ## High Priority
-        - [ ] Important task
-        - [x] Completed important task
-
-        ## Normal Priority
-        - [ ] Regular task
-        - [x] Completed regular task"></textarea>
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <button onclick="importTodos()">Import</button>
-                        <button onclick="closeImportModal()">Cancel</button>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('mdFileInput').addEventListener('change', function(e) {
-                if (e.target.files.length > 0) {
-                    handleFileUpload(e.target.files[0]);
-                }
-            });
         }
 
         let draggedItem = null;
@@ -1237,19 +1137,25 @@
         }
 
         function handleSearch() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const currentFilter = getActiveFilter();
-            
-            let filteredTodos = todos.filter(todo => {
-                const textMatch = todo.text.toLowerCase().includes(searchTerm);
-                const tagMatch = todo.tags && Array.from(todo.tags).some(tag => 
-                    tag.toLowerCase().includes(searchTerm));
-                const mentionMatch = todo.mentions && Array.from(todo.mentions).some(mention => 
-                    mention.toLowerCase().includes(searchTerm));
-                
-                return textMatch || tagMatch || mentionMatch;
-            });
+            currentSearchTerm = document.getElementById('searchInput').value.toLowerCase();
+            applyFilterAndSearch();
+        }
 
+        function applyFilterAndSearch() {
+            let filteredTodos = todos;
+            
+            if (currentSearchTerm) {
+                filteredTodos = filteredTodos.filter(todo => {
+                    const textMatch = todo.text.toLowerCase().includes(currentSearchTerm);
+                    const tagMatch = todo.tags && Array.from(todo.tags).some(tag => 
+                        tag.toLowerCase().includes(currentSearchTerm));
+                    const mentionMatch = todo.mentions && Array.from(todo.mentions).some(mention => 
+                        mention.toLowerCase().includes(currentSearchTerm));
+                    
+                    return textMatch || tagMatch || mentionMatch;
+                });
+            }
+            
             switch(currentFilter) {
                 case 'active':
                     filteredTodos = filteredTodos.filter(todo => !todo.completed);
@@ -1262,6 +1168,21 @@
                     break;
             }
 
+            filteredTodos.sort((a, b) => {
+                if (a.completed !== b.completed) {
+                    return a.completed ? 1 : -1;
+                }
+                if (!a.completed && !b.completed) {
+                    if (a.priority === 'high' && b.priority !== 'high') return -1;
+                    if (a.priority !== 'high' && b.priority === 'high') return 1;
+                }
+                return 0;
+            });
+
+            renderFilteredTodos(filteredTodos);
+        }
+
+        function renderFilteredTodos(filteredTodos) {
             const todoList = document.getElementById('todoList');
             todoList.innerHTML = '';
             
@@ -1320,14 +1241,6 @@
             applyFont();
         }
 
-        function initialize() {
-            setInitialStates();
-            renderTodos();
-            initializeDragAndDrop();
-        }
-
-        let listTitle = "Todo List";
-
         function editTitle() {
             const titleElement = document.getElementById('listTitle');
             const currentTitle = titleElement.textContent;
@@ -1370,7 +1283,94 @@
         function handleFileUpload(file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById('markdownInput').value = e.target.result;
+                const markdownText = e.target.result;
+                const lines = markdownText.split('\n');
+                const newTodos = [];
+                let currentPriority = 'normal';
+                let foundContent = false;
+                let inMetadata = false;
+
+                lines.forEach(line => {
+                    line = line.trim();
+
+                    if (line === '---') {
+                        inMetadata = !inMetadata;
+                        foundContent = true;
+                        return;
+                    }
+
+                    if (inMetadata) {
+                        const [key, value] = line.split(':').map(part => part.trim());
+                        if (value) {
+                            switch(key.toLowerCase()) {
+                                case 'style':
+                                    currentTheme = value.toLowerCase();
+                                    break;
+                                case 'theme':
+                                    isDarkMode = (value.toLowerCase() === 'dark');
+                                    break;
+                                case 'font':
+                                    currentFont = value.toLowerCase();
+                                    break;
+                                case 'mode':
+                                    isMarkdownMode = (value.toLowerCase() === 'markdown');
+                                    break;
+                            }
+                        }
+                        return;
+                    }
+                    
+                    if (line.startsWith('# ')) {
+                        listTitle = line.substring(2).trim();
+                        document.getElementById('listTitle').textContent = listTitle;
+                        document.title = listTitle;
+                        foundContent = true;
+                        return;
+                    }
+
+                    if (line.startsWith('## High Priority')) {
+                        currentPriority = 'high';
+                        foundContent = true;
+                        return;
+                    }
+                    if (line.startsWith('## Normal Priority')) {
+                        currentPriority = 'normal';
+                        foundContent = true;
+                        return;
+                    }
+
+                    if (line.startsWith('- [')) {
+                        const completed = line[3] === 'x';
+                        const text = line.substring(5).trim();
+                        if (text) {
+                            newTodos.push({
+                                id: Date.now() + Math.random(),
+                                text: text,
+                                completed: completed,
+                                priority: currentPriority,
+                                createdAt: new Date().toISOString(),
+                                tags: extractTags(text),
+                                mentions: extractMentions(text)
+                            });
+                            foundContent = true;
+                        }
+                    }
+                });
+
+                if (!foundContent) {
+                    showNotification('No valid content found in the imported file. Please check the format.');
+                    return;
+                }
+
+                if (newTodos.length > 0) {
+                    todos = newTodos;
+                }
+                
+                setInitialStates();
+                applyTheme();
+                applyFont();
+                renderTodos();
+                showNotification('File imported successfully!');
             };
             reader.readAsText(file);
         }
@@ -1417,64 +1417,12 @@
                         mentions: extractMentions(newText)
                     } : todo
                 );
-                renderTodos();
-                handleSearch();
+                applyFilterAndSearch();
             } else {
-                renderTodos();
-                handleSearch();
+                applyFilterAndSearch();
             }
         }
-
-        function updateFavicon() {
-            try {
-                const mode = isDarkMode ? 'dark' : 'light';
-                
-                const style = getComputedStyle(document.documentElement);
-                const colorVar = `--${currentTheme}-${mode}-text-color`;
-                const computedColor = style.getPropertyValue(colorVar).trim() || '#ffffff';
-                
-                const originalSvg = document.getElementById('faviconSvg');
-                const svg = originalSvg.cloneNode(true);
-                
-                svg.removeAttribute('style');
-                
-                const elementsToUpdate = svg.querySelectorAll('[stroke="#ffffff"], [fill="#ffffff"]');
-                elementsToUpdate.forEach(element => {
-                    if (element.hasAttribute('stroke')) {
-                        element.setAttribute('stroke', computedColor);
-                    }
-                    if (element.hasAttribute('fill')) {
-                        element.setAttribute('fill', computedColor);
-                    }
-                });
-
-                const serializer = new XMLSerializer();
-                let svgStr = serializer.serializeToString(svg);
-                
-                const encodedSvg = encodeURIComponent(svgStr)
-                    .replace(/%20/g, ' ')
-                    .replace(/%3D/g, '=')
-                    .replace(/%3A/g, ':')
-                    .replace(/%2F/g, '/')
-                    .replace(/%22/g, "'");
-                    
-                const svgUrl = `data:image/svg+xml;charset=utf-8,${encodedSvg}`;
-                
-                const favicon = document.getElementById('favicon');
-                favicon.href = svgUrl;
-                
-                console.log('Favicon updated successfully');
-                console.log('Color:', computedColor);
-                console.log('SVG URL length:', svgUrl.length);
-            } catch (error) {
-                console.error('Error updating favicon:', error);
-                console.error('Error details:', {
-                    message: error.message,
-                    stack: error.stack
-                });
-            }
-        }
-
+        
         function extractTags(text) {
             const matches = text.match(/#[\w-]+/g) || [];
             return new Set(matches);
@@ -1491,56 +1439,101 @@
                 .replace(/@[\w-]+/g, match => `<span class="mention">${match}</span>`);
         }
 
+        
         function toggleMarkdownMode() {
-            isMarkdownMode = !isMarkdownMode;
-            const standardMode = document.querySelector('.standard-mode');
-            const markdownMode = document.querySelector('.markdown-mode');
+            const listMode = document.getElementById('listMode');
+            const markdownMode = document.getElementById('markdownMode');
+            const modeToggleBtn = document.getElementById('modeToggleBtn');
+            const searchContainer = document.querySelector('.search-container');
             const markdownEditor = document.getElementById('markdownEditor');
 
+            isMarkdownMode = !isMarkdownMode;
+
             if (isMarkdownMode) {
-                standardMode.style.display = 'none';
-                markdownMode.style.display = 'block';
-                markdownEditor.value = generateMarkdown();
+                try {
+                    listMode.style.display = 'none';
+                    markdownMode.style.display = 'block';
+                    searchContainer.style.visibility = 'hidden';
+                    modeToggleBtn.textContent = 'List Mode';
+
+                    const markdownContent = generateMarkdown();
+                    markdownEditor.value = markdownContent;
+                } catch (error) {
+                    console.error('Error switching to markdown mode:', error);
+                    isMarkdownMode = false;
+                }
             } else {
-                standardMode.style.display = 'block';
-                markdownMode.style.display = 'none';
+                try {
+                    const currentMarkdown = markdownEditor.value;
+                    const lines = currentMarkdown.split('\n');
+                    const newTodos = [];
+                    let currentPriority = 'normal';
+                    
+                    const titleLine = lines.find(line => line.trim().startsWith('# '));
+                    if (titleLine) {
+                        const newTitle = titleLine.substring(2).trim();
+                        listTitle = newTitle;
+                        document.getElementById('listTitle').textContent = listTitle;
+                        document.title = listTitle;
+                    }
+
+                    lines.forEach(line => {
+                        line = line.trim();
+                        if (line.startsWith('## High Priority')) {
+                            currentPriority = 'high';
+                        } else if (line.startsWith('## Normal Priority')) {
+                            currentPriority = 'normal';
+                        } else if (line.startsWith('- [')) {
+                            const completed = line[3] === 'x';
+                            const text = line.substring(5).trim();
+                            if (text) {
+                                newTodos.push({
+                                    id: Date.now() + Math.random(),
+                                    text: text,
+                                    completed: completed,
+                                    priority: currentPriority,
+                                    createdAt: new Date().toISOString(),
+                                    tags: extractTags(text),
+                                    mentions: extractMentions(text)
+                                });
+                            }
+                        }
+                    });
+
+                    if (newTodos.length > 0) {
+                        todos = newTodos;
+                    }
+                    
+                    listMode.style.display = 'block';
+                    markdownMode.style.display = 'none';
+                    searchContainer.style.visibility = 'visible';
+                    modeToggleBtn.textContent = 'Markdown Mode';
+                    
+                    renderTodos();
+                } catch (error) {
+                    console.error('Error switching to list mode:', error);
+                    isMarkdownMode = true;
+                }
             }
+
+            toggleMenu();
         }
 
-        function generateMarkdown() {
-            let markdown = "";
+        function setupMarkdownSync() {
+            const markdownEditor = document.getElementById('markdownEditor');
             
-            markdown += "---\n";
-            markdown += `style: ${currentTheme}\n`;
-            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
-            markdown += `font: ${currentFont}\n`;
-            markdown += "---\n\n";
-            
-            markdown += `# ${listTitle}\n\n`;
-            
-            markdown += "## High Priority\n\n";
-            todos.filter(todo => todo.priority === 'high')
-                .forEach(todo => {
-                    markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
-                });
-
-            markdown += "\n## Normal Priority\n\n";
-            todos.filter(todo => todo.priority === 'normal')
-                .forEach(todo => {
-                    markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
-                });
-
-            return markdown;
+            markdownEditor.removeEventListener('input', handleMarkdownInput);
+            markdownEditor.addEventListener('input', handleMarkdownInput);
         }
 
-        function applyMarkdownChanges() {
-            const markdownContent = document.getElementById('markdownEditor').value;
-            
+        function handleMarkdownInput(event) {
+            const markdownContent = event.target.value;
             try {
                 const lines = markdownContent.split('\n');
                 const newTodos = [];
                 let currentPriority = 'normal';
                 let inMetadata = false;
+                let metadataChanged = false;
 
                 lines.forEach(line => {
                     line = line.trim();
@@ -1555,13 +1548,30 @@
                         if (value) {
                             switch(key.toLowerCase()) {
                                 case 'style':
-                                    currentTheme = value.toLowerCase();
+                                    if (currentTheme !== value.toLowerCase()) {
+                                        currentTheme = value.toLowerCase();
+                                        metadataChanged = true;
+                                    }
                                     break;
                                 case 'theme':
-                                    isDarkMode = (value.toLowerCase() === 'dark');
+                                    const newDarkMode = (value.toLowerCase() === 'dark');
+                                    if (isDarkMode !== newDarkMode) {
+                                        isDarkMode = newDarkMode;
+                                        metadataChanged = true;
+                                    }
                                     break;
                                 case 'font':
-                                    currentFont = value.toLowerCase();
+                                    if (currentFont !== value.toLowerCase()) {
+                                        currentFont = value.toLowerCase();
+                                        metadataChanged = true;
+                                    }
+                                    break;
+                                case 'mode':
+                                    const newMarkdownMode = (value.toLowerCase() === 'markdown');
+                                    if (isMarkdownMode !== newMarkdownMode) {
+                                        isMarkdownMode = newMarkdownMode;
+                                        metadataChanged = true;
+                                    }
                                     break;
                             }
                         }
@@ -1569,9 +1579,17 @@
                     }
 
                     if (line.startsWith('# ')) {
-                        listTitle = line.substring(2).trim();
-                        document.getElementById('listTitle').textContent = listTitle;
-                        document.title = listTitle;
+                        const newTitle = line.substring(2).trim();
+                        if (listTitle !== newTitle) {
+                            listTitle = newTitle;
+                            document.getElementById('listTitle').textContent = listTitle;
+                            document.title = listTitle;
+                            // Update the markdown editor to reflect the title change
+                            const markdownEditor = document.getElementById('markdownEditor');
+                            const currentContent = markdownEditor.value;
+                            const titleRegex = /^# .+$/m;
+                            markdownEditor.value = currentContent.replace(titleRegex, `# ${newTitle}`);
+                        }
                         return;
                     }
 
@@ -1601,23 +1619,63 @@
                     }
                 });
 
-                todos = newTodos;
-                setInitialStates();
-                applyTheme();
-                applyFont();
-                renderTodos();
-                toggleMarkdownMode();
-                showNotification('Changes applied successfully!');
+                if (JSON.stringify(todos) !== JSON.stringify(newTodos) || metadataChanged) {
+                    todos = newTodos;
+                    if (metadataChanged) {
+                        setInitialStates();
+                        applyTheme();
+                        applyFont();
+                    }
+                    renderTodos();
+                }
             } catch (error) {
-                console.error('Error applying markdown changes:', error);
-                showNotification('Error applying changes. Please check the format.');
+                console.error('Error parsing markdown:', error);
             }
         }
 
-        function discardMarkdownChanges() {
-            toggleMarkdownMode();
-            showNotification('Changes discarded');
+        function applyMarkdownChanges() {
+            const markdownContent = document.getElementById('markdownEditor').value;
+            handleMarkdownInput({ target: { value: markdownContent } });
         }
+
+        document.querySelector('.markdown-toolbar').innerHTML = `
+            <button onclick="toggleMarkdownMode()">View as List</button>
+        `;
+
+        function generateMarkdown() {
+            let markdown = "";
+            
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += `mode: ${isMarkdownMode ? 'markdown' : 'standard'}\n`;
+            markdown += "---\n\n";
+            
+            markdown += `# ${listTitle}\n\n`;
+            
+            markdown += "## High Priority\n\n";
+            todos.filter(todo => todo.priority === 'high')
+                .forEach(todo => {
+                    markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+                });
+
+            markdown += "\n## Normal Priority\n\n";
+            todos.filter(todo => todo.priority === 'normal')
+                .forEach(todo => {
+                    markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+                });
+
+            return markdown;
+        }
+
+        document.getElementById('mdFileInput').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                handleFileUpload(e.target.files[0]);
+                toggleMenu();
+                this.value = '';
+            }
+        });
 
         window.onclick = function(event) {
             if (!event.target.matches('.menu-button')) {
@@ -1635,7 +1693,6 @@
         }
 
         window.addEventListener('load', initialize);
-        createImportModal();
 
     </script>
 </body>

@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo App</title>
+    
+    <style>
+        :root {
+            /* Default Theme - Light Mode */
+            --default-light-text-color: #333;
+            --default-light-background-color: #ffffff;
+            --default-light-alt-background-color: #f0f0f0;
+            --default-light-button-background-color: #4bc67c;
+            --default-light-button-text-color: #ffffff;
+            --default-light-button-hover-color: #348b57;
+            --default-light-button-border-color: none;
+
+            /* Default Theme - Dark Mode */
+            --default-dark-text-color: #e0e0e0;
+            --default-dark-background-color: #1d1d1d;
+            --default-dark-alt-background-color: #2d2d2d;
+            --default-dark-button-background-color: #58319f;
+            --default-dark-button-text-color: #ffffff;
+            --default-dark-button-hover-color: #6d45b8;
+            --default-dark-button-border-color: none;
+
+            /* Light mode - Star Cluster */
+            --galaxy-light-text-color: #2d2357;
+            --galaxy-light-background-color: #f5f3ff;
+            --galaxy-light-alt-background-color: #e6e0ff;
+            --galaxy-light-button-background-color: #7b4fff;
+            --galaxy-light-button-text-color: #ffffff;
+            --galaxy-light-button-hover-color: #9775ff;
+            --galaxy-light-button-border-color: none;
+
+            /* Dark mode - Deep Space */
+            --galaxy-dark-text-color: #d1c4ff;
+            --galaxy-dark-background-color: #0f0b26;
+            --galaxy-dark-alt-background-color: #2d2357;
+            --galaxy-dark-button-background-color: #7b4fff;
+            --galaxy-dark-button-text-color: #ffffff;
+            --galaxy-dark-button-hover-color: #9775ff;
+            --galaxy-dark-button-border-color: none;
+            
+
+            /* Light mode - Fresh Mint */
+            --mint-light-text-color: #1d4d4f;
+            --mint-light-background-color: #f2fffd;
+            --mint-light-alt-background-color: #e0f5f1;
+            --mint-light-button-background-color: #4fb3a9;
+            --mint-light-button-text-color: #ffffff;
+            --mint-light-button-hover-color: #65c7bd;
+            --mint-light-button-border-color: none;
+            /* Dark mode - Deep Mint */
+            --mint-dark-text-color: #b8ede7;
+            --mint-dark-background-color: #0a2728;
+            --mint-dark-alt-background-color: #1d4d4f;
+            --mint-dark-button-background-color: #4fb3a9;
+            --mint-dark-button-text-color: #ffffff;
+            --mint-dark-button-hover-color: #65c7bd;
+            --mint-dark-button-border-color: none;
+
+            /* Priority colors */
+            --priority-high: #ff4757;
+            --priority-normal: transparent;
+            --tag-colour: #10b981;
+            --mention-colour: #3b82f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        body a:link, body a:visited {
+            color: var(--default-text-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+        body a:hover {
+            color: var(--link-hover-color);
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            border-bottom: 2px solid var(--column-color);
+        }
+
+        h1 {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        h3 {
+            padding-top: 20px;
+        }
+
+        h4 {
+            padding-top: 10px;
+        }
+
+        input, textarea {
+            background-color: var(--card-color);
+            color: var(--card-text-color);
+            border: 1px solid var(--button-background-color);
+        }
+
+        .todo-list {
+            background: var(--column-color);
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 100px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 100px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            background: var(--card-color);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            border-left: 4px solid var(--priority-normal);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: move; /* Indicates item is draggable */
+        }
+
+        .todo-item:hover {
+            transform: translateX(2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .todo-item.high-priority {
+            border-left-color: var(--priority-high);
+        }
+
+        .todo-item input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            color: var(--text-color);
+            opacity: 0.6;
+        }
+
+        .todo-item.dragging {
+            opacity: 0.5;
+            border: 2px dashed var(--button-background-color);
+        }
+
+        .todo-item.drag-over {
+            border-top: 2px solid var(--button-background-color);
+        }
+
+        .todo-text {
+            flex-grow: 1;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+
+        .priority-flag {
+            margin: 0 10px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.2s ease;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .priority-flag:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .high-priority .priority-flag {
+            color: var(--priority-high);
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            padding: 5px 8px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+            font-size: 1.2em;
+        }
+
+        .delete-btn:hover {
+            color: #ff4757;
+            background-color: rgba(255, 71, 87, 0.1);
+        }
+
+        .add-todo {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .add-todo input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 2px solid var(--column-color);
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            background: var(--card-color);
+            color: var(--text-color);
+        }
+
+        .add-todo input:focus {
+            outline: none;
+            border-color: var(--button-background-color);
+        }
+
+        button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: var(--button-border-color);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background-color: var(--button-hover-color);
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .menu-button:hover {
+            background-color: var(--column-color);
+        }
+
+        .menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: var(--column-color);
+            min-width: 180px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border-radius: 6px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .menu-content button {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 0;
+            transition: background-color 0.2s ease;
+        }
+
+        .menu-content button:hover {
+            background-color: var(--card-color);
+            transform: none;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--column-color);
+            color: var(--text-color);
+            margin: 15% auto;
+            padding: 25px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 15px;
+        }
+
+        .modal-content textarea {
+            width: 100%;
+            height: 200px;
+            margin: 10px 0 20px 0;
+            padding: 15px;
+            background: var(--card-color);
+            color: var(--text-color);
+            border: 2px solid var(--button-background-color);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9em;
+            resize: vertical;
+        }
+
+        .modal-content input[type="file"]::file-selector-button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: var(--button-border-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-content input[type="file"]::file-selector-button:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        footer {
+            border-top: 1px solid var(--column-color);
+            text-align: right;
+            font-size: 0.8em;
+            vertical-align: middle;
+            position: fixed;
+            bottom: 0;
+            margin-top: 40px;
+            left: 10%;
+            right: 0;
+            padding: 10px 20px;
+            width: 80%;
+            transition: opacity 0.3s;
+            opacity: 1;
+            background-color: var(--background-color);
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .modal-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--column-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            color: var(--text-color);
+            min-width: 30%;
+        }
+
+        .theme-popup {
+            max-width: 500px;
+        }
+
+        .theme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filters button {
+                width: 100%;
+            }
+
+            .add-todo {
+                flex-direction: column;
+            }
+
+            .add-todo button {
+                width: 100%;
+            }
+        }
+
+        .theme-button.active, .font-button.active {
+            background-color: var(--button-hover-color);
+            color: var(--button-text-color);
+        }
+        .tag {
+            color: var(--tag-colour);
+            font-weight: 500;
+        }
+
+        .mention {
+            color: var(--mention-colour);
+            font-weight: 500;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 10px 10px 40px;
+            border: 1px solid var(--button-background-color);
+            border-radius: 6px;
+            font-size: 16px;
+            background: var(--card-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color);
+        }
+        .markdown-mode {
+            display: none;
+            padding: 20px;
+            margin-bottom: 100px;
+        }
+
+        .markdown-editor {
+            width: 100%;
+            min-height: 500px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background: var(--card-color);
+            color: var(--text-color);
+            border: 2px solid var(--button-background-color);
+            border-radius: 6px;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+
+        .markdown-toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: flex-end;
+        }
+
+        .main-content {
+            margin-top: 20px;
+            margin-bottom: 100px;
+        }
+
+        .mode-content {
+            display: none;
+        }
+
+        .markdown-editor:focus {
+            outline: none;
+            border-color: var(--button-hover-color);
+        }
+
+        #listMode {
+            display: block;
+        }
+
+        #markdownMode {
+            display: none;
+        }
+
+        .mode-content {
+            width: 100%;
+        }
+
+        .version-info-container {
+            margin-left: 30px;
+            margin-right: 30px;
+            margin: 20px 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+        
+        .version-info-container::-webkit-scrollbar {
+            width: 2px;
+        }
+        
+        .version-info-container::-webkit-scrollbar-track {
+            background: var(--column-color);
+            border-radius: 2px;
+        }
+        
+        .version-info-container::-webkit-scrollbar-thumb {
+            background: var(--button-background-color);
+            border-radius: 4px;
+        }
+        
+        .version-info-container::-webkit-scrollbar-thumb:hover {
+            background: var(--button-hover-color);
+        }
+
+        .version-card {
+            background: var(--card-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--button-background-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .version-card h3 {
+            margin-top: 0;
+            padding-top: 0;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--button-background-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .version-card h4 {
+            color: var(--button-background-color);
+            margin-top: 15px;
+            padding-top: 0;
+        }
+
+        .version-card ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .version-card li {
+            margin: 5px 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 onclick="editTitle()" id="listTitle">Todo List</h1>
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search todos, #tags, and @mentions..." oninput="handleSearch()">
+        </div>
+        <div class="menu-container">
+            <button class="menu-button" onclick="toggleMenu()">⋮</button>
+            <div id="menuContent" class="menu-content">
+                <button onclick="openThemePopup()">Theme</button>
+                <button onclick="toggleMarkdownMode()" id="modeToggleBtn">Markdown Mode</button>
+                <button onclick="exportTodos()">Export</button>
+                <button onclick="exportToClipboard()">Copy to Clipboard</button>
+                <button onclick="copyRemainingTasks()">Copy Remaining Tasks</button>
+                <button onclick="document.getElementById('mdFileInput').click()">Import File</button>
+                <input type="file" id="mdFileInput" accept=".md" style="display: none;">
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- Standard mode content -->
+        <div id="listMode" class="mode-content">
+            <div class="filters">
+                <button data-filter="all" onclick="filterTodos('all')">All</button>
+                <button data-filter="active" onclick="filterTodos('active')">Active</button>
+                <button data-filter="completed" onclick="filterTodos('completed')">Completed</button>
+                <button data-filter="high-priority" onclick="filterTodos('high-priority')">High Priority</button>
+            </div>
+    
+            <div class="add-todo">
+                <input type="text" id="newTodo" placeholder="Add a new todo... Use #tags and @mentions" onkeypress="handleKeyPress(event)">
+                <button onclick="addTodo()">Add Task</button>
+            </div>
+    
+            <div class="todo-list" id="todoList">
+                <!-- Todo items will be rendered here -->
+            </div>
+        </div>
+    
+        <!-- Markdown mode content -->
+        <div id="markdownMode" class="mode-content">
+            <div class="markdown-toolbar">
+                <button onclick="toggleMarkdownMode()">Switch to List Mode</button>
+            </div>
+            <textarea class="markdown-editor" id="markdownEditor"></textarea>
+        </div>
+    </div>
+
+    <div id="importModal" class="modal"></div>
+
+    <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
+    <div class="modal-popup" id="theme-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h3>Style Settings</h3>
+        <div class="theme-options">
+            <div class="theme-row">
+                <label>Style:</label>
+                <div class="theme-buttons">
+                    <button class="theme-button" data-theme="default" onclick="changeTheme('default')">Default</button>
+                    <button class="theme-button" data-theme="galaxy" onclick="changeTheme('galaxy')">Galaxy</button>
+                    <button class="theme-button" data-theme="mint" onclick="changeTheme('mint')">Mint</button>
+                </div>
+            </div>
+            <div class="theme-row">
+                <button onclick="toggleDarkMode()">Light/Dark Mode</button>
+            </div>
+            <div class="theme-row">
+                <label>Font:</label>
+                <div class="font-buttons">
+                    <button class="font-button" data-font="monospace" onclick="changeFont('monospace')">Mono</button>
+                    <button class="font-button" data-font="serif" onclick="changeFont('serif')">Serif</button>
+                    <button class="font-button" data-font="sans-serif" onclick="changeFont('sans-serif')">Sans-Serif</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-popup" id="version-info-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <div class = "version-info-container" style="margin-left: 50px; margin-right: 50px;">
+            <h2>Version Info</h2>
+
+            <div class="version-card">
+                <h3>v5.6.0 - 2025-01-14</h3>
+                
+                        <h4>Added:</h4>
+                        <ul>
+                            <li>Link to Full Changelog in Version Info</li>
+                        </ul>
+                        
+                        <h4>Changed:</h4>
+                        <ul>
+                            <li>Import by File - Now a button in Menu</li>
+                        </ul>
+                        
+                        <h4>Removed:</h4>
+                        <ul>
+                            <li>Import by Text - Replaced by Markdown Mode</li>
+                            <li>Import Modal - Replaced by Markdown Mode</li>
+                            <li>Historical Changelog - Save Space and full history can be found in README</li>
+                        </ul>
+            </div>
+
+            <div class="version-card">
+                <h3>v5.5.0 - 2025-01-14</h3>
+                
+                        <h4>Added:</h4>
+                        <ul>
+                            <li>Markdown Mode Toggle to Export</li>
+                        </ul>
+                        
+                        <h4>Changed:</h4>
+                        <ul>
+                            <li>Upgraded Markdown Mode to be more of a "Mode" than a Pop Up</li>
+                            <li>Ticking a todo while filtered now doesn't reset the filter</li>
+                            <li>Clicking a Filter now Resets the Search bar</li>
+                        </ul>
+                        
+                        <h4>Fixed:</h4>
+                        <ul>
+                            <li>Version info pop up now Scrollable</li>
+                        </ul>
+                        
+                        <h4>Removed:</h4>
+                        <ul>
+                            <li>Duplicate Initialise function</li>
+                            <li>Favicon references</li>
+                        </ul>
+            </div>
+
+            <div class="version-card">
+                <a href="https://github.com/Caddickbrown/SApps/blob/main/HTMLToDo/HTMLToDo%20-%20README.md">Find full version history here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        let isDarkMode = true;
+        let currentTheme = 'default';
+        let currentFont = 'monospace';
+        let isMarkdownMode = false;
+        let listTitle = "Todo List";
+
+        let versionNumber = "5.6.0";
+        let todos = [];
+        let currentFilter = 'all';
+        let currentSearchTerm = '';
+        let currentTipIndex = 0;
+        const placeholderTips = [
+            "Add a new todo... Use #tags and @mentions",
+            "Start with ! for high priority tasks (e.g., !Important task)",
+            "Use #tags to organize related tasks",
+            "Tag people with @name",
+            "Double-click any task to edit it",
+            "Drag and drop to reorder your tasks",
+            "Export or copy your list to Markdown",
+            "Use Markdown Mode to view/edit your todos in Markdown",
+            "Use Markdown Mode to import an old list"
+        ];
+        
+        function initialize() {
+            setInitialStates();
+            renderTodos();
+            initializeDragAndDrop();
+            createImportModal();
+            cyclePlaceholder();
+            
+            const listMode = document.getElementById('listMode');
+            const markdownMode = document.getElementById('markdownMode');
+            
+            if (isMarkdownMode) {
+                listMode.style.display = 'none';
+                markdownMode.style.display = 'block';
+                document.querySelector('.search-container').style.visibility = 'hidden';
+                document.getElementById('modeToggleBtn').textContent = 'List Mode';
+                
+                const markdownEditor = document.getElementById('markdownEditor');
+                markdownEditor.value = generateMarkdown();
+                setupMarkdownSync();
+            } else {
+                listMode.style.display = 'block';
+                markdownMode.style.display = 'none';
+                document.querySelector('.search-container').style.visibility = 'visible';
+                document.getElementById('modeToggleBtn').textContent = 'Markdown Mode';
+            }
+        }
+
+        function applyTheme() {
+            const mode = isDarkMode ? 'dark' : 'light';
+            
+            document.body.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+            document.body.style.backgroundColor = `var(--${currentTheme}-${mode}-background-color)`;
+
+            document.documentElement.style.setProperty('--text-color', `var(--${currentTheme}-${mode}-text-color)`);
+            document.documentElement.style.setProperty('--background-color', `var(--${currentTheme}-${mode}-background-color)`);
+            document.documentElement.style.setProperty('--column-color', `var(--${currentTheme}-${mode}-alt-background-color)`);
+            document.documentElement.style.setProperty('--card-color', `var(--${currentTheme}-${mode}-background-color)`);
+            document.documentElement.style.setProperty('--button-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--button-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+            document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
+            document.documentElement.style.setProperty('--link-hover-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            applyTheme();
+            toggleMenu();
+        }
+
+        function cyclePlaceholder() {
+            const todoInput = document.getElementById('newTodo');
+            todoInput.placeholder = placeholderTips[currentTipIndex];
+            currentTipIndex = (currentTipIndex + 1) % placeholderTips.length;
+        }
+
+        setInterval(cyclePlaceholder, 5000);
+
+        function changeTheme(themeName) {
+            currentTheme = themeName;
+            
+            document.querySelectorAll('.theme-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.theme === themeName) {
+                    button.classList.add('active');
+                }
+            });
+            
+            applyTheme();
+        }
+
+        function changeFont(fontName) {
+            currentFont = fontName;
+            
+            document.querySelectorAll('.font-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.font === fontName) {
+                    button.classList.add('active');
+                }
+            });
+            
+            applyFont();
+        }
+
+        function applyFont() {
+            document.body.style.fontFamily = currentFont;
+        }
+
+        function toggleMenu() {
+            document.getElementById("menuContent").classList.toggle("show");
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '10px';
+            notification.style.background = 'var(--button-background-color)';
+            notification.style.color = 'var(--button-text-color)';
+            notification.style.borderRadius = '5px';
+            notification.style.zIndex = '1000';
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+
+        function addTodo() {
+            const input = document.getElementById('newTodo');
+            let text = input.value.trim();
+            
+            if (text) {
+                const isHighPriority = text.startsWith('!');
+                if (isHighPriority) {
+                    text = text.substring(1).trim();
+                }
+                
+                todos.push({
+                    id: Date.now(),
+                    text: text,
+                    completed: false,
+                    priority: isHighPriority ? 'high' : 'normal',
+                    createdAt: new Date().toISOString(),
+                    tags: extractTags(text),
+                    mentions: extractMentions(text)
+                });
+                input.value = '';
+                applyFilterAndSearch();
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                addTodo();
+            }
+        }
+
+        function toggleTodo(id) {
+            todos = todos.map(todo =>
+                todo.id === id ? {...todo, completed: !todo.completed} : todo
+            );
+            applyFilterAndSearch();
+        }
+
+        function togglePriority(id) {
+            todos = todos.map(todo =>
+                todo.id === id 
+                    ? {...todo, priority: todo.priority === 'normal' ? 'high' : 'normal'}
+                    : todo
+            );
+            applyFilterAndSearch();
+        }
+
+        function deleteTodo(id) {
+            todos = todos.filter(todo => todo.id !== id);
+            applyFilterAndSearch();
+        }
+
+        function renderTodos(filter = null) {
+            if (filter !== null) {
+                currentFilter = filter;
+            }
+            applyFilterAndSearch();
+        }
+
+        function filterTodos(filter) {
+            currentFilter = filter;
+
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = '';
+            currentSearchTerm = '';
+            
+            document.querySelectorAll('.filters button').forEach(button => {
+                button.classList.remove('active');
+                if (button.getAttribute('data-filter') === filter) {
+                    button.classList.add('active');
+                }
+            });
+            
+            applyFilterAndSearch();
+        }
+
+        function exportTodos() {
+            let markdown = "";
+            
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += `mode: ${isMarkdownMode ? 'markdown' : 'standard'}\n`;
+            markdown += "---\n\n";
+            
+            markdown += `# ${listTitle}\n\n`;
+            
+            markdown += "## High Priority\n\n";
+            todos.filter(todo => todo.priority === 'high').forEach(todo => {
+                markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+            });
+
+            markdown += "\n## Normal Priority\n\n";
+            todos.filter(todo => todo.priority === 'normal').forEach(todo => {
+                markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+            });
+
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'todo-list.md';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            toggleMenu();
+        }
+
+        function exportToClipboard() {
+            let markdown = "";
+            
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += `mode: ${isMarkdownMode ? 'markdown' : 'standard'}\n`;
+            markdown += "---\n\n";
+            
+            markdown += `# ${listTitle}\n\n`;
+            
+            markdown += "## High Priority\n\n";
+            todos.filter(todo => todo.priority === 'high').forEach(todo => {
+                markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+            });
+
+            markdown += "\n## Normal Priority\n\n";
+            todos.filter(todo => todo.priority === 'normal').forEach(todo => {
+                markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+            });
+
+            navigator.clipboard.writeText(markdown)
+                .then(() => {
+                    showNotification('Todo list copied to clipboard!');
+                    toggleMenu();
+                })
+                .catch(err => {
+                    showNotification('Failed to copy to clipboard');
+                    console.error('Failed to copy: ', err);
+                });
+        }
+
+        function copyRemainingTasks() {
+            let markdown = "";
+            
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += `mode: ${isMarkdownMode ? 'markdown' : 'standard'}\n`;
+            markdown += "---\n\n";
+            
+            markdown += `# ${listTitle}\n\n`;
+            
+            const remainingTodos = todos.filter(todo => !todo.completed);
+            
+            markdown += "## High Priority\n\n";
+            remainingTodos
+                .filter(todo => todo.priority === 'high')
+                .forEach(todo => {
+                    markdown += `- [ ] ${todo.text}\n`;
+                });
+
+            markdown += "\n## Normal Priority\n\n";
+            remainingTodos
+                .filter(todo => todo.priority === 'normal')
+                .forEach(todo => {
+                    markdown += `- [ ] ${todo.text}\n`;
+                });
+
+            navigator.clipboard.writeText(markdown)
+                .then(() => {
+                    showNotification('Remaining tasks copied to clipboard!');
+                    toggleMenu();
+                })
+                .catch(err => {
+                    showNotification('Failed to copy to clipboard');
+                    console.error('Failed to copy: ', err);
+                });
+        }
+
+        function openThemePopup() {
+            showPopup('theme-popup');
+        }
+
+        function showPopup(popupId) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById(popupId).style.display = 'block';
+            document.body.classList.add('overlay-active');
+        }
+
+        function closeAllPopups() {
+            document.getElementById('overlay').style.display = 'none';
+            document.querySelectorAll('.modal-popup').forEach(popup => {
+                popup.style.display = 'none';
+            });
+            document.body.classList.remove('overlay-active');
+        }
+
+        let draggedItem = null;
+
+        function handleDragStart(e) {
+            draggedItem = this;
+            this.classList.add('dragging');
+            
+            if (e.target.matches('input, button, .priority-flag')) {
+                e.preventDefault();
+                return false;
+            }
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            
+            document.querySelectorAll('.todo-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            if (this === draggedItem) return;
+            
+            this.classList.add('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            if (this === draggedItem) return;
+            
+            this.classList.remove('drag-over');
+            
+            const fromId = Number(draggedItem.getAttribute('data-id'));
+            const toId = Number(this.getAttribute('data-id'));
+
+            const fromIndex = todos.findIndex(todo => todo.id === fromId);
+            const toIndex = todos.findIndex(todo => todo.id === toId);
+            
+            if (fromIndex === -1 || toIndex === -1) return;
+            
+            const [removed] = todos.splice(fromIndex, 1);
+            todos.splice(toIndex, 0, removed);
+            
+            renderTodos();
+        }
+
+        function initializeDragAndDrop() {
+            const todoList = document.getElementById('todoList');
+            todoList.addEventListener('dragover', e => e.preventDefault());
+        }
+
+        function handleSearch() {
+            currentSearchTerm = document.getElementById('searchInput').value.toLowerCase();
+            applyFilterAndSearch();
+        }
+
+        function applyFilterAndSearch() {
+            let filteredTodos = todos;
+            
+            if (currentSearchTerm) {
+                filteredTodos = filteredTodos.filter(todo => {
+                    const textMatch = todo.text.toLowerCase().includes(currentSearchTerm);
+                    const tagMatch = todo.tags && Array.from(todo.tags).some(tag => 
+                        tag.toLowerCase().includes(currentSearchTerm));
+                    const mentionMatch = todo.mentions && Array.from(todo.mentions).some(mention => 
+                        mention.toLowerCase().includes(currentSearchTerm));
+                    
+                    return textMatch || tagMatch || mentionMatch;
+                });
+            }
+            
+            switch(currentFilter) {
+                case 'active':
+                    filteredTodos = filteredTodos.filter(todo => !todo.completed);
+                    break;
+                case 'completed':
+                    filteredTodos = filteredTodos.filter(todo => todo.completed);
+                    break;
+                case 'high-priority':
+                    filteredTodos = filteredTodos.filter(todo => todo.priority === 'high');
+                    break;
+            }
+
+            filteredTodos.sort((a, b) => {
+                if (a.completed !== b.completed) {
+                    return a.completed ? 1 : -1;
+                }
+                if (!a.completed && !b.completed) {
+                    if (a.priority === 'high' && b.priority !== 'high') return -1;
+                    if (a.priority !== 'high' && b.priority === 'high') return 1;
+                }
+                return 0;
+            });
+
+            renderFilteredTodos(filteredTodos);
+        }
+
+        function renderFilteredTodos(filteredTodos) {
+            const todoList = document.getElementById('todoList');
+            todoList.innerHTML = '';
+            
+            filteredTodos.forEach(todo => {
+                const todoItem = document.createElement('div');
+                todoItem.className = `todo-item ${todo.completed ? 'completed' : ''} ${todo.priority === 'high' ? 'high-priority' : ''}`;
+                todoItem.draggable = true;
+                todoItem.setAttribute('data-id', todo.id);
+                
+                todoItem.addEventListener('dragstart', handleDragStart);
+                todoItem.addEventListener('dragend', handleDragEnd);
+                todoItem.addEventListener('dragover', handleDragOver);
+                todoItem.addEventListener('drop', handleDrop);
+                
+                todoItem.innerHTML = `
+                    <input type="checkbox" ${todo.completed ? 'checked' : ''} 
+                        onchange="toggleTodo(${todo.id})">
+                    <span class="todo-text" ondblclick="editTodo(${todo.id})">${formatContent(todo.text)}</span>
+                    <span class="priority-flag" onclick="togglePriority(${todo.id})" 
+                        title="${todo.priority === 'high' ? 'High Priority' : 'Normal Priority'}">
+                        ⚑
+                    </span>
+                    <button class="delete-btn" onclick="deleteTodo(${todo.id})">×</button>
+                `;
+                
+                todoList.appendChild(todoItem);
+            });
+        }
+
+        function getActiveFilter() {
+            const buttons = document.querySelectorAll('.filters button');
+            for (let button of buttons) {
+                if (button.classList.contains('active')) {
+                    return button.getAttribute('data-filter');
+                }
+            }
+            return 'all';
+        }
+
+        function setInitialStates() {
+            document.querySelectorAll('.theme-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.theme === currentTheme) {
+                    button.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.font-button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.font === currentFont) {
+                    button.classList.add('active');
+                }
+            });
+
+            applyTheme();
+            applyFont();
+        }
+
+        function editTitle() {
+            const titleElement = document.getElementById('listTitle');
+            const currentTitle = titleElement.textContent;
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentTitle;
+            input.className = 'title-input';
+            input.style.fontSize = '1em';
+            input.style.fontWeight = '700';
+            input.style.width = '100%';
+            input.style.padding = '5px';
+            input.style.border = '2px solid var(--button-background-color)';
+            input.style.borderRadius = '6px';
+            input.style.backgroundColor = 'var(--card-color)';
+            input.style.color = 'var(--text-color)';
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveTitle(this.value);
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                saveTitle(this.value);
+            });
+            
+            titleElement.innerHTML = '';
+            titleElement.appendChild(input);
+            input.focus();
+            input.select();
+        }
+
+        function saveTitle(newTitle) {
+            listTitle = newTitle.trim() || "Todo List";
+            document.getElementById('listTitle').textContent = listTitle;
+            document.title = listTitle;
+        }
+
+        function handleFileUpload(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const markdownText = e.target.result;
+                const lines = markdownText.split('\n');
+                const newTodos = [];
+                let currentPriority = 'normal';
+                let foundContent = false;
+                let inMetadata = false;
+
+                lines.forEach(line => {
+                    line = line.trim();
+
+                    if (line === '---') {
+                        inMetadata = !inMetadata;
+                        foundContent = true;
+                        return;
+                    }
+
+                    if (inMetadata) {
+                        const [key, value] = line.split(':').map(part => part.trim());
+                        if (value) {
+                            switch(key.toLowerCase()) {
+                                case 'style':
+                                    currentTheme = value.toLowerCase();
+                                    break;
+                                case 'theme':
+                                    isDarkMode = (value.toLowerCase() === 'dark');
+                                    break;
+                                case 'font':
+                                    currentFont = value.toLowerCase();
+                                    break;
+                                case 'mode':
+                                    isMarkdownMode = (value.toLowerCase() === 'markdown');
+                                    break;
+                            }
+                        }
+                        return;
+                    }
+                    
+                    if (line.startsWith('# ')) {
+                        listTitle = line.substring(2).trim();
+                        document.getElementById('listTitle').textContent = listTitle;
+                        document.title = listTitle;
+                        foundContent = true;
+                        return;
+                    }
+
+                    if (line.startsWith('## High Priority')) {
+                        currentPriority = 'high';
+                        foundContent = true;
+                        return;
+                    }
+                    if (line.startsWith('## Normal Priority')) {
+                        currentPriority = 'normal';
+                        foundContent = true;
+                        return;
+                    }
+
+                    if (line.startsWith('- [')) {
+                        const completed = line[3] === 'x';
+                        const text = line.substring(5).trim();
+                        if (text) {
+                            newTodos.push({
+                                id: Date.now() + Math.random(),
+                                text: text,
+                                completed: completed,
+                                priority: currentPriority,
+                                createdAt: new Date().toISOString(),
+                                tags: extractTags(text),
+                                mentions: extractMentions(text)
+                            });
+                            foundContent = true;
+                        }
+                    }
+                });
+
+                if (!foundContent) {
+                    showNotification('No valid content found in the imported file. Please check the format.');
+                    return;
+                }
+
+                if (newTodos.length > 0) {
+                    todos = newTodos;
+                }
+                
+                setInitialStates();
+                applyTheme();
+                applyFont();
+                renderTodos();
+                showNotification('File imported successfully!');
+            };
+            reader.readAsText(file);
+        }
+
+        function editTodo(id) {
+            const todoSpan = event.target;
+            if (!todoSpan.classList.contains('todo-text')) return;
+            
+            const currentText = todoSpan.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentText;
+            input.className = 'edit-todo-input';
+            input.style.width = '100%';
+            input.style.padding = '5px';
+            input.style.border = '2px solid var(--button-background-color)';
+            input.style.borderRadius = '6px';
+            input.style.backgroundColor = 'var(--card-color)';
+            input.style.color = 'var(--text-color)';
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveTodoEdit(id, this.value);
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                saveTodoEdit(id, this.value);
+            });
+            
+            todoSpan.innerHTML = '';
+            todoSpan.appendChild(input);
+            input.focus();
+            input.select();
+        }
+
+        function saveTodoEdit(id, newText) {
+            if (newText.trim()) {
+                todos = todos.map(todo =>
+                    todo.id === id ? {
+                        ...todo, 
+                        text: newText.trim(),
+                        tags: extractTags(newText),
+                        mentions: extractMentions(newText)
+                    } : todo
+                );
+                applyFilterAndSearch();
+            } else {
+                applyFilterAndSearch();
+            }
+        }
+        
+        function extractTags(text) {
+            const matches = text.match(/#[\w-]+/g) || [];
+            return new Set(matches);
+        }
+
+        function extractMentions(text) {
+            const matches = text.match(/@[\w-]+/g) || [];
+            return new Set(matches);
+        }
+
+        function formatContent(content) {
+            return content
+                .replace(/#[\w-]+/g, match => `<span class="tag">${match}</span>`)
+                .replace(/@[\w-]+/g, match => `<span class="mention">${match}</span>`);
+        }
+
+        
+        function toggleMarkdownMode() {
+            const listMode = document.getElementById('listMode');
+            const markdownMode = document.getElementById('markdownMode');
+            const modeToggleBtn = document.getElementById('modeToggleBtn');
+            const searchContainer = document.querySelector('.search-container');
+            const markdownEditor = document.getElementById('markdownEditor');
+
+            isMarkdownMode = !isMarkdownMode;
+
+            if (isMarkdownMode) {
+                try {
+                    listMode.style.display = 'none';
+                    markdownMode.style.display = 'block';
+                    searchContainer.style.visibility = 'hidden';
+                    modeToggleBtn.textContent = 'List Mode';
+
+                    const markdownContent = generateMarkdown();
+                    markdownEditor.value = markdownContent;
+                } catch (error) {
+                    console.error('Error switching to markdown mode:', error);
+                    isMarkdownMode = false;
+                }
+            } else {
+                try {
+                    const currentMarkdown = markdownEditor.value;
+                    const lines = currentMarkdown.split('\n');
+                    const newTodos = [];
+                    let currentPriority = 'normal';
+                    
+                    const titleLine = lines.find(line => line.trim().startsWith('# '));
+                    if (titleLine) {
+                        const newTitle = titleLine.substring(2).trim();
+                        listTitle = newTitle;
+                        document.getElementById('listTitle').textContent = listTitle;
+                        document.title = listTitle;
+                    }
+
+                    lines.forEach(line => {
+                        line = line.trim();
+                        if (line.startsWith('## High Priority')) {
+                            currentPriority = 'high';
+                        } else if (line.startsWith('## Normal Priority')) {
+                            currentPriority = 'normal';
+                        } else if (line.startsWith('- [')) {
+                            const completed = line[3] === 'x';
+                            const text = line.substring(5).trim();
+                            if (text) {
+                                newTodos.push({
+                                    id: Date.now() + Math.random(),
+                                    text: text,
+                                    completed: completed,
+                                    priority: currentPriority,
+                                    createdAt: new Date().toISOString(),
+                                    tags: extractTags(text),
+                                    mentions: extractMentions(text)
+                                });
+                            }
+                        }
+                    });
+
+                    if (newTodos.length > 0) {
+                        todos = newTodos;
+                    }
+                    
+                    listMode.style.display = 'block';
+                    markdownMode.style.display = 'none';
+                    searchContainer.style.visibility = 'visible';
+                    modeToggleBtn.textContent = 'Markdown Mode';
+                    
+                    renderTodos();
+                } catch (error) {
+                    console.error('Error switching to list mode:', error);
+                    isMarkdownMode = true;
+                }
+            }
+
+            toggleMenu();
+        }
+
+        function setupMarkdownSync() {
+            const markdownEditor = document.getElementById('markdownEditor');
+            
+            markdownEditor.removeEventListener('input', handleMarkdownInput);
+            markdownEditor.addEventListener('input', handleMarkdownInput);
+        }
+
+        function handleMarkdownInput(event) {
+            const markdownContent = event.target.value;
+            try {
+                const lines = markdownContent.split('\n');
+                const newTodos = [];
+                let currentPriority = 'normal';
+                let inMetadata = false;
+                let metadataChanged = false;
+
+                lines.forEach(line => {
+                    line = line.trim();
+
+                    if (line === '---') {
+                        inMetadata = !inMetadata;
+                        return;
+                    }
+
+                    if (inMetadata) {
+                        const [key, value] = line.split(':').map(part => part.trim());
+                        if (value) {
+                            switch(key.toLowerCase()) {
+                                case 'style':
+                                    if (currentTheme !== value.toLowerCase()) {
+                                        currentTheme = value.toLowerCase();
+                                        metadataChanged = true;
+                                    }
+                                    break;
+                                case 'theme':
+                                    const newDarkMode = (value.toLowerCase() === 'dark');
+                                    if (isDarkMode !== newDarkMode) {
+                                        isDarkMode = newDarkMode;
+                                        metadataChanged = true;
+                                    }
+                                    break;
+                                case 'font':
+                                    if (currentFont !== value.toLowerCase()) {
+                                        currentFont = value.toLowerCase();
+                                        metadataChanged = true;
+                                    }
+                                    break;
+                                case 'mode':
+                                    const newMarkdownMode = (value.toLowerCase() === 'markdown');
+                                    if (isMarkdownMode !== newMarkdownMode) {
+                                        isMarkdownMode = newMarkdownMode;
+                                        metadataChanged = true;
+                                    }
+                                    break;
+                            }
+                        }
+                        return;
+                    }
+
+                    if (line.startsWith('# ')) {
+                        const newTitle = line.substring(2).trim();
+                        if (listTitle !== newTitle) {
+                            listTitle = newTitle;
+                            document.getElementById('listTitle').textContent = listTitle;
+                            document.title = listTitle;
+                            // Update the markdown editor to reflect the title change
+                            const markdownEditor = document.getElementById('markdownEditor');
+                            const currentContent = markdownEditor.value;
+                            const titleRegex = /^# .+$/m;
+                            markdownEditor.value = currentContent.replace(titleRegex, `# ${newTitle}`);
+                        }
+                        return;
+                    }
+
+                    if (line.startsWith('## High Priority')) {
+                        currentPriority = 'high';
+                        return;
+                    }
+                    if (line.startsWith('## Normal Priority')) {
+                        currentPriority = 'normal';
+                        return;
+                    }
+
+                    if (line.startsWith('- [')) {
+                        const completed = line[3] === 'x';
+                        const text = line.substring(5).trim();
+                        if (text) {
+                            newTodos.push({
+                                id: Date.now() + Math.random(),
+                                text: text,
+                                completed: completed,
+                                priority: currentPriority,
+                                createdAt: new Date().toISOString(),
+                                tags: extractTags(text),
+                                mentions: extractMentions(text)
+                            });
+                        }
+                    }
+                });
+
+                if (JSON.stringify(todos) !== JSON.stringify(newTodos) || metadataChanged) {
+                    todos = newTodos;
+                    if (metadataChanged) {
+                        setInitialStates();
+                        applyTheme();
+                        applyFont();
+                    }
+                    renderTodos();
+                }
+            } catch (error) {
+                console.error('Error parsing markdown:', error);
+            }
+        }
+
+        function applyMarkdownChanges() {
+            const markdownContent = document.getElementById('markdownEditor').value;
+            handleMarkdownInput({ target: { value: markdownContent } });
+        }
+
+        document.querySelector('.markdown-toolbar').innerHTML = `
+            <button onclick="toggleMarkdownMode()">View as List</button>
+        `;
+
+        function generateMarkdown() {
+            let markdown = "";
+            
+            markdown += "---\n";
+            markdown += `style: ${currentTheme}\n`;
+            markdown += `theme: ${isDarkMode ? 'dark' : 'light'}\n`;
+            markdown += `font: ${currentFont}\n`;
+            markdown += `mode: ${isMarkdownMode ? 'markdown' : 'standard'}\n`;
+            markdown += "---\n\n";
+            
+            markdown += `# ${listTitle}\n\n`;
+            
+            markdown += "## High Priority\n\n";
+            todos.filter(todo => todo.priority === 'high')
+                .forEach(todo => {
+                    markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+                });
+
+            markdown += "\n## Normal Priority\n\n";
+            todos.filter(todo => todo.priority === 'normal')
+                .forEach(todo => {
+                    markdown += `- [${todo.completed ? 'x' : ' '}] ${todo.text}\n`;
+                });
+
+            return markdown;
+        }
+
+        document.getElementById('mdFileInput').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                handleFileUpload(e.target.files[0]);
+                toggleMenu();
+                this.value = '';
+            }
+        });
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.menu-button')) {
+                const dropdowns = document.getElementsByClassName("menu-content");
+                for (let dropdown of dropdowns) {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                }
+            }
+
+            if (event.target.classList.contains('modal')) {
+                closeImportModal();
+            }
+        }
+
+        window.addEventListener('load', initialize);
+
+    </script>
+</body>
+
+<footer>
+    <p id="versionNumber"></p>
+    <p>Find this project on <a href="https://github.com/Caddickbrown/SApps/">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
+  
+    <script>
+        document.querySelectorAll("#versionNumber").forEach(function(element) {
+            element.innerHTML = "v" + versionNumber;
+            element.onclick = () => showPopup('version-info-popup');
+        });
+    </script>
+</footer>
+</html>

@@ -66,12 +66,7 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
-### [5.5.0] - 2025-01-
-
-#### Changed
-
-- [ ] Upgraded Markdown Mode so still have Menu Access
-- [ ] Ticking a todo while filtered now doesn't reset the filter
+### [5.7.0] - 2025-01-
 
 ### [6.0.0] - 2025-01-
 
@@ -80,22 +75,16 @@ To change the default theme you just need to "uncomment" out the theme you want 
 - [ ] Tips Animation
 - [ ] Filter on Tags/Mentions
 - [ ] Local Save (Shouldn't be relied on - but will save some data)
-- [ ] Version info cards
 
 #### Changed
 
-- [ ] Import by File - Now a button in Menu
 - [ ] UI Utilities now handled in one section
 - [ ] Event Handlers now handled in one section
+- [ ] Handling of Exports - Consolidated
 
 #### Fixed
 
-- [ ] Version info pop up now Scrollable
-
-#### Removed
-
-- [ ] Import by Text - Replaced by Markdown Mode
-- [ ] Import Modal
+- [ ] Markdown Mode Toggle now works as "Default" rather than "Current" Mode
 
 ### Planned Functionality
 - Favicon
@@ -122,6 +111,44 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+
+### [5.6.0] - 2025-01-14
+
+#### Added
+
+- [x] Link to Full Changelog in Version Info
+
+#### Changed
+
+- [x] Import by File - Now a button in Menu
+
+#### Removed
+
+- [x] Import by Text - Replaced by Markdown Mode
+- [x] Import Modal - Replaced by Markdown Mode
+- [x] Historical Changelog - Save Space and full history can be found in README
+
+### [5.5.0] - 2025-01-14
+
+#### Added
+
+- [x] Markdown Mode Toggle to Export
+- [x] Version info cards
+
+#### Changed
+
+- [x] Upgraded Markdown Mode to be more of a "Mode" than a Pop Up
+- [x] Ticking a todo while filtered now doesn't reset the filter
+- [x] Clicking a Filter now Resets the Search bar
+
+#### Fixed
+
+- [x] Version info pop up now Scrollable
+
+#### Removed
+
+- [x] Duplicate Initialise function
+- [x] Favicon references
 
 ### [5.0.0] - 2025-01-14
 
