@@ -85,7 +85,7 @@
         }
         body a:link, body a:visited {
             color: var(--default-text-color);
-            transition: color 0.3s ease, color 0.3s ease;
+            transition: color 0.3s ease;
         }
         body a:hover {
             color: var(--link-hover-color);
@@ -475,7 +475,7 @@
 
         .search-container {
             position: relative;
-            margin-bottom: 20px;
+            width: 50%;
         }
 
         .search-input {
@@ -611,6 +611,21 @@
             margin: 5px 0;
         }
 
+        @keyframes tipFade {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tip-animation {
+            animation: tipFade 0.5s ease-out;
+        }
+
     </style>
 </head>
 <body>
@@ -645,12 +660,11 @@
             </div>
     
             <div class="add-todo">
-                <input type="text" id="newTodo" placeholder="Add a new todo... Use #tags and @mentions" onkeypress="handleKeyPress(event)">
+                <input type="text" id="newTodo" placeholder="" onkeypress="handleKeyPress(event)">
                 <button onclick="addTodo()">Add Task</button>
             </div>
     
             <div class="todo-list" id="todoList">
-                <!-- Todo items will be rendered here -->
             </div>
         </div>
     
@@ -698,6 +712,15 @@
             <h2>Version Info</h2>
 
             <div class="version-card">
+                <h3>v5.7.0 - 2025-01-</h3>
+                
+                        <h4>Added:</h4>
+                        <ul>
+                            <li>Limited Local Save (Shouldn't be relied on - but will save you reloading everything constantly)</li>
+                        </ul>
+            </div>
+
+            <div class="version-card">
                 <h3>v5.6.0 - 2025-01-14</h3>
                 
                         <h4>Added:</h4>
@@ -715,33 +738,6 @@
                             <li>Import by Text - Replaced by Markdown Mode</li>
                             <li>Import Modal - Replaced by Markdown Mode</li>
                             <li>Historical Changelog - Save Space and full history can be found in README</li>
-                        </ul>
-            </div>
-
-            <div class="version-card">
-                <h3>v5.5.0 - 2025-01-14</h3>
-                
-                        <h4>Added:</h4>
-                        <ul>
-                            <li>Markdown Mode Toggle to Export</li>
-                        </ul>
-                        
-                        <h4>Changed:</h4>
-                        <ul>
-                            <li>Upgraded Markdown Mode to be more of a "Mode" than a Pop Up</li>
-                            <li>Ticking a todo while filtered now doesn't reset the filter</li>
-                            <li>Clicking a Filter now Resets the Search bar</li>
-                        </ul>
-                        
-                        <h4>Fixed:</h4>
-                        <ul>
-                            <li>Version info pop up now Scrollable</li>
-                        </ul>
-                        
-                        <h4>Removed:</h4>
-                        <ul>
-                            <li>Duplicate Initialise function</li>
-                            <li>Favicon references</li>
                         </ul>
             </div>
 
@@ -777,11 +773,12 @@
         ];
         
         function initialize() {
+            loadFromLocalStorage();
             setInitialStates();
             renderTodos();
             initializeDragAndDrop();
-            createImportModal();
             cyclePlaceholder();
+            setInterval(cyclePlaceholder, 5000);
             
             const listMode = document.getElementById('listMode');
             const markdownMode = document.getElementById('markdownMode');
@@ -803,6 +800,38 @@
             }
         }
 
+        function applyAllStyles() {
+            setInitialStates();
+            applyTheme();
+            applyFont();
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        const debouncedSave = debounce(() => {
+            const appState = {
+                todos,
+                listTitle,
+                isDarkMode,
+                currentTheme,
+                currentFont,
+                isMarkdownMode,
+                currentFilter,
+                currentSearchTerm
+            };
+            localStorage.setItem('todoAppState', JSON.stringify(appState));
+        }, 1000);
+
         function applyTheme() {
             const mode = isDarkMode ? 'dark' : 'light';
             
@@ -817,22 +846,20 @@
             document.documentElement.style.setProperty('--button-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
             document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
             document.documentElement.style.setProperty('--link-hover-color', `var(--${currentTheme}-${mode}-button-background-color)`);
-
         }
 
         function toggleDarkMode() {
             isDarkMode = !isDarkMode;
             applyTheme();
+            debouncedSave();
             toggleMenu();
         }
 
         function cyclePlaceholder() {
             const todoInput = document.getElementById('newTodo');
-            todoInput.placeholder = placeholderTips[currentTipIndex];
-            currentTipIndex = (currentTipIndex + 1) % placeholderTips.length;
+                    todoInput.placeholder = placeholderTips[currentTipIndex];
+                    currentTipIndex = (currentTipIndex + 1) % placeholderTips.length;
         }
-
-        setInterval(cyclePlaceholder, 5000);
 
         function changeTheme(themeName) {
             currentTheme = themeName;
@@ -845,6 +872,7 @@
             });
             
             applyTheme();
+            debouncedSave();
         }
 
         function changeFont(fontName) {
@@ -858,6 +886,7 @@
             });
             
             applyFont();
+            debouncedSave();
         }
 
         function applyFont() {
@@ -908,6 +937,7 @@
                 });
                 input.value = '';
                 applyFilterAndSearch();
+                debouncedSave();
             }
         }
 
@@ -922,6 +952,7 @@
                 todo.id === id ? {...todo, completed: !todo.completed} : todo
             );
             applyFilterAndSearch();
+            debouncedSave();
         }
 
         function togglePriority(id) {
@@ -931,11 +962,13 @@
                     : todo
             );
             applyFilterAndSearch();
+            debouncedSave();
         }
 
         function deleteTodo(id) {
             todos = todos.filter(todo => todo.id !== id);
             applyFilterAndSearch();
+            debouncedSave();
         }
 
         function renderTodos(filter = null) {
@@ -943,6 +976,7 @@
                 currentFilter = filter;
             }
             applyFilterAndSearch();
+            debouncedSave();
         }
 
         function filterTodos(filter) {
@@ -1366,9 +1400,7 @@
                     todos = newTodos;
                 }
                 
-                setInitialStates();
-                applyTheme();
-                applyFont();
+                applyAllStyles()
                 renderTodos();
                 showNotification('File imported successfully!');
             };
@@ -1437,6 +1469,62 @@
             return content
                 .replace(/#[\w-]+/g, match => `<span class="tag">${match}</span>`)
                 .replace(/@[\w-]+/g, match => `<span class="mention">${match}</span>`);
+        }
+
+        function saveToLocalStorage() {
+            const appState = {
+                todos,
+                listTitle,
+                isDarkMode,
+                currentTheme,
+                currentFont,
+                isMarkdownMode,
+                currentFilter,
+                currentSearchTerm
+            };
+            localStorage.setItem('todoAppState', JSON.stringify(appState));
+        }
+
+        function loadFromLocalStorage() {
+            const savedState = localStorage.getItem('todoAppState');
+            if (savedState) {
+                try {
+                    const appState = JSON.parse(savedState);
+                    
+                    todos = appState.todos || [];
+                    
+                    listTitle = appState.listTitle || "Todo List";
+                    document.getElementById('listTitle').textContent = listTitle;
+                    document.title = listTitle;
+                    
+                    isDarkMode = appState.isDarkMode !== undefined ? appState.isDarkMode : true;
+                    currentTheme = appState.currentTheme || 'default';
+                    currentFont = appState.currentFont || 'monospace';
+                    
+                    isMarkdownMode = appState.isMarkdownMode || false;
+                    currentFilter = appState.currentFilter || 'all';
+                    currentSearchTerm = appState.currentSearchTerm || '';
+                    
+                    const searchInput = document.getElementById('searchInput');
+                    if (searchInput && currentSearchTerm) {
+                        searchInput.value = currentSearchTerm;
+                    }
+                } catch (error) {
+                    console.error('Error loading saved state:', error);
+                    resetToDefaults();
+                }
+            }
+        }
+
+        function resetToDefaults() {
+            todos = [];
+            listTitle = "Todo List";
+            isDarkMode = true;
+            currentTheme = 'default';
+            currentFont = 'monospace';
+            isMarkdownMode = false;
+            currentFilter = 'all';
+            currentSearchTerm = '';
         }
 
         
@@ -1622,9 +1710,7 @@
                 if (JSON.stringify(todos) !== JSON.stringify(newTodos) || metadataChanged) {
                     todos = newTodos;
                     if (metadataChanged) {
-                        setInitialStates();
-                        applyTheme();
-                        applyFont();
+                        applyAllStyles()
                     }
                     renderTodos();
                 }

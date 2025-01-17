@@ -68,13 +68,26 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ### [5.7.0] - 2025-01-
 
+#### Added
+
+- [x] Limited Local Save (Shouldn't be relied on - but will save you reloading everything constantly)
+- [ ] Add input validation
+- [ ] Add loading states
+- [ ] Enhance error messages
+
+#### Changed
+
+- [x] Consolidated duplicate code
+- [ ] Clean up CSS
+
+#### Fixed
+
+- [ ] Fix missing error handling
+
 ### [6.0.0] - 2025-01-
 
 #### Added
-
-- [ ] Tips Animation
 - [ ] Filter on Tags/Mentions
-- [ ] Local Save (Shouldn't be relied on - but will save some data)
 
 #### Changed
 
@@ -84,9 +97,12 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 #### Fixed
 
-- [ ] Markdown Mode Toggle now works as "Default" rather than "Current" Mode
+- [ ] Markdown Mode Toggle now works as "Default" rather than "Current" Mode (Needs to be manually changed)
 
 ### Planned Functionality
+- Tips Animation
+- Due Dates
+- Recurring Tasks
 - Favicon
 
 ## Dependencies
