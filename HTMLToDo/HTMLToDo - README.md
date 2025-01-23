@@ -104,6 +104,12 @@ To change the default theme you just need to "uncomment" out the theme you want 
 - Due Dates
 - Recurring Tasks
 - Favicon
+- Sorting
+- Randomise Order
+- Select Random Task to Highlight
+- "Working On" Highlight
+- Work On Random Task
+- Clear Done Tasks
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
