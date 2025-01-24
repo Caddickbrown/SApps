@@ -66,50 +66,37 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
-### [5.7.0] - 2025-01-
+### [5.7.1] - 2025-01-
 
 #### Added
 
-- [x] Limited Local Save (Shouldn't be relied on - but will save you reloading everything constantly)
-- [ ] Add input validation
-- [ ] Add loading states
-- [ ] Enhance error messages
-
-#### Changed
-
-- [x] Consolidated duplicate code
-- [ ] Clean up CSS
-
-#### Fixed
-
-- [ ] Fix missing error handling
+- [x] To Do Count (In menu)
+- [x] "Working On" Highlight
 
 ### [6.0.0] - 2025-01-
 
 #### Added
 - [ ] Filter on Tags/Mentions
+- [ ] Work On Random Task
+- [ ] Clear Done Tasks
 
 #### Changed
 
 - [ ] UI Utilities now handled in one section
 - [ ] Event Handlers now handled in one section
 - [ ] Handling of Exports - Consolidated
+- [ ] Clean up CSS
 
 #### Fixed
 
-- [ ] Markdown Mode Toggle now works as "Default" rather than "Current" Mode (Needs to be manually changed)
+- [ ] Markdown Mode Toggle now works as a "Default" rather than "Current" Mode (Needs to be manually changed)
+- [ ] Working On Mode now doesn't remove Priority
 
 ### Planned Functionality
-- Tips Animation
-- Due Dates
-- Recurring Tasks
-- Favicon
-- Sorting
-- Randomise Order
-- Select Random Task to Highlight
-- "Working On" Highlight
-- Work On Random Task
-- Clear Done Tasks
+- [ ] Tips Animation
+- [ ] Due Dates
+- [ ] Recurring Tasks
+- [ ] Favicon
 
 ## Dependencies
 I try to reduce the dependencies as much as possible, but some may be necessary for the functionality of the application.
@@ -133,6 +120,16 @@ Thank you!
 This project is licensed under the MIT License.
 
 ## Change Log
+
+### [5.7.0] - 2025-01-21
+
+#### Added
+
+- [x] Limited Local Save (Shouldn't be relied on - but will save you reloading everything constantly)
+
+#### Changed
+
+- [x] Consolidated duplicate code
 
 ### [5.6.0] - 2025-01-14
 

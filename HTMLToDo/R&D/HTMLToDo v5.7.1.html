@@ -652,6 +652,13 @@
         .tip-animation {
             animation: tipFade 0.5s ease-out;
         }
+        
+        .todo-count {
+            margin-left: 20px;
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
 
     </style>
 </head>
@@ -672,6 +679,7 @@
                 <button onclick="copyRemainingTasks()">Copy Remaining Tasks</button>
                 <button onclick="document.getElementById('mdFileInput').click()">Import File</button>
                 <input type="file" id="mdFileInput" accept=".md" style="display: none;">
+                <div class="todo-count" id="todoCount" style="color: var(--text-color);"></div>
             </div>
         </div>
     </div>
@@ -739,33 +747,32 @@
             <h2>Version Info</h2>
 
             <div class="version-card">
-                <h3>v5.7.0 - 2025-01-</h3>
+                <h3>v5.7.1 - 2025-01-21</h3>
                 
-                        <h4>Added:</h4>
-                        <ul>
-                            <li>Limited Local Save (Shouldn't be relied on - but will save you reloading everything constantly)</li>
-                        </ul>
+                    <h4>Added:</h4>
+                    <ul>
+                        <li>"Working On" Highlight</li>
+                        <li>To Do Count (In menu)</li>
+                    </ul>
+                    
+                    <h4>Changed:</h4>
+                    <ul>
+                        <li>Consolidated duplicate code</li>
+                    </ul>
             </div>
 
             <div class="version-card">
-                <h3>v5.6.0 - 2025-01-14</h3>
+                <h3>v5.7.0 - 2025-01-21</h3>
                 
-                        <h4>Added:</h4>
-                        <ul>
-                            <li>Link to Full Changelog in Version Info</li>
-                        </ul>
-                        
-                        <h4>Changed:</h4>
-                        <ul>
-                            <li>Import by File - Now a button in Menu</li>
-                        </ul>
-                        
-                        <h4>Removed:</h4>
-                        <ul>
-                            <li>Import by Text - Replaced by Markdown Mode</li>
-                            <li>Import Modal - Replaced by Markdown Mode</li>
-                            <li>Historical Changelog - Save Space and full history can be found in README</li>
-                        </ul>
+                    <h4>Added:</h4>
+                    <ul>
+                        <li>Limited Local Save (Shouldn't be relied on - but will save you reloading everything constantly)</li>
+                    </ul>
+                    
+                    <h4>Changed:</h4>
+                    <ul>
+                        <li>Consolidated duplicate code</li>
+                    </ul>
             </div>
 
             <div class="version-card">
@@ -782,7 +789,7 @@
         let isMarkdownMode = false;
         let listTitle = "Todo List";
 
-        let versionNumber = "5.7.0";
+        let versionNumber = "5.7.1";
         let todos = [];
         let currentFilter = 'all';
         let currentSearchTerm = '';
@@ -803,6 +810,7 @@
             loadFromLocalStorage();
             setInitialStates();
             renderTodos();
+            updateTodoCount();
             initializeDragAndDrop();
             cyclePlaceholder();
             setInterval(cyclePlaceholder, 5000);
@@ -965,6 +973,7 @@
                 });
                 input.value = '';
                 applyFilterAndSearch();
+                updateTodoCount();
                 debouncedSave();
             }
         }
@@ -980,6 +989,7 @@
                 todo.id === id ? {...todo, completed: !todo.completed} : todo
             );
             applyFilterAndSearch();
+            updateTodoCount();
             debouncedSave();
         }
 
@@ -1005,6 +1015,7 @@
         function deleteTodo(id) {
             todos = todos.filter(todo => todo.id !== id);
             applyFilterAndSearch();
+            updateTodoCount();
             debouncedSave();
         }
 
@@ -1450,6 +1461,7 @@
                 
                 applyAllStyles()
                 renderTodos();
+                updateTodoCount();
                 showNotification('File imported successfully!');
             };
             reader.readAsText(file);
@@ -1803,6 +1815,15 @@
                 });
 
             return markdown;
+        }
+
+        function updateTodoCount() {
+            const total = todos.length;
+            const completed = todos.filter(todo => todo.completed).length;
+            const remaining = total - completed;
+            
+            document.getElementById('todoCount').textContent = 
+                `${remaining} remaining todos`;
         }
 
         document.getElementById('mdFileInput').addEventListener('change', function(e) {
