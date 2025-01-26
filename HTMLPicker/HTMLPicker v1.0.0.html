@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Random Picker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            position: relative;
+        }
+
+        .import-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .import-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            color: #333;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 1rem;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.3s;
+        }
+
+        button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .options-list {
+            margin: 20px 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .option-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+
+        .option-item:hover {
+            transform: translateX(5px);
+        }
+
+        .delete-btn {
+            background: #ff4444;
+            padding: 5px 10px;
+            margin-left: 10px;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: #ff4444;
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 2;
+        }
+
+        .result {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            min-height: 36px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .result.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes celebration {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .celebrating {
+            animation: celebration 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Decider</h1>
+        
+        <button class="import-button" onclick="openImportModal()">Import List</button>
+
+        <div class="input-section">
+            <input type="text" id="optionInput" placeholder="Enter an option...">
+            <button onclick="addOption()">Add</button>
+        </div>
+
+        <ul class="options-list" id="optionsList"></ul>
+
+        <div class="wheel-container">
+            <div class="wheel-pointer"></div>
+            <div class="wheel" id="wheel"></div>
+        </div>
+
+        <div class="result" id="result"></div>
+
+        <button onclick="spin()" id="spinButton">Spin the Wheel!</button>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Import List</h2>
+                <button class="modal-close" onclick="closeImportModal()">&times;</button>
+            </div>
+            <p>Paste/Write your list below</p>
+            <textarea id="markdownInput" placeholder="Option 1&#10;Option 2&#10;Option 3"></textarea>
+            <button onclick="importList()">Import</button>
+        </div>
+    </div>
+
+    <script>
+        let options = [];
+        let isSpinning = false;
+
+        const optionInput = document.getElementById('optionInput');
+        const optionsList = document.getElementById('optionsList');
+        const wheel = document.getElementById('wheel');
+        const result = document.getElementById('result');
+        const spinButton = document.getElementById('spinButton');
+        const importModal = document.getElementById('importModal');
+        const markdownInput = document.getElementById('markdownInput');
+
+        optionInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addOption();
+            }
+        });
+
+        function openImportModal() {
+            importModal.classList.add('show');
+        }
+
+        function closeImportModal() {
+            importModal.classList.remove('show');
+        }
+
+        function importList() {
+            const markdown = markdownInput.value;
+            const lines = markdown.split('\n');
+            
+            const newOptions = lines
+                .map(line => line.trim())
+                .filter(line => line.length > 0);
+
+            if (newOptions.length > 0) {
+                options = [...new Set([...options, ...newOptions])];
+                updateOptionsList();
+                updateWheel();
+                closeImportModal();
+                markdownInput.value = '';
+            }
+        }
+
+        function addOption() {
+            const value = optionInput.value.trim();
+            if (value && !options.includes(value)) {
+                options.push(value);
+                updateOptionsList();
+                updateWheel();
+                optionInput.value = '';
+            }
+        }
+
+        function deleteOption(index) {
+            options.splice(index, 1);
+            updateOptionsList();
+            updateWheel();
+        }
+
+        function updateOptionsList() {
+            optionsList.innerHTML = '';
+            options.forEach((option, index) => {
+                const li = document.createElement('li');
+                li.className = 'option-item';
+                li.innerHTML = `
+                    <span>${option}</span>
+                    <button class="delete-btn" onclick="deleteOption(${index})">×</button>
+                `;
+                optionsList.appendChild(li);
+            });
+        }
+
+        function updateWheel() {
+            if (options.length === 0) {
+                wheel.style.background = '#ccc';
+                return;
+            }
+
+            const pieSize = 360 / options.length;
+            wheel.style.background = `conic-gradient(${options.map((option, index) => {
+                const start = index * pieSize;
+                const color = `hsl(${start}, 70%, 50%)`;
+                return `${color} ${start}deg ${start + pieSize}deg`;
+            }).join(', ')})`;
+        }
+
+        function spin() {
+            if (isSpinning || options.length < 2) return;
+            isSpinning = true;
+            result.classList.remove('show');
+            spinButton.disabled = true;
+
+            const randomDegrees = Math.floor(Math.random() * 360);
+            const extraSpins = 5 * 360; // 5 full rotations
+            const totalDegrees = extraSpins + randomDegrees;
+            
+            wheel.style.transform = `rotate(${totalDegrees}deg)`;
+
+            setTimeout(() => {
+                const selectedIndex = Math.floor(options.length * (randomDegrees / 360));
+                const selectedOption = options[selectedIndex];
+                
+                result.textContent = `${selectedOption}`;
+                result.classList.add('show', 'celebrating');
+                
+                setTimeout(() => {
+                    result.classList.remove('celebrating');
+                    isSpinning = false;
+                    spinButton.disabled = false;
+                }, 500);
+            }, 4000);
+        }
+
+        // Initialize the wheel
+        updateWheel();
+    </script>
+</body>
+</html>
