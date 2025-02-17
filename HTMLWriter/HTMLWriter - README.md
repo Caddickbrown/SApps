@@ -38,8 +38,10 @@ To change the default theme you just need to "uncomment" out the theme you want 
 ### v4.0.0 - 
 
 #### Added
+
 - [ ] To Do Buttons
 - [ ] Bullet Point Buttons
+- [x] Coloured Caret
 
 #### Changed
 
