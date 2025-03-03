@@ -986,7 +986,11 @@
 
         function toggleTodo(id) {
             todos = todos.map(todo =>
-                todo.id === id ? {...todo, completed: !todo.completed} : todo
+                todo.id === id ? {
+                    ...todo, 
+                    completed: !todo.completed,
+                    workingOn: todo.workingOn && !todo.completed ? false : todo.workingOn
+                } : todo
             );
             applyFilterAndSearch();
             updateTodoCount();

@@ -66,19 +66,20 @@ To change the default theme you just need to "uncomment" out the theme you want 
 
 ## Roadmap
 
-### [5.7.1] - 2025-01-
+### [5.7.1] - 2025--
 
 #### Added
 
 - [x] To Do Count (In menu)
-- [x] "Working On" Highlight
+- [x] "Working On" Highlight (turns off when completed)
 
-### [6.0.0] - 2025-01-
+### [6.0.0] - 2025--
 
 #### Added
 - [ ] Filter on Tags/Mentions
 - [ ] Work On Random Task
 - [ ] Clear Done Tasks
+- [ ] Randomise Order
 
 #### Changed
 
