@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote/Excerpt/Lesson JSON Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input[type="text"], input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        
+        .checkbox-label {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 20px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+        
+        .checkbox-label input {
+            margin-right: 8px;
+        }
+        
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 0 auto;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .output-container {
+            margin-top: 30px;
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .output-container h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 18px;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .actions {
+            margin-top: 15px;
+            text-align: right;
+        }
+        .copy-btn {
+            background-color: #007bff;
+            padding: 8px 15px;
+        }
+        .copy-btn:hover {
+            background-color: #0069d9;
+        }
+        .success-message {
+            color: #28a745;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: right;
+            visibility: hidden;
+        }
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        .tag {
+            background-color: #e9ecef;
+            border-radius: 4px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+        }
+        .tag button {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0 0 0 5px;
+            margin: 0;
+        }
+        .add-tag-btn {
+            margin-top: 10px;
+            background-color: #6c757d;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: #fff;
+            border-bottom: 1px solid #fff;
+            margin-bottom: -1px;
+        }
+        .panel {
+            display: none;
+        }
+        .panel.active {
+            display: block;
+        }
+        .date-added {
+            display: flex;
+            gap: 10px;
+        }
+        .date-added button {
+            margin: 0;
+            padding: 10px;
+        }
+        .custom-select {
+            position: relative;
+        }
+        .custom-select input {
+            padding-right: 30px;
+        }
+        .custom-select .dropdown {
+            position: absolute;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            z-index: 100;
+            display: none;
+        }
+        .custom-select .dropdown-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .custom-select .dropdown-item:hover {
+            background-color: #f8f8f8;
+        }
+        .author-search {
+            display: flex;
+            gap: 10px;
+        }
+        .author-search button {
+            margin: 0;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quote/Excerpt/Lesson JSON Generator</h1>
+    
+    <div class="tabs">
+        <div class="tab active" data-tab="content">Add Content</div>
+        <div class="tab" data-tab="author">Add Author</div>
+    </div>
+    
+    <div class="panel active" id="content-panel">
+        <div class="form-group">
+            <label>Type:</label>
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="radio" name="type" value="Q" checked> Quote
+                </label>
+                <label class="checkbox-label">
+                    <input type="radio" name="type" value="L"> Lesson
+                </label>
+                <label class="checkbox-label">
+                    <input type="radio" name="type" value="E"> Excerpt
+                </label>
+                <label class="checkbox-label">
+                    <input type="radio" name="type" value="T"> Tip
+                </label>
+                <label class="checkbox-label">
+                    <input type="radio" name="type" value="I"> Insight
+                </label>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="id-number">ID Number:</label>
+            <input type="number" id="id-number" min="1" value="1">
+        </div>
+        
+        <div class="form-group">
+            <label for="content-text">Content Text:</label>
+            <textarea id="content-text" placeholder="Enter your quote, lesson, excerpt, etc."></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="author-select">Author:</label>
+            <select id="author-select">
+                <option value="">-- Select Author --</option>
+                <option value="new">-- Add New Author --</option>
+            </select>
+            <div id="new-author-fields" style="display: none; margin-top: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                <div class="form-group">
+                    <label for="new-content-author-id">New Author ID:</label>
+                    <input type="text" id="new-content-author-id" placeholder="e.g. A0020">
+                </div>
+                <div class="form-group">
+                    <label for="new-content-author-name">New Author Name:</label>
+                    <input type="text" id="new-content-author-name" placeholder="Author's name">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="source">Source:</label>
+            <input type="text" id="source" placeholder="Book, article, speech, etc.">
+        </div>
+        
+        <div class="form-group">
+            <label for="date-added">Date Added:</label>
+            <div class="date-added">
+                <input type="text" id="date-added" placeholder="YYYY-MM-DD">
+                <button id="today-btn">Today</button>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="tags">Tags:</label>
+            <input type="text" id="tag-input" placeholder="Add a tag and press Enter">
+            <div class="tags-container" id="tags-container"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="commentary">Commentary:</label>
+            <textarea id="commentary" placeholder="Optional commentary or notes about this item"></textarea>
+        </div>
+        
+        <!-- Additional fields for specific types -->
+        <div id="additional-fields">
+            <!-- Dynamically populated based on selected type -->
+        </div>
+        
+        <button id="generate-btn">Generate JSON</button>
+    </div>
+    
+    <div class="panel" id="author-panel">
+        <div class="form-group">
+            <label for="new-author-id">Author ID:</label>
+            <input type="text" id="new-author-id" placeholder="e.g. A0001">
+        </div>
+        
+        <div class="form-group">
+            <label for="author-name">Name:</label>
+            <input type="text" id="author-name" placeholder="Author's name">
+        </div>
+        
+        <div class="form-group">
+            <label for="author-info">Info:</label>
+            <textarea id="author-info" placeholder="Brief description or information about the author"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="author-category">Category:</label>
+            <input type="text" id="author-category" placeholder="Add a category and press Enter">
+            <div class="tags-container" id="category-tags-container"></div>
+        </div>
+        
+        <button id="add-author-btn">Generate Author JSON</button>
+    </div>
+    
+    <div class="output-container" style="display: none;">
+        <h2>Generated JSON</h2>
+        <pre id="json-output"></pre>
+        <div class="actions">
+            <button class="copy-btn" id="copy-btn">Copy to Clipboard</button>
+        </div>
+        <div class="success-message" id="copy-success">Copied to clipboard!</div>
+    </div>
+    
+    <script>
+        // Define author data
+        const authorData = [
+            { id: "A0001", name: "Unknown" },
+            { id: "A0002", name: "David Morgan" },
+            { id: "A0003", name: "Stephen King" },
+            { id: "A0004", name: "James Clear" },
+            { id: "A0005", name: "Lucille Clifton" },
+            { id: "A0006", name: "Bill Gates" },
+            { id: "A0007", name: "Sam Levenson" },
+            { id: "A0008", name: "Cal Newport" },
+            { id: "A0009", name: "Paulo Coelho" },
+            { id: "A0010", name: "Jean-Luc Picard" },
+            { id: "A0011", name: "Sahil Lavingia" },
+            { id: "A0012", name: "Seth Godin" },
+            { id: "A0013", name: "S.A.S." },
+            { id: "A0014", name: "Robert California" },
+            { id: "A0015", name: "Sun Tzu" },
+            { id: "A0016", name: "Hubert Reeves" },
+            { id: "A0017", name: "African Proverb" },
+            { id: "A0018", name: "Rudyard Kipling" },
+            { id: "A0019", name: "Brandon Sanderson" }
+        ];
+        
+        // Populate author dropdown - this is done immediately when the page loads
+        const populateAuthorDropdown = () => {
+            const authorSelect = document.getElementById('author-select');
+            
+            // Clear existing options except the first two
+            while (authorSelect.options.length > 2) {
+                authorSelect.remove(2);
+            }
+            
+            // Add author options
+            authorData.forEach(author => {
+                const option = document.createElement('option');
+                option.value = author.id;
+                option.textContent = `${author.id} - ${author.name}`;
+                authorSelect.appendChild(option);
+            });
+        };
+        
+        // Call the populate function immediately
+        document.addEventListener('DOMContentLoaded', function() {
+            populateAuthorDropdown();
+            console.log("Authors populated in dropdown");
+        });
+        
+        // Tags functionality for content
+        const tagInput = document.getElementById('tag-input');
+        const tagsContainer = document.getElementById('tags-container');
+        let tags = [];
+        
+        tagInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== '') {
+                e.preventDefault();
+                addTag(this.value.trim());
+                this.value = '';
+            }
+        });
+        
+        function addTag(tagName) {
+            if (tags.includes(tagName)) return;
+            
+            tags.push(tagName);
+            
+            const tagElement = document.createElement('div');
+            tagElement.className = 'tag';
+            tagElement.innerHTML = `
+                ${tagName}
+                <button type="button" data-tag="${tagName}">&times;</button>
+            `;
+            
+            tagElement.querySelector('button').addEventListener('click', function() {
+                const tagToRemove = this.getAttribute('data-tag');
+                tags = tags.filter(tag => tag !== tagToRemove);
+                this.parentElement.remove();
+            });
+            
+            tagsContainer.appendChild(tagElement);
+        }
+        
+        // Author category tags
+        const categoryInput = document.getElementById('author-category');
+        const categoryTagsContainer = document.getElementById('category-tags-container');
+        let categories = [];
+        
+        categoryInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== '') {
+                e.preventDefault();
+                addCategory(this.value.trim());
+                this.value = '';
+            }
+        });
+        
+        function addCategory(categoryName) {
+            if (categories.includes(categoryName)) return;
+            
+            categories.push(categoryName);
+            
+            const categoryElement = document.createElement('div');
+            categoryElement.className = 'tag';
+            categoryElement.innerHTML = `
+                ${categoryName}
+                <button type="button" data-category="${categoryName}">&times;</button>
+            `;
+            
+            categoryElement.querySelector('button').addEventListener('click', function() {
+                const categoryToRemove = this.getAttribute('data-category');
+                categories = categories.filter(category => category !== categoryToRemove);
+                this.parentElement.remove();
+            });
+            
+            categoryTagsContainer.appendChild(categoryElement);
+        }
+        
+        // Today button functionality
+        document.getElementById('today-btn').addEventListener('click', function() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            document.getElementById('date-added').value = `${year}-${month}-${day}`;
+        });
+        
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs and panels
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                
+                // Add active class to current tab
+                this.classList.add('active');
+                
+                // Show the corresponding panel
+                const tabName = this.getAttribute('data-tab');
+                document.getElementById(tabName + '-panel').classList.add('active');
+            });
+        });
+        
+        // Show/hide new author fields based on selection
+        document.getElementById('author-select').addEventListener('change', function() {
+            const newAuthorFields = document.getElementById('new-author-fields');
+            if (this.value === 'new') {
+                newAuthorFields.style.display = 'block';
+                
+                // Generate next available author ID
+                let maxId = 0;
+                authorData.forEach(author => {
+                    const idNum = parseInt(author.id.substring(1));
+                    if (idNum > maxId) maxId = idNum;
+                });
+                
+                const nextId = `A${(maxId + 1).toString().padStart(4, '0')}`;
+                document.getElementById('new-content-author-id').value = nextId;
+            } else {
+                newAuthorFields.style.display = 'none';
+            }
+        });
+        
+        // Additional fields based on content type
+        function updateAdditionalFields() {
+            const type = document.querySelector('input[name="type"]:checked').value;
+            const additionalFieldsContainer = document.getElementById('additional-fields');
+            additionalFieldsContainer.innerHTML = '';
+            
+            if (type === 'E') {
+                // Fields for Excerpt
+                additionalFieldsContainer.innerHTML = `
+                    <div class="form-group">
+                        <label for="excerpt-title">Title:</label>
+                        <input type="text" id="excerpt-title" placeholder="Title of this excerpt">
+                    </div>
+                    <div class="form-group">
+                        <label for="work-title">Work Title:</label>
+                        <input type="text" id="work-title" placeholder="Title of the source work">
+                    </div>
+                    <div class="form-group">
+                        <label for="work-series">Series:</label>
+                        <input type="text" id="work-series" placeholder="Series name (if applicable)">
+                    </div>
+                    <div class="form-group">
+                        <label for="work-type">Work Type:</label>
+                        <input type="text" id="work-type" placeholder="Novel, Essay, Speech, etc.">
+                    </div>
+                    <div class="form-group">
+                        <label for="excerpt-characters">Characters:</label>
+                        <input type="text" id="excerpt-characters" placeholder="Characters mentioned (comma separated)">
+                    </div>
+                `;
+            } else if (type === 'L') {
+                // Fields for Lesson
+                additionalFieldsContainer.innerHTML = `
+                    <div class="form-group">
+                        <label for="source-experience">Source Experience:</label>
+                        <input type="text" id="source-experience" placeholder="What experience led to this lesson">
+                    </div>
+                    <div class="form-group">
+                        <label>Application:</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="app-personal"> Personal
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="app-business"> Business
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="app-creativity"> Creativity
+                            </label>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Update fields when type changes
+        document.querySelectorAll('input[name="type"]').forEach(radio => {
+            radio.addEventListener('change', updateAdditionalFields);
+        });
+        
+        // Initialize additional fields based on default selection
+        updateAdditionalFields();
+        
+        // Add author functionality
+        document.getElementById('add-author-btn').addEventListener('click', function() {
+            const authorId = document.getElementById('new-author-id').value.trim();
+            const authorName = document.getElementById('author-name').value.trim();
+            const authorInfo = document.getElementById('author-info').value.trim();
+            
+            if (!authorId || !authorName) {
+                alert('Please provide at least an ID and name for the author');
+                return;
+            }
+            
+            // Create author object
+            const newAuthor = {
+                id: authorId,
+                name: authorName,
+                info: authorInfo,
+                category: categories.length > 1 ? categories : categories[0] || ""
+            };
+            
+            // Add to the array
+            authorData.push({
+                id: authorId,
+                name: authorName
+            });
+            
+            // Update the dropdown
+            populateAuthorDropdown();
+            
+            // Convert to formatted JSON string
+            const jsonString = JSON.stringify(newAuthor, null, 4);
+            
+            // Display the output container
+            const outputContainer = document.querySelector('.output-container');
+            outputContainer.style.display = 'block';
+            
+            // Update the output area
+            document.getElementById('json-output').textContent = jsonString;
+            
+            // Scroll to output
+            outputContainer.scrollIntoView({ behavior: 'smooth' });
+            
+            // Reset fields
+            document.getElementById('new-author-id').value = '';
+            document.getElementById('author-name').value = '';
+            document.getElementById('author-info').value = '';
+            document.getElementById('author-category').value = '';
+            categories = [];
+            categoryTagsContainer.innerHTML = '';
+        });
+        
+        // Generate content JSON functionality
+        document.getElementById('generate-btn').addEventListener('click', function() {
+            // Get selected type from radio buttons
+            const typeRadio = document.querySelector('input[name="type"]:checked');
+            const type = typeRadio ? typeRadio.value : 'Q';
+            
+            const idNumber = document.getElementById('id-number').value.trim();
+            const content = document.getElementById('content-text').value.trim();
+            let authorId = document.getElementById('author-select').value.trim();
+            const source = document.getElementById('source').value.trim();
+            const dateAdded = document.getElementById('date-added').value.trim();
+            const commentary = document.getElementById('commentary').value.trim();
+            
+            // Validate input
+            if (!content) {
+                alert('Please enter the content text');
+                return;
+            }
+            
+            // Check if it's a new author
+            if (authorId === 'new') {
+                authorId = document.getElementById('new-content-author-id').value.trim();
+                
+                // Also create a new author object
+                const authorName = document.getElementById('new-content-author-name').value.trim();
+                
+                if (authorName.trim()) {
+                    // Add to authorData array
+                    authorData.push({
+                        id: authorId,
+                        name: authorName
+                    });
+                    
+                    // Update dropdown
+                    populateAuthorDropdown();
+                    
+                    // Create a separate author object for optional saving
+                    const newAuthorObj = {
+                        id: authorId,
+                        name: authorName,
+                        info: "",
+                        category: ""
+                    };
+                    
+                    // Log the new author
+                    console.log("Created new author:", newAuthorObj);
+                }
+            }
+            
+            // Create ID based on type and number
+            const id = `${type}${idNumber.toString().padStart(4, '0')}`;
+            
+            // Create base JSON object
+            let jsonObject = {
+                id: id,
+                text: content,
+                authorId: authorId || "",
+                dateAdded: dateAdded || getCurrentDate(),
+                tags: tags,
+                commentary: commentary || ""
+            };
+            
+            // Add source if provided
+            if (source) {
+                jsonObject.source = source;
+            }
+            
+            // Add type-specific fields
+            if (type === 'E') {
+                jsonObject.title = document.getElementById('excerpt-title').value.trim();
+                
+                // Work information
+                jsonObject.work = {
+                    title: document.getElementById('work-title').value.trim(),
+                    series: document.getElementById('work-series').value.trim(),
+                    type: document.getElementById('work-type').value.trim()
+                };
+                
+                // Characters
+                const charactersInput = document.getElementById('excerpt-characters').value.trim();
+                if (charactersInput) {
+                    jsonObject.characters = charactersInput.split(',').map(char => char.trim());
+                }
+            } else if (type === 'L') {
+                jsonObject.source_experience = document.getElementById('source-experience').value.trim();
+                
+                // Application
+                jsonObject.application = {
+                    personal: document.getElementById('app-personal').checked,
+                    business: document.getElementById('app-business').checked,
+                    creativity: document.getElementById('app-creativity').checked
+                };
+            }
+            
+            // Convert to formatted JSON string
+            const jsonString = JSON.stringify(jsonObject, null, 4);
+            
+            // Display the output container
+            const outputContainer = document.querySelector('.output-container');
+            outputContainer.style.display = 'block';
+            
+            // Update the output area
+            document.getElementById('json-output').textContent = jsonString;
+            
+            // Scroll to output
+            outputContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Copy to clipboard functionality
+        document.getElementById('copy-btn').addEventListener('click', function() {
+            const jsonOutput = document.getElementById('json-output').textContent;
+            navigator.clipboard.writeText(jsonOutput).then(function() {
+                // Show success message
+                const successMsg = document.getElementById('copy-success');
+                successMsg.style.visibility = 'visible';
+                
+                // Hide after 2 seconds
+                setTimeout(function() {
+                    successMsg.style.visibility = 'hidden';
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+                alert('Failed to copy to clipboard');
+            });
+        });
+        
+        // Helper function to get current date in YYYY-MM-DD format
+        function getCurrentDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        // Add padding for ID number (ensures 4 digits)
+        String.prototype.padStart = String.prototype.padStart || function padStart(targetLength, padString) {
+            padString = padString || ' ';
+            if (this.length >= targetLength) {
+                return String(this);
+            }
+            targetLength = targetLength - this.length;
+            var padding = padString.repeat(Math.ceil(targetLength / padString.length));
+            return padding.slice(0, targetLength) + String(this);
+        };
+    </script>
+</body>
+</html>
