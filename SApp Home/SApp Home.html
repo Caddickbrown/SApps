@@ -38,18 +38,57 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
+            padding: 0.5rem 1rem;  /* Reduced padding */
             background-color: var(--alt-background-color);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            height: 40px;  /* Fixed height */
+        }
+
+        .header h1 {
+            font-size: 1.2rem;  /* Smaller font size */
+            margin: 0;
+        }
+
+        .home-button {
+            padding: 0.5rem;
+            border-radius: 50%;
+            border: none;
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            cursor: pointer;
+            width: 32px;  /* Slightly smaller */
+            height: 32px;  /* Slightly smaller */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 4px;  /* Positioned within header */
+            left: 8px;
+            z-index: 3;
+            transition: transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-size: 1rem;  /* Smaller icon */
+        }
+
+        .home-button:hover {
+            transform: scale(1.1);
+            background-color: var(--button-hover-color);
         }
 
         .app-grid {
+            margin-top: 56px;  /* Account for header height + some spacing */
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             padding: 2rem;
             max-width: 1200px;
-            margin: 0 auto;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .app-card {
@@ -126,16 +165,23 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+        #app-container {
+            margin-top: 40px;  /* Match header height */
+            height: calc(100vh - 40px);  /* Subtract header height */
+            position: relative;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <div style="display: flex; align-items: center; gap: 1rem;">
-            <button class="home-button" onclick="goHome()" style="display: none;">🏠</button>
             <h1>SApp Suite</h1>
         </div>
         <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</button>
     </div>
+
+    <button class="home-button" onclick="goHome()" style="display: none;">🏠</button>
 
     <div class="app-grid">
         <a href="#" class="app-card" onclick="loadApp('writer')">
@@ -173,6 +219,17 @@
         function toggleDarkMode() {
             isDarkMode = !isDarkMode;
             applyTheme();
+            
+            // Also update theme in active app if any
+            const iframe = document.getElementById('app-frame');
+            if (iframe) {
+                const theme = isDarkMode ? 'dark' : 'light';
+                try {
+                    iframe.contentWindow.postMessage({ type: 'setTheme', theme: theme }, '*');
+                } catch (e) {
+                    console.log('Could not set theme in iframe');
+                }
+            }
         }
 
         function applyTheme() {
@@ -192,20 +249,35 @@
             
             appGrid.style.display = 'none';
             appContainer.style.display = 'block';
-            homeButton.style.display = 'block';  // Show home button when in an app
+            homeButton.style.display = 'block';
 
-            // Load the appropriate app
-            switch(appName) {
-                case 'writer':
-                    loadWriter();
-                    break;
-                case 'todo':
-                    loadTodo();
-                    break;
-                case 'kanban':
-                    loadKanban();
-                    break;
-            }
+            // Map app names to their file paths (relative to this HTML file)
+            const appPaths = {
+                'writer': '../HTMLWriter/HTMLWriter v3.0.0.html',
+                'todo': '../HTMLToDo/HTMLToDo v5.7.0.html',
+                'kanban': '../HTMLKanban/HTMLKanban v2.0.0.html'
+            };
+
+            // Create and load the iframe
+            appContainer.innerHTML = `
+                <iframe 
+                    src="${appPaths[appName]}" 
+                    style="width: 100%; height: 100%; border: none;"
+                    title="${appName}"
+                    id="app-frame"
+                ></iframe>
+            `;
+
+            // Wait for iframe to load then inject theme
+            const iframe = document.getElementById('app-frame');
+            iframe.onload = function() {
+                const theme = isDarkMode ? 'dark' : 'light';
+                try {
+                    iframe.contentWindow.postMessage({ type: 'setTheme', theme: theme }, '*');
+                } catch (e) {
+                    console.log('Could not set theme in iframe');
+                }
+            };
         }
 
         function goHome() {
@@ -213,10 +285,12 @@
             const appContainer = document.getElementById('app-container');
             const homeButton = document.querySelector('.home-button');
             
+            // Remove any iframes
+            appContainer.innerHTML = '';
+            
             appGrid.style.display = 'grid';
             appContainer.style.display = 'none';
-            homeButton.style.display = 'none';  // Hide home button on homepage
-            appContainer.innerHTML = '';
+            homeButton.style.display = 'none';
         }
 
         // Initialize
