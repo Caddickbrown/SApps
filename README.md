@@ -59,6 +59,7 @@ There is some customisation that can be done - but this should be a one time thi
 | [HTMLToDo](HTMLToDo/HTMLToDo - README.md) | Task management system | Stable |
 | [HTMLKanban](HTMLKanban/HTMLKanban - README.md) | Visual project management | Beta |
 | [WT](WT/WT - README.md) | Form data to CSV exporter | Stable |
+| [Scopr](Scopr/Scopr - README.md) | Scope tasks using templates | Beta |
 
 ### Creative Tools
 | App | Description | Status |
@@ -72,6 +73,7 @@ There is some customisation that can be done - but this should be a one time thi
 |-----|-------------|---------|
 | [HTML2MD](HTML2MD/HTML2MD - README.md) | HTML to Markdown converter | Stable |
 | [Galleria](Galleria/Galleria - README.md) | Base64 image gallery | Stable |
+| [B64](B64/B64 - README.md) | Image to Base64 converter | Stable |
 | [Recordr](Recordr/Recordr - README.md) | Simple audio recorder | Beta |
 
 ## Technical Details

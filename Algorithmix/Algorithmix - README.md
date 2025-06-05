@@ -41,3 +41,9 @@ Small robotic giraffe happy pop art pen
 5 love hate passion envy anger calm greed happiness sadness
 6 pop art
 7 pen origami paint spray photography sculpture
+
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.

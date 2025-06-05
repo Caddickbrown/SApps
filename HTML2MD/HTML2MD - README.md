@@ -52,3 +52,9 @@ This is an example HTML file.
 ## Conclusion
 
 The HTML to Markdown Converter is a powerful tool that simplifies the process of converting HTML code to Markdown. It provides a user-friendly interface and offers various export options for your convenience. Whether you need to convert a single HTML file or multiple files, the converter is a reliable and efficient solution.
+## Contributing
+Contributions are welcome! Feel free to open an issue or pull request if you have improvements.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.
+
