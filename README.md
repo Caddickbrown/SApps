@@ -20,7 +20,7 @@ SApps is a suite of standalone HTML applications that can perform various tasks 
 ## No Frameworks, No Libraries, No Dependencies, No Problem
 These applications are designed to be as lightweight as possible. They do not use any frameworks, libraries, or dependencies. They are designed to be entirely self-contained and portable. They should be able to be used on any computer, from a USB drive, and should not require any installation or configuration.
 
-There is some customisation that can be done - but this should be a one time think and should not require any further configuration.
+There is some customisation that can be done - but this should be a one time thing and should not require any further configuration.
 
 ## Quick Start
 1. Download the latest release
@@ -49,30 +49,30 @@ There is some customisation that can be done - but this should be a one time thi
 ### Writing & Documentation
 | App | Description | Status |
 |-----|-------------|---------|
-| [HTMLWriter](HTMLWriter/README.md) | Distraction-free writing environment | Stable |
-| [Journaller](Journaller/README.md) | Journal entry management and export | Stable |
-| [Postage](Postage/README.md) | Markdown to HTML converter | Stable |
+| [HTMLWriter](HTMLWriter/HTMLWriter - README.md) | Distraction-free writing environment | Stable |
+| [Journaller](Journaller/Journaller - README.md) | Journal entry management and export | Stable |
+| [Postage](Postage/Postage - README.md) | Markdown to HTML converter | Stable |
 
 ### Productivity
 | App | Description | Status |
 |-----|-------------|---------|
-| [HTMLToDo](HTMLToDo/README.md) | Task management system | Stable |
-| [HTMLKanban](HTMLKanban/README.md) | Visual project management | Beta |
-| [WT](WT/README.md) | Form data to CSV exporter | Stable |
+| [HTMLToDo](HTMLToDo/HTMLToDo - README.md) | Task management system | Stable |
+| [HTMLKanban](HTMLKanban/HTMLKanban - README.md) | Visual project management | Beta |
+| [WT](WT/WT - README.md) | Form data to CSV exporter | Stable |
 
 ### Creative Tools
 | App | Description | Status |
 |-----|-------------|---------|
-| [JPrompt](JPrompt/README.md) | Journal prompt generator | Stable |
-| [OSlogan](OSlogan/README.md) | Random slogan generator | Stable |
-| [Algorithmix](Algorithmix/README.md) | Creative prompt generator | Beta |
+| [JPrompt](JPrompt/JPrompt - README.md) | Journal prompt generator | Stable |
+| [OSlogan](OSlogan/OSlogan - README.md) | Random slogan generator | Stable |
+| [Algorithmix](Algorithmix/Algorithmix - README.md) | Creative prompt generator | Beta |
 
 ### Utilities
 | App | Description | Status |
 |-----|-------------|---------|
-| [HTML2MD](HTML2MD/README.md) | HTML to Markdown converter | Stable |
-| [Galleria](Galleria/README.md) | Base64 image gallery | Stable |
-| [Recordr](Recordr/README.md) | Simple audio recorder | Beta |
+| [HTML2MD](HTML2MD/HTML2MD - README.md) | HTML to Markdown converter | Stable |
+| [Galleria](Galleria/Galleria - README.md) | Base64 image gallery | Stable |
+| [Recordr](Recordr/Recordr - README.md) | Simple audio recorder | Beta |
 
 ## Technical Details
 
@@ -84,7 +84,7 @@ There is some customisation that can be done - but this should be a one time thi
 - Standardized theme system across apps
 
 ### Template System
-The [SAppTemplate](SAppTemplate/README.md) provides the foundation for all apps, ensuring consistency in:
+The [SAppTemplate](SAppTemplate/SAppTemplate - README.md) provides the foundation for all apps, ensuring consistency in:
 - Basic structure
 - Theme implementation
 - Common utilities
