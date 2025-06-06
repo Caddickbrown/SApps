@@ -148,3 +148,10 @@ Enhanced Statistics
 - [ ] Tag usage patterns
 - [ ] Writing style changes over time
 - [ ] Mood tracking if implemented
+
+## Contributing
+Suggestions and improvements are always welcome. Please open an issue or submit a pull request.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.
+

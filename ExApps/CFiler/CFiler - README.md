@@ -42,3 +42,9 @@ I may add a way to generate a "blog" style page with the most recent entries at 
 - Python File
 
 
+
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request if you have suggestions or fixes.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](../../LICENSE) file for details.
