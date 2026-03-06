@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageName"></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:ital,wght@0,800;0,900;1,900&family=Rajdhani:wght@300;500;700&display=swap');
+
+        :root {
+            --lime: #a6ff00;
+            --lime-hover: #c8ff33;
+            --orange: #ff5500;
+            --blue: #00aaff;
+            --pink: #ff0066;
+            --bg: #0a0a0a;
+            --bg-raised: #0f0f0f;
+            --bg-hover: #141414;
+            --text: #e8eef2;
+            --text-dim: #ffffff;
+            --text-muted: #5a5a5a;
+            --border: rgba(255,255,255,0.07);
+
+            /* Default Theme - Light Mode */
+            --default-light-text-color: #e8eef2;
+            --default-light-background-color: #0a0a0a;
+            --default-light-alt-background-color: #0f0f0f;
+            --default-light-button-background-color: #a6ff00;
+            --default-light-button-text-color: #000000;
+            --default-light-button-hover-color: #c8ff33;
+            --default-light-button-border-color: none;
+            /* Default Theme - Dark Mode */
+            --default-dark-text-color: #e8eef2;
+            --default-dark-background-color: #050505;
+            --default-dark-alt-background-color: #0a0a0a;
+            --default-dark-button-background-color: #a6ff00;
+            --default-dark-button-text-color: #000000;
+            --default-dark-button-hover-color: #c8ff33;
+            --default-dark-button-border-color: none;
+
+            /* Sepia Theme - Light Mode */
+            --sepia-light-text-color: #d3c4a9;
+            --sepia-light-background-color: #1a1408;
+            --sepia-light-alt-background-color: #241c0e;
+            --sepia-light-button-background-color: #c19a6b;
+            --sepia-light-button-text-color: #000000;
+            --sepia-light-button-hover-color: #d4af82;
+            --sepia-light-button-border-color: none;
+            /* Sepia Theme - Dark Mode */
+            --sepia-dark-text-color: #d3c4a9;
+            --sepia-dark-background-color: #0d0a04;
+            --sepia-dark-alt-background-color: #1a1408;
+            --sepia-dark-button-background-color: #8b6b4a;
+            --sepia-dark-button-text-color: #000000;
+            --sepia-dark-button-hover-color: #a67c52;
+            --sepia-dark-button-border-color: none;
+
+            /* Cool Theme - Light Mode */
+            --cool-light-text-color: #bdc3c7;
+            --cool-light-background-color: #0a1520;
+            --cool-light-alt-background-color: #0f1e2e;
+            --cool-light-button-background-color: #00aaff;
+            --cool-light-button-text-color: #000000;
+            --cool-light-button-hover-color: #33bbff;
+            --cool-light-button-border-color: none;
+            /* Cool Theme - Dark Mode */
+            --cool-dark-text-color: #bdc3c7;
+            --cool-dark-background-color: #050a10;
+            --cool-dark-alt-background-color: #0a1520;
+            --cool-dark-button-background-color: #2980b9;
+            --cool-dark-button-text-color: #000000;
+            --cool-dark-button-hover-color: #3498db;
+            --cool-dark-button-border-color: none;
+
+            /* Terminal Theme - Light Mode */
+            --terminal-light-text-color: #59b822;
+            --terminal-light-background-color: #0a0a0a;
+            --terminal-light-alt-background-color: #0f0f0f;
+            --terminal-light-button-background-color: #13451a;
+            --terminal-light-button-text-color: #59b822;
+            --terminal-light-button-hover-color: #186d1d;
+            --terminal-light-button-border-color: none;
+            /* Terminal Theme - Dark Mode */
+            --terminal-dark-text-color: #c20000;
+            --terminal-dark-background-color: #000000;
+            --terminal-dark-alt-background-color: #0a0000;
+            --terminal-dark-button-background-color: #000000;
+            --terminal-dark-button-text-color: #c20000;
+            --terminal-dark-button-hover-color: #690000;
+            --terminal-dark-button-border-color: 1px solid #c20000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            height: 100%;
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body a:link, body a:visited {
+            color: var(--lime);
+            transition: color 0.15s;
+        }
+        body a:hover {
+            color: var(--lime-hover);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* ── TOOLBAR ── */
+        #toolbar {
+            padding: 0.6rem 1.5rem;
+            background: rgba(10,10,10,0.96);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: opacity 0.3s;
+            opacity: 0;
+            z-index: 10;
+        }
+        #toolbar:hover {
+            opacity: 1;
+        }
+
+        /* ── BUTTONS ── */
+        button {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.45rem 1rem;
+            background: var(--button-background-color, var(--lime));
+            border: var(--button-border-color, none);
+            color: var(--button-text-color, #000);
+            cursor: pointer;
+            transition: all 0.15s;
+            clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+            border-radius: 0;
+            margin-right: 3px;
+        }
+        button:hover {
+            background: var(--button-hover-color, var(--lime-hover));
+        }
+
+        #toolbar button {
+            min-width: 30px;
+        }
+
+        #word-count {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--text);
+            text-transform: uppercase;
+        }
+
+        /* ── EDITOR ── */
+        .editor-container {
+            display: flex;
+            flex-grow: 1;
+            width: var(--editor-width, 60%);
+            margin: 0 auto;
+            transition: width 0.3s ease;
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+        }
+
+        #line-numbers {
+            display: none;
+            padding: 1.5rem 0.8rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 18px;
+            line-height: 1.6;
+            text-align: right;
+            border-right: 1px solid var(--border);
+            user-select: none;
+            overflow-y: hidden;
+            color: var(--text-muted);
+            background: var(--bg-raised);
+        }
+
+        #editor {
+            flex-grow: 1;
+            border: none;
+            padding: 1.5rem;
+            font-size: 20px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 300;
+            line-height: 1.8;
+            letter-spacing: 0.01em;
+            resize: none;
+            transition: background-color 0.3s, color 0.3s;
+            width: 100%;
+            margin: 0 auto;
+            outline: none;
+            background: var(--bg);
+            color: var(--text);
+            caret-color: var(--lime);
+        }
+
+        #editor::placeholder {
+            color: var(--text-muted);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* ── NOTIFICATION ── */
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            background: var(--lime);
+            color: #000;
+            padding: 0.6rem 1.2rem;
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+            border-radius: 0;
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: -1;
+        }
+
+        /* ── SELECTS ── */
+        select {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            background: var(--bg-raised);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 0;
+            padding: 0.4rem 1.8rem 0.4rem 0.6rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 0 100%);
+        }
+        select:hover {
+            border-color: var(--lime);
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        /* ── OVERLAY ── */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            backdrop-filter: blur(2px);
+        }
+
+        .overlay-active #toolbar,
+        .overlay-active footer {
+            opacity: 1 !important;
+        }
+
+        /* ── MODAL POPUPS ── */
+        .modal-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-raised);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+            z-index: 1000;
+            color: var(--text);
+            box-shadow: 0 0 40px rgba(166,255,0,0.04);
+        }
+
+        .modal-popup h2 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .modal-popup h3 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--lime);
+            margin-top: 0;
+            margin-bottom: 0.8rem;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 0.8rem;
+            right: 1rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            clip-path: none;
+            padding: 0;
+            letter-spacing: 0;
+            text-transform: none;
+            font-weight: 400;
+        }
+        .close-popup:hover {
+            color: var(--lime);
+            background: none;
+        }
+
+        /* ── THEME POPUP ── */
+        #theme-popup {
+            max-width: 400px;
+            min-width: 300px;
+        }
+
+        .theme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .theme-row:last-child { border-bottom: none; }
+
+        .theme-row label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            min-width: 100px;
+        }
+
+        /* ── CHECKBOX ── */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.3rem 0.6rem;
+            transition: background-color 0.15s;
+        }
+        .checkbox-container:hover {
+            background: var(--bg-hover);
+        }
+        .checkbox-container input[type="checkbox"] {
+            cursor: pointer;
+            width: 14px;
+            height: 14px;
+            margin: 0;
+            accent-color: var(--lime);
+        }
+        .checkbox-container label {
+            cursor: pointer;
+            user-select: none;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: var(--text-dim);
+        }
+
+        /* ── VERSION POPUP ── */
+        #version-info-popup {
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .version-info-content {
+            margin-top: 1rem;
+            color: var(--text-dim);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 300;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .version-info-content h3 {
+            margin: 1rem 0 0.4rem 0;
+            font-size: 0.9rem;
+        }
+
+        .version-info-content ul {
+            margin: 0.3rem 0;
+            padding-left: 1.2rem;
+        }
+
+        .version-info-content li {
+            padding: 0.15rem 0;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: right;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            color: var(--text);
+            position: fixed;
+            bottom: 0;
+            width: 95%;
+            transition: opacity 0.3s;
+            opacity: 0;
+            padding: 0.6rem 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        footer:hover {
+            opacity: 1;
+        }
+        footer a {
+            color: var(--lime) !important;
+            text-decoration: none;
+        }
+        footer a:hover {
+            color: var(--lime-hover) !important;
+        }
+
+        #versionNumber {
+            cursor: pointer;
+            display: inline-block;
+            color: var(--lime);
+        }
+        #versionNumber:hover {
+            text-decoration: underline;
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--lime); }
+
+        /* ── SELECTION ── */
+        ::selection {
+            background: rgba(166,255,0,0.2);
+            color: var(--text);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="toolbar">
+            <div>
+                <button onclick="formatText('bold')"><b>B</b></button>
+                <button onclick="formatText('italic')"><i>I</i></button>
+                <button onclick="formatText('underline')"><u>U</u></button>
+                <button onclick="insertDateTime()">Date/Time</button>
+                <button onclick="document.getElementById('file-input').click()">Import</button>
+                <button onclick="exportText()">Export</button>
+                <button onclick="copyText()">Copy</button>
+                <button onclick="openThemePopup()">Styles</button>
+                <input type="file" id="file-input" accept=".txt,.md" onchange="handleFileUpload(event)" style="display: none;">
+            </div>
+            <div id="word-count">Words: 0</div>
+        </div>
+        <div class="editor-container">
+            <div id="line-numbers"></div>
+            <textarea id="editor" placeholder="Start writing..."></textarea>
+        </div>
+    </div>
+
+
+    <div class="overlay" id="overlay" onclick="closeAllPopups()"></div>
+    <div class="modal-popup" id="theme-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h3>Style Settings</h3>
+        <div class="theme-options">
+            <div class="theme-row">
+                <label for="theme-select">Style:</label>
+                <select id="theme-select" onchange="changeTheme()">
+                    <option value="default">Default</option>
+                    <option value="sepia">Sepia</option>
+                    <option value="cool">Cool</option>
+                    <option value="terminal">Terminal</option>
+                </select>
+            </div>
+            <div class="theme-row">
+                <button onclick="toggleDarkMode()">Light/Dark Mode</button>
+            </div>
+            <div class="theme-row">
+                <label for="theme-select">Font:</label>
+                <select id="font-select" onchange="changeFont()">
+                    <option value="'Rajdhani', sans-serif">Rajdhani</option>
+                    <option value="'Share Tech Mono', monospace">Mono</option>
+                    <option value="serif">Serif</option>
+                    <option value="sans-serif">Sans-Serif</option>
+                </select>
+            </div>
+            <div class="theme-row">
+                <label for="theme-select">Font:</label>
+                <select id="font-size-select" onchange="changeFontSize()">
+                    <option value="16">Small</option>
+                    <option value="20">Medium</option>
+                    <option value="24">Large</option>
+                    <option value="28">Extra-Large</option>
+                </select>
+            </div>
+            <div class="theme-row">
+                <label for="theme-select">Line Numbers:</label>
+                <input type="checkbox" id="line-numbers-toggle" onchange="toggleLineNumbers()" />
+            </div>
+            <div class="theme-row">
+                <label for="margin-width-select">Margin Width:</label>
+                <select id="margin-width-select" onchange="changeMarginWidth()">
+                    <option value="80">Small</option>
+                    <option value="60" selected>Medium</option>
+                    <option value="40">Large</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-popup" id="version-info-popup">
+        <button class="close-popup" onclick="closeAllPopups()">×</button>
+        <h2>Version Information</h2>
+        <div class="version-info-content">
+            <h3>v3.0.0 - 2024-10-25</h3>
+            
+            <h3>New Features:</h3>
+            <ul>
+                <li>New Theme: Terminal</li>
+                <li>Text File Upload</li>
+                <li>Font Size Options</li>
+                <li>Margin Width Options</li>
+            </ul>
+    
+            <h3>Improvements:</h3>
+            <ul>
+                <li>Button Border CSS Styling for all themes</li>
+                <li>Style Settings Popup Menu</li>
+                <li>Version Information</li>
+                <li>Removed Redundant Script Tags</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+
+        const editor = document.getElementById('editor');
+        const wordCount = document.getElementById('word-count');
+        const lineNumbers = document.getElementById('line-numbers');
+        const themeSelect = document.getElementById('theme-select');
+        const fontSelect = document.getElementById('font-select');
+        const notification = document.getElementById('notification');
+
+        //Config
+        let showLineNumbers = 
+            false
+            //true
+            ;
+        let isDarkMode = 
+            false
+            //true
+            ;
+        let currentTheme =
+            'default'
+            //'sepia'
+            //'cool'
+            //'terminal'
+            ;
+        let currentFont = 
+            "'Rajdhani', sans-serif"
+            //"'Share Tech Mono', monospace"
+            //"serif"
+            //"sans-serif"
+            ;
+        let currentFontSize =
+            //"16"
+            "20"
+            //"24"
+            //"28"
+            ;
+        let currentMarginWidth =
+            //"80"
+            "60"
+            //"40"
+            ;
+        
+
+        editor.addEventListener('input', () => {
+            updateWordCount();
+            updateLineNumbers();
+        });
+        editor.addEventListener('scroll', syncScroll);
+
+        function updateWordCount() {
+            const text = editor.value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            wordCount.textContent = `Words: ${words}`;
+        }
+
+        function updateLineNumbers() {
+            const lines = editor.value.split('\n');
+            lineNumbers.innerHTML = lines.map((_, index) => `${index + 1}`).join('<br>');
+        }
+
+        function syncScroll() {
+            lineNumbers.scrollTop = editor.scrollTop;
+        }
+
+        function setInitialSelections() {
+            // Set initial theme selection
+            for (let i = 0; i < themeSelect.options.length; i++) {
+                if (themeSelect.options[i].value === currentTheme) {
+                    themeSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // Set initial font selection
+            for (let i = 0; i < fontSelect.options.length; i++) {
+                if (fontSelect.options[i].value === currentFont) {
+                    fontSelect.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+
+        function formatText(style) {
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const selectedText = editor.value.substring(start, end);
+            let formattedText = '';
+            let adjustment = 0;
+
+            switch(style) {
+                case 'bold':
+                    formattedText = `**${selectedText}**`;
+                    offset = 2; // Two ** on each side
+                    break;
+                case 'italic':
+                    formattedText = `*${selectedText}*`;
+                    offset = 1; // One * on each side
+                    break;
+                case 'underline':
+                    formattedText = `_${selectedText}_`;
+                    offset = 1; // One _ on each side
+                    break;
+            }
+
+            editor.value = editor.value.substring(0, start) + formattedText + editor.value.substring(end);
+            editor.focus();
+            editor.setSelectionRange(start + offset, end + offset); // Adjust selection range
+            updateLineNumbers();
+        }
+
+        function exportText() {
+            const text = editor.value;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'exported_text.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showNotification('Text exported successfully!');
+        }
+
+        function copyText() {
+            editor.select();
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            showNotification('Text copied to clipboard!');
+        }
+
+        function insertDateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            const dateTimeString = `[${year}-${month}-${day} ${hours}:${minutes}:${seconds}] `;
+            
+            const cursorPos = editor.selectionStart;
+            const textBefore = editor.value.substring(0, cursorPos);
+            const textAfter = editor.value.substring(cursorPos);
+            
+            editor.value = textBefore + dateTimeString + textAfter;
+            editor.focus();
+            editor.selectionStart = editor.selectionEnd = cursorPos + dateTimeString.length;
+            
+            updateWordCount();
+            updateLineNumbers();
+            showNotification('Date/Time Added!');
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            applyTheme();
+        }
+
+        function toggleLineNumbers() {
+            showLineNumbers = !showLineNumbers;
+            lineNumbers.style.display = showLineNumbers ? 'block' : 'none';
+            updateLineNumbers();
+        }
+
+        function changeTheme() {
+            currentTheme = themeSelect.value;
+            applyTheme();
+        }
+
+        function changeFont() {
+            currentFont = fontSelect.value;
+            applyFont();
+        }
+
+        function showPopup(popupId) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById(popupId).style.display = 'block';
+            document.body.classList.add('overlay-active');
+        }
+
+        function closeAllPopups() {
+            document.getElementById('overlay').style.display = 'none';
+            document.querySelectorAll('.modal-popup').forEach(popup => {
+                popup.style.display = 'none';
+            });
+            document.body.classList.remove('overlay-active');
+        }
+
+        // Update existing functions to use new unified system
+        function openThemePopup() {
+        showPopup('theme-popup');
+        }
+
+        function applyTheme() {
+            const mode = isDarkMode ? 'dark' : 'light';
+            
+            document.body.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+            document.body.style.backgroundColor = `var(--${currentTheme}-${mode}-background-color)`;
+            editor.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+            editor.style.backgroundColor = `var(--${currentTheme}-${mode}-background-color)`;
+            lineNumbers.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+            lineNumbers.style.backgroundColor = `var(--${currentTheme}-${mode}-alt-background-color)`;
+
+            document.documentElement.style.setProperty('--button-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--button-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+            document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
+            document.documentElement.style.setProperty('--button-border-color', `var(--${currentTheme}-${mode}-button-border-color)`);
+
+            document.documentElement.style.setProperty('--notification-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--notification-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+
+            document.documentElement.style.setProperty('--select-background-color', `var(--${currentTheme}-${mode}-background-color)`);
+            document.documentElement.style.setProperty('--select-alt-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+            document.documentElement.style.setProperty('--select-text-color', `var(--${currentTheme}-${mode}-text-color)`);
+        
+            document.documentElement.style.setProperty('--link-hover-color', `var(--${currentTheme}-${mode}-button-background-color)`);
+           
+            const popup = document.getElementById('theme-popup');
+            popup.style.backgroundColor = `var(--${currentTheme}-${mode}-alt-background-color)`;
+            popup.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+        }
+        
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.style.zIndex = '1';
+            notification.style.opacity = '1';
+            setTimeout(function() {
+                notification.style.opacity = '0';
+                notification.style.zIndex = '-1';
+            }, 2000);
+        }
+
+        function applyFont() {
+            editor.style.fontFamily = currentFont;
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeAllPopups();
+            }
+        });
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check if file is txt or md
+                if (!file.name.match(/\.(txt|md)$/i)) {
+                    showNotification('Please upload only .txt or .md files!');
+                    event.target.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    editor.value = e.target.result;
+                    updateWordCount();
+                    updateLineNumbers();
+    
+                    // Show filename in notification
+                    showNotification(`Loaded ${file.name} successfully!`);
+    
+                    // Optional: Update page title to reflect loaded file
+                    document.title = `${appName} - ${file.name}`;
+                };
+                reader.onerror = function() {
+                    showNotification('Error reading file!');
+                };
+                reader.readAsText(file);
+            }
+            // Reset the input to allow uploading the same file again
+            event.target.value = '';
+        }
+
+        function changeFontSize() {
+            currentFontSize = document.getElementById('font-size-select').value;
+            applyFontSize();
+        }
+
+        function applyFontSize() {
+            editor.style.fontSize = `${currentFontSize}px`;
+            lineNumbers.style.fontSize = `${currentFontSize}px`;
+        }
+        
+
+        function changeMarginWidth() {
+            currentMarginWidth = document.getElementById('margin-width-select').value;
+            applyMarginWidth();
+        }
+
+        function applyMarginWidth() {
+            document.documentElement.style.setProperty('--editor-width', currentMarginWidth + '%');
+        }
+
+        function setInitialStates() {
+            // Set font size initial selection
+            const fontSizeSelect = document.getElementById('font-size-select');
+            for (let i = 0; i < fontSizeSelect.options.length; i++) {
+                if (fontSizeSelect.options[i].value === currentFontSize) {
+                    fontSizeSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // Set margin width initial selection
+            const marginWidthSelect = document.getElementById('margin-width-select');
+            for (let i = 0; i < marginWidthSelect.options.length; i++) {
+                if (marginWidthSelect.options[i].value === currentMarginWidth) {
+                    marginWidthSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            
+            // Previous initial states
+            document.getElementById('line-numbers-toggle').checked = showLineNumbers;
+            lineNumbers.style.display = showLineNumbers ? 'block' : 'none';
+            setInitialSelections();
+            updateLineNumbers();
+            applyTheme();
+            applyFont();
+            applyFontSize();
+            applyMarginWidth();
+        }
+
+        // Initialize
+        setInitialStates();
+
+        var appName = "HTMLWriter";
+        var versionNumber = "3.0.0";
+
+        document.querySelectorAll("#pageName").forEach(function(element) {element.innerHTML = appName;});
+
+    </script>
+
+</body>
+
+<footer>
+    <p id="versionNumber"></p>
+    <p>Find this project on <a href="https://github.com/Caddickbrown/SApps/">GitHub</a> - Created by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
+  
+    <script>
+        document.querySelectorAll("#versionNumber").forEach(function(element) {
+            element.innerHTML = "v" + versionNumber;
+            element.onclick = () => showPopup('version-info-popup');
+        });
+    </script>
+</footer>
+</html>
