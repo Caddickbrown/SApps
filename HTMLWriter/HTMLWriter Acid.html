@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:ital,wght@0,800;0,900;1,900&family=Rajdhani:wght@300;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:ital,wght@0,800;0,900;1,900&display=swap');
 
         :root {
             --lime: #a6ff00;
@@ -23,73 +23,36 @@
             --text-muted: #5a5a5a;
             --border: rgba(255,255,255,0.07);
 
-            /* Default Theme - Light Mode */
-            --default-light-text-color: #e8eef2;
-            --default-light-background-color: #0a0a0a;
-            --default-light-alt-background-color: #0f0f0f;
-            --default-light-button-background-color: #a6ff00;
-            --default-light-button-text-color: #000000;
-            --default-light-button-hover-color: #c8ff33;
-            --default-light-button-border-color: none;
-            /* Default Theme - Dark Mode */
-            --default-dark-text-color: #e8eef2;
-            --default-dark-background-color: #050505;
-            --default-dark-alt-background-color: #0a0a0a;
-            --default-dark-button-background-color: #a6ff00;
-            --default-dark-button-text-color: #000000;
-            --default-dark-button-hover-color: #c8ff33;
-            --default-dark-button-border-color: none;
+            /* Light Mode base */
+            --light-text: #1a1a1a;
+            --light-bg: #ebebeb;
+            --light-alt-bg: #e0e0e0;
+            /* Dark Mode base */
+            --dark-text: #e0e0e0;
+            --dark-bg: #0a0a0a;
+            --dark-alt-bg: #111111;
 
-            /* Sepia Theme - Light Mode */
-            --sepia-light-text-color: #d3c4a9;
-            --sepia-light-background-color: #1a1408;
-            --sepia-light-alt-background-color: #241c0e;
-            --sepia-light-button-background-color: #c19a6b;
-            --sepia-light-button-text-color: #000000;
-            --sepia-light-button-hover-color: #d4af82;
-            --sepia-light-button-border-color: none;
-            /* Sepia Theme - Dark Mode */
-            --sepia-dark-text-color: #d3c4a9;
-            --sepia-dark-background-color: #0d0a04;
-            --sepia-dark-alt-background-color: #1a1408;
-            --sepia-dark-button-background-color: #8b6b4a;
-            --sepia-dark-button-text-color: #000000;
-            --sepia-dark-button-hover-color: #a67c52;
-            --sepia-dark-button-border-color: none;
+            /* Shared button base */
+            --btn-text: #000000;
+            --btn-border: none;
 
-            /* Cool Theme - Light Mode */
-            --cool-light-text-color: #bdc3c7;
-            --cool-light-background-color: #0a1520;
-            --cool-light-alt-background-color: #0f1e2e;
-            --cool-light-button-background-color: #00aaff;
-            --cool-light-button-text-color: #000000;
-            --cool-light-button-hover-color: #33bbff;
-            --cool-light-button-border-color: none;
-            /* Cool Theme - Dark Mode */
-            --cool-dark-text-color: #bdc3c7;
-            --cool-dark-background-color: #050a10;
-            --cool-dark-alt-background-color: #0a1520;
-            --cool-dark-button-background-color: #2980b9;
-            --cool-dark-button-text-color: #000000;
-            --cool-dark-button-hover-color: #3498db;
-            --cool-dark-button-border-color: none;
+            /* Theme highlight colours */
+            --lime-accent: #a6ff00;
+            --lime-accent-hover: #c8ff33;
 
-            /* Terminal Theme - Light Mode */
-            --terminal-light-text-color: #59b822;
-            --terminal-light-background-color: #0a0a0a;
-            --terminal-light-alt-background-color: #0f0f0f;
-            --terminal-light-button-background-color: #13451a;
-            --terminal-light-button-text-color: #59b822;
-            --terminal-light-button-hover-color: #186d1d;
-            --terminal-light-button-border-color: none;
-            /* Terminal Theme - Dark Mode */
-            --terminal-dark-text-color: #c20000;
-            --terminal-dark-background-color: #000000;
-            --terminal-dark-alt-background-color: #0a0000;
-            --terminal-dark-button-background-color: #000000;
-            --terminal-dark-button-text-color: #c20000;
-            --terminal-dark-button-hover-color: #690000;
-            --terminal-dark-button-border-color: 1px solid #c20000;
+            --blue-accent: #00aaff;
+            --blue-accent-hover: #33bbff;
+
+            --yellow-accent: #ffdd00;
+            --yellow-accent-hover: #ffe633;
+
+            --orange-accent: #ff5500;
+            --orange-accent-hover: #ff7733;
+            --orange-btn-text: #ffffff;
+
+            --pink-accent: #ff0066;
+            --pink-accent-hover: #ff3388;
+            --pink-btn-text: #ffffff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -104,11 +67,11 @@
         }
 
         body a:link, body a:visited {
-            color: var(--lime);
+            color: var(--button-background-color, var(--lime));
             transition: color 0.15s;
         }
         body a:hover {
-            color: var(--lime-hover);
+            color: var(--button-hover-color, var(--lime-hover));
         }
 
         .container {
@@ -120,12 +83,12 @@
         /* ── TOOLBAR ── */
         #toolbar {
             padding: 0.6rem 1.5rem;
-            background: rgba(10,10,10,0.96);
+            background: var(--toolbar-bg, rgba(10,10,10,0.96));
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s, background-color 0.3s;
             opacity: 0;
             z-index: 10;
         }
@@ -162,7 +125,7 @@
             font-family: 'Share Tech Mono', monospace;
             font-size: 0.65rem;
             letter-spacing: 0.2em;
-            color: var(--text);
+            color: var(--word-count-color, var(--text-muted));
             text-transform: uppercase;
         }
 
@@ -172,9 +135,9 @@
             flex-grow: 1;
             width: var(--editor-width, 60%);
             margin: 0 auto;
-            transition: width 0.3s ease;
-            border-left: 1px solid var(--border);
-            border-right: 1px solid var(--border);
+            transition: width 0.3s ease, border-color 0.3s;
+            border-left: 0px solid var(--border);
+            border-right: 0px solid var(--border);
         }
 
         #line-numbers {
@@ -228,14 +191,14 @@
             font-size: 0.7rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            background: var(--lime);
-            color: #000;
+            background: var(--notification-background-color, var(--lime));
+            color: var(--notification-text-color, #000);
             padding: 0.6rem 1.2rem;
             clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
             border-radius: 0;
             opacity: 0;
             transition: opacity 0.4s;
-            z-index: -1;
+            z-index: 50;
         }
 
         /* ── SELECTS ── */
@@ -253,7 +216,7 @@
             clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 0 100%);
         }
         select:hover {
-            border-color: var(--lime);
+            border-color: var(--select-alt-color, var(--lime));
         }
 
         #file-input {
@@ -308,7 +271,7 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.06em;
-            color: var(--lime);
+            color: inherit;
             margin-top: 0;
             margin-bottom: 0.8rem;
         }
@@ -360,36 +323,56 @@
             font-size: 0.6rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: var(--text-muted);
+            color: inherit;
+            opacity: 0.6;
             min-width: 100px;
         }
 
-        /* ── CHECKBOX ── */
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            padding: 0.3rem 0.6rem;
-            transition: background-color 0.15s;
-        }
-        .checkbox-container:hover {
-            background: var(--bg-hover);
-        }
-        .checkbox-container input[type="checkbox"] {
-            cursor: pointer;
-            width: 14px;
+        /* ── TOGGLE SWITCH ── */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 28px;
             height: 14px;
-            margin: 0;
-            accent-color: var(--lime);
-        }
-        .checkbox-container label {
+            flex-shrink: 0;
             cursor: pointer;
-            user-select: none;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.65rem;
-            letter-spacing: 0.15em;
-            color: var(--text-dim);
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+        .toggle-track {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 28px;
+            height: 14px;
+            background: var(--toggle-track-bg, #141414);
+            border: 1px solid var(--toggle-track-border, var(--border));
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
+        }
+        .toggle-track::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 8px;
+            height: 8px;
+            background: var(--text-muted);
+            transition: transform 0.2s, background 0.2s;
+            clip-path: polygon(0 0, calc(100% - 2px) 0, 100% 2px, 100% 100%, 0 100%);
+        }
+        .toggle-switch input:checked + .toggle-track {
+            background: rgba(166,255,0,0.15);
+            border-color: var(--button-background-color, var(--lime));
+        }
+        .toggle-switch input:checked + .toggle-track::after {
+            background: var(--button-background-color, var(--lime));
+            transform: translateX(14px);
         }
 
         /* ── VERSION POPUP ── */
@@ -427,30 +410,31 @@
             font-family: 'Share Tech Mono', monospace;
             font-size: 0.6rem;
             letter-spacing: 0.12em;
-            color: var(--text);
+            color: #e8eef2;
             position: fixed;
             bottom: 0;
-            width: 95%;
+            width: 100%;
             transition: opacity 0.3s;
             opacity: 0;
             padding: 0.6rem 1.5rem;
-            border-top: 1px solid var(--border);
+            border: none;
+            background: linear-gradient(175deg, transparent, rgba(0,0,0,0.5) 56%, #000);
         }
         footer:hover {
             opacity: 1;
         }
         footer a {
-            color: var(--lime) !important;
+            color: var(--button-background-color, var(--lime)) !important;
             text-decoration: none;
         }
         footer a:hover {
-            color: var(--lime-hover) !important;
+            color: var(--button-hover-color, var(--lime-hover)) !important;
         }
 
         #versionNumber {
             cursor: pointer;
             display: inline-block;
-            color: var(--lime);
+            color: var(--button-background-color, var(--lime));
         }
         #versionNumber:hover {
             text-decoration: underline;
@@ -458,14 +442,14 @@
 
         /* ── SCROLLBAR ── */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--text-muted); }
-        ::-webkit-scrollbar-thumb:hover { background: var(--lime); }
+        ::-webkit-scrollbar-track { background: var(--scrollbar-track, var(--bg)); }
+        ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb, var(--text-muted)); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--button-background-color, var(--lime)); }
 
         /* ── SELECTION ── */
         ::selection {
-            background: rgba(166,255,0,0.2);
-            color: var(--text);
+            background: var(--selection-bg, rgba(166,255,0,0.35));
+            color: var(--selection-text, #000);
         }
 
     </style>
@@ -501,10 +485,11 @@
             <div class="theme-row">
                 <label for="theme-select">Style:</label>
                 <select id="theme-select" onchange="changeTheme()">
-                    <option value="default">Default</option>
-                    <option value="sepia">Sepia</option>
-                    <option value="cool">Cool</option>
-                    <option value="terminal">Terminal</option>
+                    <option value="lime">Lime</option>
+                    <option value="blue">Blue</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="orange">Orange</option>
+                    <option value="pink">Pink</option>
                 </select>
             </div>
             <div class="theme-row">
@@ -529,8 +514,11 @@
                 </select>
             </div>
             <div class="theme-row">
-                <label for="theme-select">Line Numbers:</label>
-                <input type="checkbox" id="line-numbers-toggle" onchange="toggleLineNumbers()" />
+                <label for="line-numbers-toggle">Line Numbers:</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="line-numbers-toggle" onchange="toggleLineNumbers()" />
+                    <span class="toggle-track"></span>
+                </label>
             </div>
             <div class="theme-row">
                 <label for="margin-width-select">Margin Width:</label>
@@ -588,20 +576,19 @@
             //true
             ;
         let currentTheme =
-            'default'
-            //'sepia'
-            //'cool'
-            //'terminal'
+            'lime'
+            //'blue'
+            //'yellow'
+            //'orange'
             ;
         let currentFont = 
-            "'Rajdhani', sans-serif"
-            //"'Share Tech Mono', monospace"
+            "'Share Tech Mono', monospace"
             //"serif"
             //"sans-serif"
             ;
         let currentFontSize =
-            //"16"
-            "20"
+            "16"
+            //"20"
             //"24"
             //"28"
             ;
@@ -766,36 +753,65 @@
 
         function applyTheme() {
             const mode = isDarkMode ? 'dark' : 'light';
-            
-            document.body.style.color = `var(--${currentTheme}-${mode}-text-color)`;
-            document.body.style.backgroundColor = `var(--${currentTheme}-${mode}-background-color)`;
-            editor.style.color = `var(--${currentTheme}-${mode}-text-color)`;
-            editor.style.backgroundColor = `var(--${currentTheme}-${mode}-background-color)`;
-            lineNumbers.style.color = `var(--${currentTheme}-${mode}-text-color)`;
-            lineNumbers.style.backgroundColor = `var(--${currentTheme}-${mode}-alt-background-color)`;
+            const textVar = `var(--${mode}-text)`;
+            const bgVar = `var(--${mode}-bg)`;
+            const altBgVar = `var(--${mode}-alt-bg)`;
+            const accent = `var(--${currentTheme}-accent)`;
+            const accentHover = `var(--${currentTheme}-accent-hover)`;
+            const hasBtnTextOverride = getComputedStyle(document.documentElement).getPropertyValue(`--${currentTheme}-btn-text`).trim();
+            const btnText = hasBtnTextOverride ? `var(--${currentTheme}-btn-text)` : 'var(--btn-text)';
+            const btnBorder = 'var(--btn-border)';
 
-            document.documentElement.style.setProperty('--button-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
-            document.documentElement.style.setProperty('--button-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
-            document.documentElement.style.setProperty('--button-hover-color', `var(--${currentTheme}-${mode}-button-hover-color)`);
-            document.documentElement.style.setProperty('--button-border-color', `var(--${currentTheme}-${mode}-button-border-color)`);
+            document.body.style.color = textVar;
+            document.body.style.backgroundColor = bgVar;
+            editor.style.color = textVar;
+            editor.style.backgroundColor = bgVar;
+            editor.style.caretColor = accent;
+            lineNumbers.style.color = textVar;
+            lineNumbers.style.backgroundColor = altBgVar;
 
-            document.documentElement.style.setProperty('--notification-background-color', `var(--${currentTheme}-${mode}-button-background-color)`);
-            document.documentElement.style.setProperty('--notification-text-color', `var(--${currentTheme}-${mode}-button-text-color)`);
+            document.documentElement.style.setProperty('--button-background-color', accent);
+            document.documentElement.style.setProperty('--button-text-color', btnText);
+            document.documentElement.style.setProperty('--button-hover-color', accentHover);
+            document.documentElement.style.setProperty('--button-border-color', btnBorder);
 
-            document.documentElement.style.setProperty('--select-background-color', `var(--${currentTheme}-${mode}-background-color)`);
-            document.documentElement.style.setProperty('--select-alt-color', `var(--${currentTheme}-${mode}-button-background-color)`);
-            document.documentElement.style.setProperty('--select-text-color', `var(--${currentTheme}-${mode}-text-color)`);
-        
-            document.documentElement.style.setProperty('--link-hover-color', `var(--${currentTheme}-${mode}-button-background-color)`);
-           
-            const popup = document.getElementById('theme-popup');
-            popup.style.backgroundColor = `var(--${currentTheme}-${mode}-alt-background-color)`;
-            popup.style.color = `var(--${currentTheme}-${mode}-text-color)`;
+            document.documentElement.style.setProperty('--notification-background-color', accent);
+            document.documentElement.style.setProperty('--notification-text-color', btnText);
+
+            document.documentElement.style.setProperty('--select-background-color', altBgVar);
+            document.documentElement.style.setProperty('--select-alt-color', accent);
+            document.documentElement.style.setProperty('--select-text-color', textVar);
+
+            document.documentElement.style.setProperty('--link-hover-color', accent);
+
+            document.documentElement.style.setProperty('--toolbar-bg', altBgVar);
+            document.documentElement.style.setProperty('--word-count-color', textVar);
+            document.documentElement.style.setProperty('--border', isDarkMode ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.1)');
+            document.documentElement.style.setProperty('--toggle-track-bg', isDarkMode ? '#141414' : 'rgba(0,0,0,0.06)');
+            document.documentElement.style.setProperty('--toggle-track-border', isDarkMode ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.3)');
+            document.documentElement.style.setProperty('--scrollbar-track', isDarkMode ? '#0a0a0a' : '#e0e0e0');
+            document.documentElement.style.setProperty('--scrollbar-thumb', isDarkMode ? '#5a5a5a' : '#bbb');
+
+            const selectionColors = {
+                lime:   { light: { bg: 'rgba(166,255,0,0.4)',  text: '#000' }, dark: { bg: 'rgba(166,255,0,0.3)',  text: '#fff' } },
+                blue:   { light: { bg: 'rgba(0,170,255,0.4)',  text: '#000' }, dark: { bg: 'rgba(0,170,255,0.3)',  text: '#fff' } },
+                yellow: { light: { bg: 'rgba(255,221,0,0.4)',  text: '#000' }, dark: { bg: 'rgba(255,221,0,0.3)',  text: '#fff' } },
+                orange: { light: { bg: 'rgba(255,85,0,0.4)',   text: '#fff' }, dark: { bg: 'rgba(255,85,0,0.3)',   text: '#fff' } },
+                pink:   { light: { bg: 'rgba(255,0,102,0.4)',  text: '#fff' }, dark: { bg: 'rgba(255,0,102,0.3)',  text: '#fff' } }
+            };
+            const sel = (selectionColors[currentTheme] || selectionColors.lime)[mode];
+            document.documentElement.style.setProperty('--selection-bg', sel.bg);
+            document.documentElement.style.setProperty('--selection-text', sel.text);
+
+            document.querySelectorAll('.modal-popup').forEach(popup => {
+                popup.style.backgroundColor = altBgVar;
+                popup.style.color = textVar;
+            });
         }
         
         function showNotification(message) {
             notification.textContent = message;
-            notification.style.zIndex = '1';
+            notification.style.zIndex = '50';
             notification.style.opacity = '1';
             setTimeout(function() {
                 notification.style.opacity = '0';
