@@ -48,7 +48,6 @@ Every app also works on its own: each lives at `<App>/<App>.html`.
 | | [Postage](Postage/README.md) | Markdown to HTML, live preview | Stable |
 | | [HTML2MD](HTML2MD/README.md) | HTML to Markdown | Stable |
 | | [Glossar](Glossar/README.md) | JSON glossary editor and reader | Stable |
-| | [Journl](Journl/README.md) | Encrypted offline journal | Stable |
 | Productivity | [HTMLToDo](HTMLToDo/README.md) | Task management | Stable |
 | | [HTMLKanban](HTMLKanban/README.md) | Kanban board | Beta |
 | | [Scopr](Scopr/README.md) | Scope a project from a checklist template | Stable |
@@ -67,7 +66,8 @@ Every app also works on its own: each lives at `<App>/<App>.html`.
 | | [Recordr](Recordr/README.md) | Microphone recorder | Stable |
 
 Also in the repo but not on the home page: [Journaller](Journaller/README.md)
-(uses CDN libraries, so not offline) and [ExApps](ExApps/README.md) (Python
+(uses CDN libraries, so not offline), [Journl](Journl/README.md) (encrypted
+journal, kept for reference) and [ExApps](ExApps/README.md) (Python
 scripts that need a filesystem; see [REVIEW](ExApps/REVIEW.md)).
 
 ## Technical Details

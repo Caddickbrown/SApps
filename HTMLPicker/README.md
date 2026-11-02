@@ -2,7 +2,7 @@
 A spin-the-wheel random picker in a single HTML file.
 
 ## Background
-Started as a quick "Decider" wheel, then forked into *Batboard* ("Tier 3 of Fortune"), a copy with a hard-coded list of names. HTMLPicker is both rolled into one: a general wheel where the list is yours, and any list (a team, a menu, a game) can be saved and loaded by name. The two originals are kept in `Archive/`.
+Started as a quick "Decider" wheel. A later copy hard-coded a list of names; this version is a general wheel where the list is yours, and any list (a team, a menu, a game) can be saved and loaded by name. The original wheel is kept in `Archive/`.
 
 ## Usage
 1. Open `HTMLPicker.html` in your browser of choice.
@@ -23,7 +23,6 @@ Started as a quick "Decider" wheel, then forked into *Batboard* ("Tier 3 of Fort
 ## Behavior
 - Options are unique (case-insensitive). Names are plain text and are never interpreted as HTML.
 - Everything is saved in this browser only (`sapps.htmlpicker.*`).
-- Batboard's default list of names is **not** included. Paste your own list, save it, and it is one click away.
 
 ## Roadmap
 ### Planned Functionality
@@ -36,7 +35,7 @@ Started as a quick "Decider" wheel, then forked into *Batboard* ("Tier 3 of Fort
 #### Added
 - Labelled wheel, per-option colours, saved lists, templates, history, import/export, themes, keyboard support
 #### Changed
-- Merged HTMLPicker v1.0.0 and Batboard into one app; version removed from the filename
+- Merged HTMLPicker v1.0.0 and its list-based copy into one app; version removed from the filename
 #### Fixed
 - The announced winner did not match the slice under the pointer (wrong angle maths)
 - Second and later spins started from the wrong position
