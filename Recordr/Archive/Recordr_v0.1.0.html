@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recordr</title>
+</head>
+<body>
+    <h1>Recordr</h1>
+    <button id="recordToggle">Start Recording</button>
+    <button id="downloadWav" style="display: none;">Download WAV</button>
+    <p id="timer" style="display: none;"></p>
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let recordToggle;
+        let timerElement;
+        let downloadWavButton;
+        let startTime;
+        let recordingDurationInSeconds = 2; // maximum recording length in minutes
+
+        document.addEventListener('DOMContentLoaded', () => {
+            recordToggle = document.getElementById('recordToggle');
+            downloadWavButton = document.getElementById('downloadWav');
+            timerElement = document.getElementById('timer');
+
+            recordToggle.addEventListener('click', toggleRecording);
+            downloadWavButton.addEventListener('click', downloadWavRecording);
+        });
+
+        async function toggleRecording() {
+            if (recordToggle.textContent === 'Start Recording') {
+                await startRecording();
+            } else {
+                stopRecording();
+            }
+        }
+
+        async function startRecording() {
+            audioChunks = [];
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+            mediaRecorder = new MediaRecorder(stream, { timeslice: recordingDurationInSeconds * 60000 });
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    audioChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+
+                const url = URL.createObjectURL(audioBlob);
+
+                downloadWavButton.href = url;
+
+                // Generate the filename with the current date and time
+                const currentDate = new Date();
+                const dateString = currentDate.toISOString().split('T')[0];
+                const timeString = currentDate.toTimeString().split(' ')[0].replace(/:/g, '-');
+
+                downloadWavButton.download = `Recording - ${dateString}-${timeString}.wav`;
+
+                recordToggle.textContent = 'Start Recording';
+                downloadWavButton.style.display = 'inline'; // Show the download button
+                timerElement.style.display = 'none'; // Hide the timer
+            };
+
+            startTime = Date.now();
+            updateTimer();
+
+            mediaRecorder.start();
+
+            recordToggle.textContent = 'Stop Recording';
+            downloadWavButton.style.display = 'none'; // Hide the download button when starting a new recording
+            timerElement.style.display = 'inline'; // Show the timer
+        }
+
+        function stopRecording() {
+            mediaRecorder.stop();
+
+            recordToggle.textContent = 'Start Recording';
+            timerElement.style.display = 'none'; // Hide the timer
+        }
+
+        function updateTimer() {
+            const currentTime = Date.now();
+            const elapsedSeconds = Math.floor((currentTime - startTime) / 1000);
+
+            const minutes = Math.floor(elapsedSeconds / 60);
+            const seconds = elapsedSeconds % 60;
+
+            timerElement.textContent = `${padZero(minutes)}:${padZero(seconds)}`;
+            setTimeout(updateTimer, 1000); // Update the timer every second
+        }
+
+        function padZero(value) {
+            return value < 10 ? `0${value}` : value;
+        }
+
+        function downloadWavRecording() {
+            const a = document.createElement('a');
+            a.href = downloadWavButton.href;
+            a.download = downloadWavButton.download;
+            a.click();
+        }
+    </script>
+</body>
+</html>

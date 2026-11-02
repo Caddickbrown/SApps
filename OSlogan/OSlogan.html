@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OSlogan</title>
+<style>
+:root{
+  --text:#333;--bg:#f1f1f1;--field:#fff;--border:#ccc;--muted:#777;
+  --btn:#4bc67c;--btn-hover:#348b57;--btn-text:#fff;--accent:#4bc67c;
+}
+body.dark-mode{
+  --text:#eee;--bg:#222;--field:#333;--border:#555;--muted:#aaa;
+  --btn:#58319f;--btn-hover:#6d45b8;--btn-text:#fff;--accent:#8e6fd6;
+}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text);background:var(--bg);margin:0;padding:0 1rem 4rem;transition:background-color .3s,color .3s;line-height:1.5}
+header.appbar{display:flex;align-items:center;justify-content:space-between;max-width:900px;margin:0 auto;padding:1rem 0}
+h1.appname{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:2.2em;margin:0}
+main{max-width:900px;margin:0 auto}
+button,.btn{font:inherit;cursor:pointer;border:0;border-radius:6px;padding:.55em 1.1em;background:var(--btn);color:var(--btn-text);transition:background-color .2s}
+button:hover:not(:disabled),.btn:hover{background:var(--btn-hover)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+button.secondary:hover:not(:disabled){background:var(--field)}
+textarea,input[type=text],input[type=number],select{font:inherit;color:var(--text);background:var(--field);border:1px solid var(--border);border-radius:6px;padding:.5em .7em;max-width:100%}
+textarea{width:100%}
+a{color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.75rem 0}
+.muted{color:var(--muted);font-size:.9em}
+.toast{position:fixed;left:50%;bottom:2.5rem;transform:translateX(-50%);background:var(--btn);color:var(--btn-text);padding:.6em 1.2em;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .3s}
+.toast.show{opacity:1}
+footer.appfooter{position:fixed;bottom:0;left:0;right:0;text-align:right;font-size:.8em;padding:.4rem 1rem;background:var(--bg);opacity:.85}
+
+main{text-align:center;padding-top:2rem}
+#slogan{font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.4rem,4vw,2.4rem);min-height:4.5em;display:flex;align-items:center;justify-content:center;margin:1rem 0}
+#slogan .a{display:block}
+#slogan .b{display:block;font-style:italic;color:var(--accent)}
+.big{font-size:1.2rem;padding:.8em 1.8em}
+#history{list-style:none;padding:0;margin:2rem auto 0;max-width:600px;text-align:left}
+#history li{padding:.35rem 0;border-top:1px solid var(--border);cursor:pointer}
+#history li:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+<header class="appbar"><h1 class="appname">OSlogan</h1><button id="themeBtn" class="secondary" onclick="toggleTheme()">Dark mode</button></header>
+<main>
+  <p class="muted">Press <kbd>Space</kbd> or the button for a random office slogan.</p>
+  <div id="slogan" aria-live="polite"><span class="muted">…</span></div>
+  <div class="row" style="justify-content:center">
+    <button class="big" id="genBtn">New slogan</button>
+    <button class="secondary" id="copyBtn" disabled>Copy</button>
+  </div>
+  <p class="muted" id="count"></p>
+  <ul id="history" aria-label="Recent slogans"></ul>
+</main>
+<footer class="appfooter"><span id="versionNumber"></span> · OSlogan · <a href="https://caddickbrown.com">Caddick &amp; Brown</a></footer>
+<script>
+const APP_ID = 'oslogan', appName = 'OSlogan', versionNumber = 'v2.0.0';
+/* ---- SApps common helpers ---- */
+const SKEY = 'sapps.' + APP_ID + '.';
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(SKEY + k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(SKEY + k, JSON.stringify(v)); } catch(e){} },
+  raw(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+};
+function applyTheme(dark){
+  document.body.classList.toggle('dark-mode', dark);
+  const b = document.getElementById('themeBtn'); if (b) b.textContent = dark ? 'Light mode' : 'Dark mode';
+}
+function toggleTheme(){ const d = !document.body.classList.contains('dark-mode'); applyTheme(d); store.set('theme', d ? 'dark' : 'light'); }
+(function initTheme(){
+  let t = store.get('theme', null);
+  if (!t) t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  applyTheme(t === 'dark');
+})();
+function toast(msg){
+  let t = document.getElementById('toast');
+  if (!t){ t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); }
+  catch(e){ const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(_){} ta.remove(); }
+  toast('Copied to clipboard');
+}
+function downloadFile(name, text, mime){
+  const url = URL.createObjectURL(new Blob([text], {type: (mime || 'text/plain') + ';charset=utf-8'}));
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.getElementById('versionNumber').textContent = versionNumber;
+
+const reasons = [
+  "I haven't had my coffee today","I've just woken up","I'm tired","I don't like you","I'm hungry",
+  "I'm not in the mood","I'm not feeling well","I'm not feeling like myself","I am feeling like myself",
+  "It's a Monday","It's nearly Friday","I've been in meetings since nine","This could have been an email",
+  "My inbox has 4,000 unread messages","The printer has beaten me again","I'm on my last nerve","I'm in my own little world",
+  "I've run out of biscuits","The Wi-Fi is down","I'm between two deadlines","I've read the same sentence six times",
+  "My other monitor is on fire (metaphorically)","I'm pretending to be busy","I'm actually busy","I'm one spreadsheet away from a breakdown"
+];
+const demands = [
+  "Leave me alone","Let me sleep","Find me in the stationery cupboard… sleeping","Come back after lunch","Ask me tomorrow",
+  "Send me an email (I won't read it)","Put it in the diary","Take it up with the printer","Don't make eye contact","Make your own tea",
+  "Reply-all at your peril","Speak to my assistant (I don't have one)","Try turning yourself off and on again","Park it. Then forget it",
+  "I'll circle back (I won't)","Take a number","Please hold. For eternity","Do not disturb the hibernation","Pretend you didn't see me"
+];
+const end = t => /[.!?…]$/.test(t) ? t : t + '.';
+const pick = a => a[Math.floor(Math.random() * a.length)];
+let current = null, hist = store.get('history', []);
+
+function render(){
+  const ul = document.getElementById('history'); ul.innerHTML = '';
+  hist.forEach(s => { const li = document.createElement('li'); li.textContent = s.text; li.title = 'Click to copy'; li.onclick = () => copyText(s.text); ul.appendChild(li); });
+  document.getElementById('count').textContent = (reasons.length * demands.length) + ' possible slogans';
+}
+function generate(){
+  const a = pick(reasons), b = pick(demands);
+  const box = document.getElementById('slogan'); box.innerHTML = '';
+  const wrap = document.createElement('div');
+  const sa = document.createElement('span'); sa.className = 'a'; sa.textContent = end(a);
+  const sb = document.createElement('span'); sb.className = 'b'; sb.textContent = end(b);
+  wrap.append(sa, sb); box.appendChild(wrap);
+  document.getElementById('copyBtn').disabled = false;
+  current = end(a) + ' ' + end(b);
+  hist = [{text: current}, ...hist.filter(h => h.text !== current)].slice(0, 8);
+  store.set('history', hist); render();
+}
+document.getElementById('genBtn').onclick = generate;
+document.getElementById('copyBtn').onclick = () => current && copyText(current);
+document.addEventListener('keydown', e => { if (e.code === 'Space' && !/BUTTON|INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); generate(); } });
+render();
+</script>
+</body>
+</html>

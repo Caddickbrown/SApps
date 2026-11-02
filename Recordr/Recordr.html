@@ -1,111 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recordr</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recordr</title>
+<style>
+:root{
+  --text:#333;--bg:#f1f1f1;--field:#fff;--border:#ccc;--muted:#777;
+  --btn:#4bc67c;--btn-hover:#348b57;--btn-text:#fff;--accent:#4bc67c;
+}
+body.dark-mode{
+  --text:#eee;--bg:#222;--field:#333;--border:#555;--muted:#aaa;
+  --btn:#58319f;--btn-hover:#6d45b8;--btn-text:#fff;--accent:#8e6fd6;
+}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text);background:var(--bg);margin:0;padding:0 1rem 4rem;transition:background-color .3s,color .3s;line-height:1.5}
+header.appbar{display:flex;align-items:center;justify-content:space-between;max-width:900px;margin:0 auto;padding:1rem 0}
+h1.appname{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:2.2em;margin:0}
+main{max-width:900px;margin:0 auto}
+button,.btn{font:inherit;cursor:pointer;border:0;border-radius:6px;padding:.55em 1.1em;background:var(--btn);color:var(--btn-text);transition:background-color .2s}
+button:hover:not(:disabled),.btn:hover{background:var(--btn-hover)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+button.secondary:hover:not(:disabled){background:var(--field)}
+textarea,input[type=text],input[type=number],select{font:inherit;color:var(--text);background:var(--field);border:1px solid var(--border);border-radius:6px;padding:.5em .7em;max-width:100%}
+textarea{width:100%}
+a{color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.75rem 0}
+.muted{color:var(--muted);font-size:.9em}
+.toast{position:fixed;left:50%;bottom:2.5rem;transform:translateX(-50%);background:var(--btn);color:var(--btn-text);padding:.6em 1.2em;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .3s}
+.toast.show{opacity:1}
+footer.appfooter{position:fixed;bottom:0;left:0;right:0;text-align:right;font-size:.8em;padding:.4rem 1rem;background:var(--bg);opacity:.85}
+
+main{text-align:center}
+#status{display:inline-flex;align-items:center;gap:.6rem;font-size:1.1rem;margin:1.5rem 0 .5rem}
+#dot{width:.9rem;height:.9rem;border-radius:50%;background:var(--border)}
+#dot.rec{background:#d33;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.25}}
+#timer{font-variant-numeric:tabular-nums;font-size:2.6rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+#error{color:#d33;min-height:1.5em}
+audio{width:100%;max-width:520px;margin-top:1rem}
+#meter{width:100%;max-width:520px;height:10px;border-radius:5px;background:var(--field);border:1px solid var(--border);overflow:hidden;margin:.5rem auto}
+#meter i{display:block;height:100%;width:0;background:var(--accent);transition:width .08s}
+</style>
 </head>
 <body>
-    <h1>Recordr</h1>
-    <button id="recordToggle">Start Recording</button>
-    <button id="downloadWav" style="display: none;">Download WAV</button>
-    <p id="timer" style="display: none;"></p>
+<header class="appbar"><h1 class="appname">Recordr</h1><button id="themeBtn" class="secondary" onclick="toggleTheme()">Dark mode</button></header>
+<main>
+  <div id="status"><span id="dot"></span><span id="stateText">Ready</span></div>
+  <div id="timer">00:00</div>
+  <div id="meter" aria-hidden="true"><i></i></div>
+  <div class="row" style="justify-content:center">
+    <button id="recordBtn">Start recording</button>
+    <button id="downloadBtn" class="secondary" disabled>Download</button>
+    <button id="discardBtn" class="secondary" disabled>Discard</button>
+  </div>
+  <p id="error" role="alert"></p>
+  <audio id="player" controls hidden></audio>
+  <p class="muted" id="formatInfo"></p>
+</main>
+<footer class="appfooter"><span id="versionNumber"></span> · Recordr · <a href="https://caddickbrown.com">Caddick &amp; Brown</a></footer>
+<script>
+const APP_ID = 'recordr', appName = 'Recordr', versionNumber = 'v1.0.0';
+/* ---- SApps common helpers ---- */
+const SKEY = 'sapps.' + APP_ID + '.';
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(SKEY + k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(SKEY + k, JSON.stringify(v)); } catch(e){} },
+  raw(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+};
+function applyTheme(dark){
+  document.body.classList.toggle('dark-mode', dark);
+  const b = document.getElementById('themeBtn'); if (b) b.textContent = dark ? 'Light mode' : 'Dark mode';
+}
+function toggleTheme(){ const d = !document.body.classList.contains('dark-mode'); applyTheme(d); store.set('theme', d ? 'dark' : 'light'); }
+(function initTheme(){
+  let t = store.get('theme', null);
+  if (!t) t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  applyTheme(t === 'dark');
+})();
+function toast(msg){
+  let t = document.getElementById('toast');
+  if (!t){ t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); }
+  catch(e){ const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(_){} ta.remove(); }
+  toast('Copied to clipboard');
+}
+function downloadFile(name, text, mime){
+  const url = URL.createObjectURL(new Blob([text], {type: (mime || 'text/plain') + ';charset=utf-8'}));
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
-    <script>
-        let mediaRecorder;
-        let audioChunks = [];
-        let recordToggle;
-        let timerElement;
-        let downloadWavButton;
-        let startTime;
-        let recordingDurationInSeconds = 2; // maximum recording length in minutes
+document.getElementById('versionNumber').textContent = versionNumber;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            recordToggle = document.getElementById('recordToggle');
-            downloadWavButton = document.getElementById('downloadWav');
-            timerElement = document.getElementById('timer');
+const $ = id => document.getElementById(id);
+const recordBtn = $('recordBtn'), downloadBtn = $('downloadBtn'), discardBtn = $('discardBtn'), player = $('player');
+let recorder = null, stream = null, chunks = [], startedAt = 0, tick = null, blob = null, blobUrl = null, audioCtx = null, rafId = 0;
 
-            recordToggle.addEventListener('click', toggleRecording);
-            downloadWavButton.addEventListener('click', downloadWavRecording);
-        });
+const CANDIDATES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus', 'audio/mp4', 'audio/mpeg'];
+function chooseMime(){ if (!window.MediaRecorder) return ''; return CANDIDATES.find(t => MediaRecorder.isTypeSupported(t)) || ''; }
+function extFor(mime){
+  const m = (mime || '').toLowerCase();
+  if (m.includes('webm')) return 'webm'; if (m.includes('ogg')) return 'ogg';
+  if (m.includes('mp4') || m.includes('aac')) return 'm4a'; if (m.includes('mpeg')) return 'mp3';
+  if (m.includes('wav')) return 'wav'; return 'webm';
+}
+const pad = n => String(n).padStart(2, '0');
+function stamp(){ const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`; }
+function setState(text, rec){ $('stateText').textContent = text; $('dot').classList.toggle('rec', !!rec); }
+function showError(msg){ $('error').textContent = msg || ''; }
+function updateTimer(){ const s = Math.floor((Date.now() - startedAt) / 1000); $('timer').textContent = `${pad(Math.floor(s/60))}:${pad(s%60)}`; }
 
-        async function toggleRecording() {
-            if (recordToggle.textContent === 'Start Recording') {
-                await startRecording();
-            } else {
-                stopRecording();
-            }
-        }
+function startMeter(){
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const src = audioCtx.createMediaStreamSource(stream), an = audioCtx.createAnalyser(); an.fftSize = 512; src.connect(an);
+    const buf = new Uint8Array(an.fftSize);
+    (function loop(){ an.getByteTimeDomainData(buf); let peak = 0; for (const v of buf) peak = Math.max(peak, Math.abs(v - 128)); document.querySelector('#meter i').style.width = Math.min(100, peak / 128 * 140) + '%'; rafId = requestAnimationFrame(loop); })();
+  } catch(e) { /* meter is cosmetic */ }
+}
+function stopMeter(){ cancelAnimationFrame(rafId); if (audioCtx) { audioCtx.close().catch(()=>{}); audioCtx = null; } document.querySelector('#meter i').style.width = '0'; }
 
-        async function startRecording() {
-            audioChunks = [];
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+function clearTake(){
+  if (blobUrl) URL.revokeObjectURL(blobUrl);
+  blob = null; blobUrl = null; player.removeAttribute('src'); player.hidden = true; player.load();
+  downloadBtn.disabled = discardBtn.disabled = true; $('formatInfo').textContent = ''; $('timer').textContent = '00:00';
+}
 
-            mediaRecorder = new MediaRecorder(stream, { timeslice: recordingDurationInSeconds * 60000 });
-
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    audioChunks.push(event.data);
-                }
-            };
-
-            mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-
-                const url = URL.createObjectURL(audioBlob);
-
-                downloadWavButton.href = url;
-
-                // Generate the filename with the current date and time
-                const currentDate = new Date();
-                const dateString = currentDate.toISOString().split('T')[0];
-                const timeString = currentDate.toTimeString().split(' ')[0].replace(/:/g, '-');
-
-                downloadWavButton.download = `Recording - ${dateString}-${timeString}.wav`;
-
-                recordToggle.textContent = 'Start Recording';
-                downloadWavButton.style.display = 'inline'; // Show the download button
-                timerElement.style.display = 'none'; // Hide the timer
-            };
-
-            startTime = Date.now();
-            updateTimer();
-
-            mediaRecorder.start();
-
-            recordToggle.textContent = 'Stop Recording';
-            downloadWavButton.style.display = 'none'; // Hide the download button when starting a new recording
-            timerElement.style.display = 'inline'; // Show the timer
-        }
-
-        function stopRecording() {
-            mediaRecorder.stop();
-
-            recordToggle.textContent = 'Start Recording';
-            timerElement.style.display = 'none'; // Hide the timer
-        }
-
-        function updateTimer() {
-            const currentTime = Date.now();
-            const elapsedSeconds = Math.floor((currentTime - startTime) / 1000);
-
-            const minutes = Math.floor(elapsedSeconds / 60);
-            const seconds = elapsedSeconds % 60;
-
-            timerElement.textContent = `${padZero(minutes)}:${padZero(seconds)}`;
-            setTimeout(updateTimer, 1000); // Update the timer every second
-        }
-
-        function padZero(value) {
-            return value < 10 ? `0${value}` : value;
-        }
-
-        function downloadWavRecording() {
-            const a = document.createElement('a');
-            a.href = downloadWavButton.href;
-            a.download = downloadWavButton.download;
-            a.click();
-        }
-    </script>
+async function start(){
+  showError('');
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) {
+    showError('This browser does not support audio recording. Try a recent Chrome, Edge, Firefox or Safari — and note that recording needs https:// or a local file.'); return;
+  }
+  clearTake();
+  try { stream = await navigator.mediaDevices.getUserMedia({audio: true}); }
+  catch (e) {
+    showError(e.name === 'NotAllowedError' || e.name === 'SecurityError' ? 'Microphone access was blocked. Allow it in the address bar / site settings and try again.'
+      : e.name === 'NotFoundError' ? 'No microphone was found.' : 'Could not start the microphone: ' + (e.message || e.name));
+    return;
+  }
+  chunks = [];
+  const mime = chooseMime();
+  try { recorder = mime ? new MediaRecorder(stream, {mimeType: mime}) : new MediaRecorder(stream); }
+  catch (e) { showError('Could not start recording: ' + e.message); stream.getTracks().forEach(t => t.stop()); return; }
+  recorder.ondataavailable = ev => { if (ev.data && ev.data.size) chunks.push(ev.data); };
+  recorder.onstop = finish;
+  recorder.onerror = ev => showError('Recording error: ' + (ev.error && ev.error.message || 'unknown'));
+  recorder.start(1000);
+  startedAt = Date.now(); updateTimer(); tick = setInterval(updateTimer, 250);
+  startMeter(); setState('Recording', true); recordBtn.textContent = 'Stop recording';
+}
+function stop(){ if (recorder && recorder.state !== 'inactive') recorder.stop(); }
+function finish(){
+  clearInterval(tick); updateTimer(); stopMeter();
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  const type = recorder.mimeType || chunks[0]?.type || 'audio/webm';
+  if (!chunks.length) { setState('Ready'); recordBtn.textContent = 'Start recording'; showError('Nothing was recorded.'); return; }
+  blob = new Blob(chunks, {type}); blobUrl = URL.createObjectURL(blob);
+  player.src = blobUrl; player.hidden = false;
+  downloadBtn.disabled = discardBtn.disabled = false;
+  $('formatInfo').textContent = `${type.split(';')[0]} · ${(blob.size/1024).toFixed(0)} KB`;
+  setState('Recorded — preview below'); recordBtn.textContent = 'Record again';
+}
+recordBtn.onclick = () => (recorder && recorder.state === 'recording') ? stop() : start();
+downloadBtn.onclick = () => { if (!blob) return; const a = document.createElement('a'); a.href = blobUrl; a.download = `Recording_${stamp()}.${extFor(blob.type)}`; document.body.appendChild(a); a.click(); a.remove(); };
+discardBtn.onclick = () => { clearTake(); setState('Ready'); recordBtn.textContent = 'Start recording'; };
+window.addEventListener('beforeunload', e => { if (recorder && recorder.state === 'recording') { e.preventDefault(); e.returnValue = ''; } });
+</script>
 </body>
 </html>

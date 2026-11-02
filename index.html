@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SApps</title>
+<meta name="description" content="Small single-file web apps. No installs, no accounts, works offline.">
+<style>
+:root{--bg:#fff;--alt:#f0f0f0;--text:#333;--muted:#6b6b6b;--accent:#4bc67c;--accent-h:#348b57;--on-accent:#fff;--line:rgba(0,0,0,.1)}
+:root[data-theme=dark]{--bg:#1d1d1d;--alt:#2d2d2d;--text:#e0e0e0;--muted:#a0a0a0;--accent:#58319f;--accent-h:#6d45b8;--on-accent:#fff;--line:rgba(255,255,255,.1)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5;transition:background .3s,color .3s}
+a{color:inherit}
+header{max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem 1rem;display:flex;gap:1rem;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+h1{margin:0;font-size:2.2rem;letter-spacing:-.02em}
+.tag{margin:.3rem 0 0;color:var(--muted);max-width:42ch}
+.tools{display:flex;gap:.5rem;align-items:center}
+input[type=search]{padding:.5rem .8rem;border:1px solid var(--line);border-radius:8px;background:var(--alt);color:var(--text);font:inherit;width:14rem}
+button{padding:.5rem .8rem;border:0;border-radius:8px;background:var(--accent);color:var(--on-accent);font:inherit;cursor:pointer}
+button:hover{background:var(--accent-h)}
+main{max-width:1100px;margin:0 auto;padding:0 1.5rem 3rem}
+h2{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:2rem 0 .8rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.card{display:block;text-decoration:none;background:var(--alt);border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem;transition:transform .15s,box-shadow .15s}
+.card:hover,.card:focus-visible{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,.12);outline:2px solid var(--accent)}
+.card b{font-size:1.05rem}
+.card span.d{display:block;color:var(--muted);font-size:.9rem;margin-top:.25rem}
+.badge{float:right;font-size:.7rem;padding:.1rem .5rem;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.empty{color:var(--muted);display:none}
+footer{max-width:1100px;margin:0 auto;padding:1.5rem;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>SApps</h1>
+    <p class="tag">Small single-file web apps. No installs, no accounts. Your data stays in your browser.</p>
+  </div>
+  <div class="tools">
+    <input type="search" id="q" placeholder="Search apps…" aria-label="Search apps">
+    <button id="theme" type="button" aria-label="Toggle light and dark">◐</button>
+  </div>
+</header>
+<main id="main"></main>
+<p class="empty" id="empty" style="max-width:1100px;margin:0 auto;padding:0 1.5rem">Nothing matches.</p>
+<footer>
+  <span id="count"></span> · v<span id="ver"></span> ·
+  <a href="https://github.com/Caddickbrown/SApps">Source on GitHub</a> ·
+  <a href="https://caddickbrown.com">caddickbrown.com</a>
+</footer>
+<script>
+const VERSION = "4.0.0";
+// One entry per app: folder is also the file name (Folder/Folder.html).
+const APPS = [
+  ["Writing", [
+    ["HTMLWriter", "Distraction-free writing with nine themes, line numbers and word count.", "Stable"],
+    ["Postage", "Markdown to HTML with a live preview.", "Stable"],
+    ["HTML2MD", "Paste or upload HTML, get clean Markdown.", "Stable"],
+    ["Glossar", "Edit and read a glossary as JSON, with search and Markdown export.", "Stable"],
+    ["Journl", "An encrypted, offline journal with tags and import/export.", "Stable"]
+  ]],
+  ["Productivity", [
+    ["HTMLToDo", "A task manager that remembers what you are working on.", "Stable"],
+    ["HTMLKanban", "A kanban board with themes, drag and drop, and autosave.", "Beta"],
+    ["Scopr", "Scope a project from an editable checklist template, with hour totals.", "Stable"],
+    ["Formr", "Build a quick form and export the entries as CSV. (Formerly WT.)", "Stable"],
+    ["Wrkot", "A workout log with history, stats and CSV export.", "Stable"],
+    ["CounTally", "A tally counter with history, steps and reports.", "Stable"]
+  ]],
+  ["Creative", [
+    ["JPrompt", "Journalling prompts that ask about you, not just a topic.", "Stable"],
+    ["Algorithmix", "Random creative challenges. Click a word to re-roll, Shift-click to lock.", "Stable"],
+    ["OSlogan", "475 slogans and counting.", "Stable"],
+    ["HTMLPicker", "A spinning wheel to settle arguments.", "Stable"]
+  ]],
+  ["Utilities", [
+    ["TabLite", "View and edit CSV with schema validation.", "Stable"],
+    ["JSON2CSV", "Flatten JSON into CSV.", "Stable"],
+    ["JSONGenerator", "A form that builds JSON records for quotes, lessons and tips.", "Stable"],
+    ["B64", "Images to Base64 and back.", "Stable"],
+    ["Galleria", "A Base64 image slideshow in one file.", "Stable"],
+    ["Recordr", "Record from your microphone and download the file.", "Stable"]
+  ]]
+];
+const main = document.getElementById("main"), q = document.getElementById("q");
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function render(){
+  const term = q.value.trim().toLowerCase(); let n = 0;
+  main.innerHTML = APPS.map(([cat, apps]) => {
+    const hits = apps.filter(a => !term || (a[0]+" "+a[1]+" "+cat).toLowerCase().includes(term));
+    n += hits.length;
+    return hits.length ? `<section><h2>${esc(cat)}</h2><div class="grid">` + hits.map(([name, desc, st]) =>
+      `<a class="card" href="${encodeURI(name)}/${encodeURI(name)}.html"><span class="badge">${esc(st)}</span><b>${esc(name)}</b><span class="d">${esc(desc)}</span></a>`
+    ).join("") + `</div></section>` : "";
+  }).join("");
+  document.getElementById("empty").style.display = n ? "none" : "block";
+  document.getElementById("count").textContent = APPS.reduce((t,[,a])=>t+a.length,0) + " apps";
+}
+q.addEventListener("input", render);
+document.getElementById("ver").textContent = VERSION;
+// Theme: saved choice wins, otherwise follow the system.
+function setTheme(t){document.documentElement.dataset.theme = t}
+let saved = null; try { saved = localStorage.getItem("sapps.home.theme"); } catch(e){}
+setTheme(saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+document.getElementById("theme").addEventListener("click", () => {
+  const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  setTheme(t); try { localStorage.setItem("sapps.home.theme", t); } catch(e){}
+});
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A JSON-driven guidebook: sections, subsections and searchable items.">
+  <title>Glossar</title>
+  <style>
+    :root, :root[data-theme="light"] {
+      --bg:#f0f0f0; --alt:#ffffff; --text:#333333; --muted:#6b6b6b; --border:#d6d6d6;
+      --accent:#4bc67c; --accent-hover:#348b57; --accent-text:#ffffff; --danger:#d64545;
+      --shadow:0 2px 8px rgba(0,0,0,.08);
+    }
+    :root[data-theme="dark"] {
+      --bg:#1d1d1d; --alt:#2d2d2d; --text:#e0e0e0; --muted:#a0a0a0; --border:#444444;
+      --accent:#58319f; --accent-hover:#6d45b8; --accent-text:#ffffff; --danger:#e26a6a;
+      --shadow:0 2px 8px rgba(0,0,0,.4);
+    }
+    :root[data-theme="sepia"] {
+      --bg:#f4ecd8; --alt:#fbf0d9; --text:#5b4636; --muted:#8a7360; --border:#dccfae;
+      --accent:#c19a6b; --accent-hover:#a67c52; --accent-text:#ffffff; --danger:#b5483a;
+      --shadow:0 2px 8px rgba(91,70,54,.12);
+    }
+    :root[data-theme="terminal"] {
+      --bg:#0e290e; --alt:#0c2108; --text:#59b822; --muted:#3f8a18; --border:#1f5a1f;
+      --accent:#13451a; --accent-hover:#186d1d; --accent-text:#59b822; --danger:#c20000;
+      --shadow:none;
+    }
+    * { box-sizing:border-box; }
+    html { color-scheme: light; }
+    :root[data-theme="dark"], :root[data-theme="terminal"] { color-scheme: dark; }
+    body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.45; }
+    :root[data-theme="terminal"] body, :root[data-theme="terminal"] button, :root[data-theme="terminal"] input,
+    :root[data-theme="terminal"] select, :root[data-theme="terminal"] textarea { font-family:ui-monospace,Menlo,Consolas,monospace; }
+    h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-style:italic; font-weight:600; }
+    button, select, input, textarea { font:inherit; color:inherit; }
+    button { background:var(--accent); color:var(--accent-text); border:1px solid transparent; border-radius:6px; padding:.5em .9em; cursor:pointer; transition:background .15s; }
+    :root[data-theme="terminal"] button { border-color:var(--border); }
+    button:hover:not(:disabled) { background:var(--accent-hover); }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    button.secondary { background:transparent; color:var(--text); border-color:var(--border); }
+    button.secondary:hover:not(:disabled) { background:var(--alt); }
+    button.danger { background:transparent; color:var(--danger); border-color:var(--border); }
+    button.danger:hover:not(:disabled) { background:var(--danger); color:#fff; }
+    input[type=text], input[type=number], input[type=search], input[type=date], select, textarea {
+      background:var(--alt); border:1px solid var(--border); border-radius:6px; padding:.5em .65em; max-width:100%;
+    }
+    :focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+    :root[data-theme="dark"] :focus-visible { outline-color:#a98ae6; }
+    a { color:inherit; }
+    .sapp-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; max-width:960px; margin:0 auto; padding:18px 16px 8px; }
+    .sapp-bar .right { display:flex; gap:8px; align-items:center; }
+    .sapp-wrap { max-width:960px; margin:0 auto; padding:8px 16px 64px; }
+    .card { background:var(--alt); border:1px solid var(--border); border-radius:10px; padding:16px; box-shadow:var(--shadow); }
+    .muted { color:var(--muted); }
+    .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+    .sapp-toast { position:fixed; left:50%; bottom:46px; transform:translate(-50%,20px); background:var(--text); color:var(--bg); padding:.55em 1em; border-radius:8px; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:50; max-width:90vw; }
+    .sapp-toast.show { opacity:1; transform:translate(-50%,0); }
+    footer.sapp-foot { position:fixed; bottom:0; right:0; padding:4px 12px; font-size:.8em; color:var(--muted); opacity:.55; transition:opacity .3s; }
+    footer.sapp-foot:hover { opacity:1; }
+    dialog { background:var(--alt); color:var(--text); border:1px solid var(--border); border-radius:12px; padding:20px; width:min(520px,92vw); }
+    dialog::backdrop { background:rgba(0,0,0,.5); }
+    dialog textarea { width:100%; min-height:180px; }
+    dialog .row { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+    @media (prefers-reduced-motion: reduce) { * { transition-duration:.01ms !important; animation-duration:.01ms !important; } }
+
+
+    .shell { display:grid; grid-template-columns:260px minmax(0,1fr); gap:20px; align-items:start; }
+    @media (max-width:760px) { .shell { grid-template-columns:1fr; } }
+    nav.side { position:sticky; top:12px; max-height:calc(100vh - 80px); overflow:auto; }
+    @media (max-width:760px) { nav.side { position:static; max-height:none; } }
+    nav.side input[type=search] { width:100%; margin-bottom:10px; }
+    nav.side details { margin:2px 0; }
+    nav.side summary { cursor:pointer; padding:5px 6px; border-radius:6px; font-weight:600; }
+    nav.side summary:hover, nav.side a.sub:hover { background:var(--bg); }
+    nav.side a.sub { display:block; padding:4px 6px 4px 22px; border-radius:6px; text-decoration:none; font-size:.95rem; }
+    nav.side a.on, nav.side summary.on { background:var(--accent); color:var(--accent-text); }
+    nav.side a.on:hover { background:var(--accent-hover); }
+    .crumbs { font-size:.85rem; color:var(--muted); margin-bottom:6px; }
+    .crumbs a { text-decoration:none; }
+    .crumbs a:hover { text-decoration:underline; }
+    main h2 { margin:0 0 12px; font-size:1.6rem; }
+    .tiles { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px; }
+    a.tile { display:block; text-decoration:none; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px; }
+    a.tile:hover { border-color:var(--accent); }
+    a.tile b { display:block; margin-bottom:4px; }
+    ul.items { list-style:none; margin:0; padding:0; }
+    ul.items li { padding:10px 0; border-bottom:1px solid var(--border); }
+    ul.items li:last-child { border-bottom:0; }
+    ul.items .t { font-weight:600; }
+    ul.items .d { color:var(--muted); margin-top:2px; white-space:pre-wrap; }
+    ul.items a { color:var(--accent); font-size:.9rem; }
+    :root[data-theme="light"] ul.items a, :root[data-theme="sepia"] ul.items a { color:var(--accent-hover); }
+    mark { background:#ffe36a; color:#222; border-radius:3px; padding:0 1px; }
+    .toolbar { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+    textarea#json { width:100%; min-height:340px; font-family:ui-monospace,Menlo,Consolas,monospace; font-size:.85rem; }
+    dialog.wide { width:min(760px,94vw); }
+    #jsonErr { color:var(--danger); min-height:1.4em; font-size:.9rem; }
+    .empty { padding:24px; text-align:center; }
+    @media print {
+      body { background:#fff; color:#000; } .sapp-bar, nav.side, .toolbar, footer.sapp-foot, .sapp-toast { display:none !important; }
+      .shell { display:block; } .card { border:0; box-shadow:none; padding:0; }
+    }
+
+  </style>
+</head>
+<body>
+  <header class="sapp-bar">
+    <h1>Glossar</h1>
+    <div class="right"><label class="sr-only" for="themeSelect">Theme</label><select id="themeSelect" aria-label="Theme"><option value="light">Light</option><option value="dark">Dark</option><option value="sepia">Sepia</option><option value="terminal">Terminal</option></select></div>
+  </header>
+
+  <div class="sapp-wrap">
+    <div class="shell">
+      <nav class="side card" aria-label="Sections">
+        <label class="sr-only" for="q">Search everything</label>
+        <input type="search" id="q" placeholder="Search…  ( / )" autocomplete="off">
+        <div id="tree"></div>
+        <div class="toolbar">
+          <button type="button" class="secondary" id="editBtn">Edit data…</button>
+          <button type="button" class="secondary" id="mdBtn">Export Markdown</button>
+          <button type="button" class="secondary" id="printBtn">Print</button>
+        </div>
+      </nav>
+      <main class="card" id="main" aria-live="polite"></main>
+    </div>
+  </div>
+
+  <dialog id="editDialog" class="wide">
+    <h2 style="margin-top:0">Edit data</h2>
+    <p class="muted" style="margin-top:0">Glossar is driven by JSON: <code>title</code>, then <code>sections</code> → <code>subheadings</code> → <code>items</code>. An item is a string, or an object with <code>title</code>, optional <code>text</code> and optional <code>link</code>.</p>
+    <textarea id="json" spellcheck="false" aria-label="Guidebook JSON"></textarea>
+    <div id="jsonErr" role="alert"></div>
+    <div class="row" style="justify-content:space-between;flex-wrap:wrap">
+      <span class="toolbar" style="margin:0">
+        <button type="button" class="secondary" id="loadFile">Load file…</button>
+        <button type="button" class="secondary" id="saveFile">Download JSON</button>
+        <button type="button" class="secondary" id="resetBtn">Reset to sample</button>
+        <input type="file" id="jsonFile" accept=".json,application/json" hidden>
+      </span>
+      <span class="toolbar" style="margin:0">
+        <button type="button" class="secondary" id="cancelEdit">Cancel</button>
+        <button type="button" id="applyEdit">Apply</button>
+      </span>
+    </div>
+  </dialog>
+
+  <div id="toast" class="sapp-toast" role="status" aria-live="polite"></div>
+  <footer class="sapp-foot"><span id="versionNumber"></span></footer>
+  <script>
+    "use strict";
+    const APP_NAME = "Glossar";
+    const APP_VERSION = "1.0.0";
+    const APP_KEY = "sapps.glossar.";
+
+    // ---- shared SApp plumbing -------------------------------------------------
+    const store = {
+      get(key, fallback) { try { const v = localStorage.getItem(APP_KEY + key); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } },
+      set(key, value) { try { localStorage.setItem(APP_KEY + key, JSON.stringify(value)); return true; } catch (e) { return false; } },
+      remove(key) { try { localStorage.removeItem(APP_KEY + key); } catch (e) { /* ignore */ } }
+    };
+    function esc(text) { return String(text).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])); }
+    function toast(message) {
+      const el = document.getElementById('toast'); if (!el) return;
+      el.textContent = message; el.classList.add('show');
+      clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+    function download(filename, text, type) {
+      const url = URL.createObjectURL(new Blob([text], { type: type || 'text/plain' }));
+      const a = document.createElement('a'); a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    function copyText(text) {
+      const fallback = () => { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+        let ok = false; try { ok = document.execCommand('copy'); } catch (e) { /* ignore */ } t.remove(); return ok; };
+      if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text).then(() => true, () => fallback());
+      return Promise.resolve(fallback());
+    }
+    function initTheme() {
+      const sel = document.getElementById('themeSelect');
+      const saved = store.get('theme', null);
+      const theme = saved || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme; sel.value = theme;
+      sel.addEventListener('change', () => { document.documentElement.dataset.theme = sel.value; store.set('theme', sel.value); });
+    }
+    document.getElementById('versionNumber').textContent = APP_NAME + ' v' + APP_VERSION;
+    document.title = APP_NAME;
+    initTheme();
+
+
+    const SAMPLE = {
+      title: 'Glossar',
+      sections: [
+        { heading: 'Start here', subheadings: [
+          { subheading: 'What is this?', items: [
+            { title: 'A guidebook in one file', text: 'Glossar turns a little JSON into a browsable index: sections, subsections, and the items inside them. Good for glossaries, FAQs, cheat sheets, field guides and reading lists.' },
+            { title: 'Everything stays on this device', text: 'Your data is saved in this browser only. Use Download JSON to keep a copy or move it elsewhere.' }
+          ]},
+          { subheading: 'Make it yours', items: [
+            { title: 'Edit data…', text: 'Opens the JSON. Change anything, press Apply, and the guidebook rebuilds. Mistakes are caught before they are saved.' },
+            { title: 'Search', text: 'Type in the search box (or press / ) to look through every title and description at once.' },
+            { title: 'Export Markdown', text: 'Gets you a Markdown version of the whole guidebook, ready to paste into notes or a README.' }
+          ]}
+        ]},
+        { heading: 'Example: Photography terms', subheadings: [
+          { subheading: 'Exposure', items: [
+            { title: 'Aperture', text: 'The size of the lens opening. A smaller f-number means a wider opening, more light and a shallower depth of field.' },
+            { title: 'Shutter speed', text: 'How long the sensor is exposed. Fast speeds freeze motion; slow speeds blur it.' },
+            { title: 'ISO', text: 'Sensor sensitivity. Higher values brighten the shot and add noise.' }
+          ]},
+          { subheading: 'Composition', items: [
+            { title: 'Rule of thirds', text: 'Place subjects on the lines or intersections of a 3 × 3 grid rather than dead centre.' },
+            { title: 'Leading lines', text: 'Lines in the scene that draw the eye towards the subject.' },
+            'Negative space'
+          ]}
+        ]}
+      ]
+    };
+
+    let data = load();
+    let route = { s: -1, u: -1 };
+    const $ = id => document.getElementById(id);
+
+    function validate(d) {
+      if (!d || typeof d !== 'object' || !Array.isArray(d.sections)) return 'Top level needs a "sections" array.';
+      for (const [i, s] of d.sections.entries()) {
+        if (!s || typeof s.heading !== 'string' || !s.heading.trim()) return 'Section ' + (i + 1) + ' needs a "heading".';
+        if (!Array.isArray(s.subheadings)) return 'Section "' + s.heading + '" needs a "subheadings" array.';
+        for (const [j, u] of s.subheadings.entries()) {
+          if (!u || typeof u.subheading !== 'string' || !u.subheading.trim()) return 'Section "' + s.heading + '", subheading ' + (j + 1) + ' needs a "subheading".';
+          if (!Array.isArray(u.items)) return '"' + u.subheading + '" needs an "items" array.';
+          for (const [k, it] of u.items.entries()) {
+            const ok = typeof it === 'string' || (it && typeof it === 'object' && typeof it.title === 'string');
+            if (!ok) return '"' + u.subheading + '", item ' + (k + 1) + ' must be a string or an object with a "title".';
+          }
+        }
+      }
+      return '';
+    }
+    function load() {
+      const saved = store.get('data', null);
+      return saved && !validate(saved) ? saved : JSON.parse(JSON.stringify(SAMPLE));
+    }
+    const norm = it => typeof it === 'string' ? { title: it, text: '', link: '' } : { title: it.title, text: it.text || '', link: /^https?:\/\//i.test(it.link || '') ? it.link : '' };
+    const hl = (text, q) => { const t = esc(text); if (!q) return t; const re = new RegExp('(' + esc(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'); return t.replace(re, '<mark>$1</mark>'); };
+
+    function parseHash() {
+      const m = location.hash.match(/^#s=(\d+)(?:&u=(\d+))?/);
+      route = m ? { s: +m[1], u: m[2] !== undefined ? +m[2] : -1 } : { s: -1, u: -1 };
+      const sec = data.sections[route.s];
+      if (!sec) route = { s: -1, u: -1 }; else if (route.u >= sec.subheadings.length) route.u = -1;
+    }
+    const href = (s, u) => '#s=' + s + (u >= 0 ? '&u=' + u : '');
+
+    function renderTree() {
+      $('tree').innerHTML = data.sections.map((s, i) =>
+        '<details' + (route.s === i || data.sections.length <= 8 ? ' open' : '') + '><summary class="' + (route.s === i && route.u < 0 ? 'on' : '') + '">' + esc(s.heading) + '</summary>' +
+        '<a class="sub' + (route.s === i && route.u < 0 ? ' on' : '') + '" href="' + href(i, -1) + '">Overview</a>' +
+        s.subheadings.map((u, j) => '<a class="sub' + (route.s === i && route.u === j ? ' on' : '') + '" href="' + href(i, j) + '">' + esc(u.subheading) + '</a>').join('') + '</details>').join('')
+        || '<p class="muted">No sections yet.</p>';
+    }
+    function itemsHtml(items, q) {
+      return '<ul class="items">' + items.map(norm).map(it => '<li><div class="t">' + hl(it.title, q) + '</div>' + (it.text ? '<div class="d">' + hl(it.text, q) + '</div>' : '') + (it.link ? '<a href="' + esc(it.link) + '" target="_blank" rel="noopener noreferrer">' + esc(it.link) + '</a>' : '') + '</li>').join('') + '</ul>';
+    }
+    function renderMain() {
+      const q = $('q').value.trim(), main = $('main');
+      if (q) return renderSearch(q, main);
+      const sec = data.sections[route.s];
+      if (!sec) {
+        main.innerHTML = '<h2>' + esc(data.title || 'Glossar') + '</h2>' + (data.sections.length ? '<div class="tiles">' + data.sections.map((s, i) => '<a class="tile" href="' + href(i, -1) + '"><b>' + esc(s.heading) + '</b><span class="muted">' + s.subheadings.length + ' subsection' + (s.subheadings.length === 1 ? '' : 's') + '</span></a>').join('') + '</div>' : '<p class="empty muted">This guidebook is empty. Use “Edit data…” to add sections.</p>');
+        return;
+      }
+      const crumbs = '<div class="crumbs"><a href="#">Home</a> › ' + (route.u >= 0 ? '<a href="' + href(route.s, -1) + '">' + esc(sec.heading) + '</a>' : esc(sec.heading)) + '</div>';
+      if (route.u < 0) {
+        main.innerHTML = crumbs + '<h2>' + esc(sec.heading) + '</h2>' + (sec.subheadings.length ? '<div class="tiles">' + sec.subheadings.map((u, j) => '<a class="tile" href="' + href(route.s, j) + '"><b>' + esc(u.subheading) + '</b><span class="muted">' + u.items.length + ' item' + (u.items.length === 1 ? '' : 's') + '</span></a>').join('') + '</div>' : '<p class="empty muted">No subsections.</p>');
+      } else {
+        const u = sec.subheadings[route.u];
+        main.innerHTML = crumbs + '<h2>' + esc(u.subheading) + '</h2>' + (u.items.length ? itemsHtml(u.items, '') : '<p class="empty muted">No items.</p>');
+      }
+    }
+    function renderSearch(q, main) {
+      const needle = q.toLowerCase(); let html = '', n = 0;
+      data.sections.forEach((s, i) => s.subheadings.forEach((u, j) => {
+        const hits = u.items.filter(it => { const x = norm(it); return (x.title + ' ' + x.text).toLowerCase().includes(needle); });
+        if (hits.length) { n += hits.length; html += '<h3 style="margin:16px 0 0"><a href="' + href(i, j) + '">' + esc(s.heading) + ' › ' + esc(u.subheading) + '</a></h3>' + itemsHtml(hits, q); }
+      }));
+      main.innerHTML = '<h2>' + n + ' result' + (n === 1 ? '' : 's') + ' for “' + esc(q) + '”</h2>' + (html || '<p class="empty muted">Nothing found.</p>');
+    }
+    function render() { parseHash(); document.title = (data.title || 'Glossar'); renderTree(); renderMain(); }
+
+    // ---- markdown / editing --------------------------------------------------
+    function toMarkdown() {
+      let md = '# ' + (data.title || 'Glossar') + '\n\n';
+      data.sections.forEach(s => { md += '## ' + s.heading + '\n\n'; s.subheadings.forEach(u => {
+        md += '### ' + u.subheading + '\n\n'; u.items.map(norm).forEach(it => { md += '- **' + it.title + '**' + (it.text ? ' — ' + it.text.replace(/\n+/g, ' ') : '') + (it.link ? ' (' + it.link + ')' : '') + '\n'; }); md += '\n'; }); });
+      return md;
+    }
+    function openEditor() { $('json').value = JSON.stringify(data, null, 2); $('jsonErr').textContent = ''; $('editDialog').showModal(); }
+    function tryApply(text) {
+      let parsed; try { parsed = JSON.parse(text); } catch (e) { $('jsonErr').textContent = 'Not valid JSON: ' + e.message; return false; }
+      const err = validate(parsed); if (err) { $('jsonErr').textContent = err; return false; }
+      data = parsed; store.set('data', data); $('jsonErr').textContent = ''; render(); return true;
+    }
+    $('editBtn').addEventListener('click', openEditor);
+    $('cancelEdit').addEventListener('click', () => $('editDialog').close());
+    $('applyEdit').addEventListener('click', () => { if (tryApply($('json').value)) { $('editDialog').close(); toast('Guidebook updated.'); } });
+    $('resetBtn').addEventListener('click', () => { if (confirm('Replace the current data with the sample guidebook?')) $('json').value = JSON.stringify(SAMPLE, null, 2); });
+    $('saveFile').addEventListener('click', () => download('glossar.json', $('json').value));
+    $('loadFile').addEventListener('click', () => $('jsonFile').click());
+    $('jsonFile').addEventListener('change', e => { const f = e.target.files[0]; if (f) f.text().then(t => { $('json').value = t; $('jsonErr').textContent = ''; }); e.target.value = ''; });
+    $('mdBtn').addEventListener('click', () => download('glossar.md', toMarkdown(), 'text/markdown'));
+    $('printBtn').addEventListener('click', () => window.print());
+    $('q').addEventListener('input', renderMain);
+    window.addEventListener('hashchange', () => { $('q').value = ''; render(); });
+    document.addEventListener('keydown', e => {
+      const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+      if (e.key === '/' && !typing) { e.preventDefault(); $('q').focus(); }
+      if (e.key === 'Escape' && document.activeElement === $('q')) { $('q').value = ''; renderMain(); }
+    });
+    render();
+    window.__glossar = { validate, SAMPLE };
+
+  </script>
+</body>
+</html>

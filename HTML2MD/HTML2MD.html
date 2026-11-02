@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTML2MD</title>
+<style>
+:root{
+  --text:#333;--bg:#f1f1f1;--field:#fff;--border:#ccc;--muted:#777;
+  --btn:#4bc67c;--btn-hover:#348b57;--btn-text:#fff;--accent:#4bc67c;
+}
+body.dark-mode{
+  --text:#eee;--bg:#222;--field:#333;--border:#555;--muted:#aaa;
+  --btn:#58319f;--btn-hover:#6d45b8;--btn-text:#fff;--accent:#8e6fd6;
+}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text);background:var(--bg);margin:0;padding:0 1rem 4rem;transition:background-color .3s,color .3s;line-height:1.5}
+header.appbar{display:flex;align-items:center;justify-content:space-between;max-width:900px;margin:0 auto;padding:1rem 0}
+h1.appname{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:2.2em;margin:0}
+main{max-width:900px;margin:0 auto}
+button,.btn{font:inherit;cursor:pointer;border:0;border-radius:6px;padding:.55em 1.1em;background:var(--btn);color:var(--btn-text);transition:background-color .2s}
+button:hover:not(:disabled),.btn:hover{background:var(--btn-hover)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+button.secondary:hover:not(:disabled){background:var(--field)}
+textarea,input[type=text],input[type=number],select{font:inherit;color:var(--text);background:var(--field);border:1px solid var(--border);border-radius:6px;padding:.5em .7em;max-width:100%}
+textarea{width:100%}
+a{color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.75rem 0}
+.muted{color:var(--muted);font-size:.9em}
+.toast{position:fixed;left:50%;bottom:2.5rem;transform:translateX(-50%);background:var(--btn);color:var(--btn-text);padding:.6em 1.2em;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .3s}
+.toast.show{opacity:1}
+footer.appfooter{position:fixed;bottom:0;left:0;right:0;text-align:right;font-size:.8em;padding:.4rem 1rem;background:var(--bg);opacity:.85}
+
+textarea{min-height:16em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media (max-width:700px){.cols{grid-template-columns:1fr}}
+label.lbl{font-weight:600;display:block;margin-bottom:.25rem}
+</style>
+</head>
+<body>
+<header class="appbar"><h1 class="appname">HTML2MD</h1><button id="themeBtn" class="secondary" onclick="toggleTheme()">Dark mode</button></header>
+<main>
+  <p class="muted">Paste HTML or open an .html file. Conversion happens in your browser as you type; nothing is uploaded.</p>
+  <div class="row">
+    <label class="btn" for="fileInput">Open HTML file…</label>
+    <input type="file" id="fileInput" accept=".html,.htm,text/html" hidden>
+    <button class="secondary" id="clearBtn">Clear</button>
+  </div>
+  <div class="cols">
+    <div><label class="lbl" for="htmlIn">HTML</label><textarea id="htmlIn" spellcheck="false" placeholder="<h1>Hello</h1><p>Paste HTML here…</p>"></textarea></div>
+    <div><label class="lbl" for="mdOut">Markdown</label><textarea id="mdOut" readonly spellcheck="false"></textarea></div>
+  </div>
+  <div class="row">
+    <button id="copyBtn">Copy Markdown</button>
+    <button id="exportBtn">Download .md</button>
+  </div>
+</main>
+<footer class="appfooter"><span id="versionNumber"></span> · HTML2MD · <a href="https://caddickbrown.com">Caddick &amp; Brown</a></footer>
+<script>
+const APP_ID = 'html2md', appName = 'HTML2MD', versionNumber = 'v2.0.0';
+/* ---- SApps common helpers ---- */
+const SKEY = 'sapps.' + APP_ID + '.';
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(SKEY + k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(SKEY + k, JSON.stringify(v)); } catch(e){} },
+  raw(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+};
+function applyTheme(dark){
+  document.body.classList.toggle('dark-mode', dark);
+  const b = document.getElementById('themeBtn'); if (b) b.textContent = dark ? 'Light mode' : 'Dark mode';
+}
+function toggleTheme(){ const d = !document.body.classList.contains('dark-mode'); applyTheme(d); store.set('theme', d ? 'dark' : 'light'); }
+(function initTheme(){
+  let t = store.get('theme', null);
+  if (!t) t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  applyTheme(t === 'dark');
+})();
+function toast(msg){
+  let t = document.getElementById('toast');
+  if (!t){ t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); }
+  catch(e){ const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(_){} ta.remove(); }
+  toast('Copied to clipboard');
+}
+function downloadFile(name, text, mime){
+  const url = URL.createObjectURL(new Blob([text], {type: (mime || 'text/plain') + ';charset=utf-8'}));
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.getElementById('versionNumber').textContent = versionNumber;
+
+/* ---------- Converter ---------- */
+const SKIP = new Set(['SCRIPT','STYLE','HEAD','NOSCRIPT','TEMPLATE','META','LINK','TITLE']);
+function escText(s){ return s.replace(/\\/g,'\\\\').replace(/([*_`\[\]])/g,'\\$1'); }
+function inline(node, ctx){
+  let out = '';
+  node.childNodes.forEach(n => { out += convertNode(n, ctx); });
+  return out;
+}
+function wrap(mark, inner){
+  const m = inner.match(/^(\s*)([\s\S]*?)(\s*)$/);
+  return m[2] ? m[1] + mark + m[2] + mark + m[3] : inner;
+}
+function indentBlock(text, pad){ return text.split('\n').map(l => l ? pad + l : l).join('\n'); }
+function convertList(el, ctx){
+  const ordered = el.tagName === 'OL';
+  let i = parseInt(el.getAttribute('start') || '1', 10);
+  let out = '';
+  Array.from(el.children).forEach(li => {
+    if (li.tagName !== 'LI') return;
+    const marker = ordered ? (i++) + '. ' : '- ';
+    let text = '';
+    let nested = '';
+    li.childNodes.forEach(n => {
+      if (n.nodeType === 1 && (n.tagName === 'UL' || n.tagName === 'OL')) nested += '\n' + indentBlock(convertList(n, ctx).replace(/\n+$/,''), '  ');
+      else text += convertNode(n, ctx);
+    });
+    text = text.trim().replace(/\n{2,}/g, '\n').replace(/\n/g, '\n' + ' '.repeat(marker.length));
+    out += marker + text + nested + '\n';
+  });
+  return out + '\n';
+}
+function convertTable(el, ctx){
+  const rows = Array.from(el.querySelectorAll('tr')).map(tr =>
+    Array.from(tr.children).filter(c => c.tagName === 'TD' || c.tagName === 'TH')
+      .map(c => inline(c, ctx).trim().replace(/\n+/g,' ').replace(/\|/g,'\\|')));
+  if (!rows.length) return '';
+  const width = Math.max(...rows.map(r => r.length));
+  rows.forEach(r => { while (r.length < width) r.push(''); });
+  const line = r => '| ' + r.join(' | ') + ' |';
+  return [line(rows[0]), '| ' + Array(width).fill('---').join(' | ') + ' |', ...rows.slice(1).map(line)].join('\n') + '\n\n';
+}
+function convertNode(n, ctx){
+  if (n.nodeType === 3) {
+    const t = n.nodeValue.replace(/\s+/g, ' ');
+    return ctx.pre ? n.nodeValue : escText(t);
+  }
+  if (n.nodeType !== 1 || SKIP.has(n.tagName)) return '';
+  const tag = n.tagName;
+  switch (tag) {
+    case 'H1': case 'H2': case 'H3': case 'H4': case 'H5': case 'H6':
+      return '\n\n' + '#'.repeat(+tag[1]) + ' ' + inline(n, ctx).trim().replace(/\s+/g,' ') + '\n\n';
+    case 'P': case 'DIV': case 'SECTION': case 'ARTICLE': case 'MAIN': case 'HEADER': case 'FOOTER': case 'NAV': case 'ASIDE': case 'FIGURE': case 'FIGCAPTION': case 'DETAILS': case 'SUMMARY': case 'FORM':
+      return '\n\n' + inline(n, ctx).trim() + '\n\n';
+    case 'BR': return '  \n';
+    case 'HR': return '\n\n---\n\n';
+    case 'STRONG': case 'B': return wrap('**', inline(n, ctx));
+    case 'EM': case 'I': return wrap('*', inline(n, ctx));
+    case 'DEL': case 'S': case 'STRIKE': return wrap('~~', inline(n, ctx));
+    case 'CODE': {
+      if (ctx.pre) return n.textContent;
+      const t = n.textContent; const fence = t.includes('`') ? '``' : '`';
+      return fence + (fence === '``' ? ' ' + t + ' ' : t) + fence;
+    }
+    case 'PRE': {
+      const code = n.querySelector('code');
+      const lang = code && (code.className.match(/(?:language|lang)-([\w+-]+)/) || [])[1] || '';
+      const text = (code || n).textContent.replace(/\n$/, '');
+      return '\n\n```' + lang + '\n' + text + '\n```\n\n';
+    }
+    case 'A': {
+      const href = n.getAttribute('href'); const text = inline(n, ctx).trim();
+      if (!href || href.startsWith('javascript:')) return text;
+      const title = n.getAttribute('title');
+      return '[' + (text || href) + '](' + href.replace(/\(/g,'%28').replace(/\)/g,'%29') + (title ? ' "' + title.replace(/"/g,'\\"') + '"' : '') + ')';
+    }
+    case 'IMG': {
+      const src = n.getAttribute('src') || ''; if (!src) return '';
+      const title = n.getAttribute('title');
+      return '![' + (n.getAttribute('alt') || '') + '](' + src + (title ? ' "' + title.replace(/"/g,'\\"') + '"' : '') + ')';
+    }
+    case 'UL': case 'OL': return '\n\n' + convertList(n, ctx);
+    case 'BLOCKQUOTE': {
+      const inner = inline(n, ctx).trim();
+      return '\n\n' + inner.split('\n').map(l => '> ' + l).join('\n') + '\n\n';
+    }
+    case 'TABLE': return '\n\n' + convertTable(n, ctx);
+    default: return inline(n, ctx);
+  }
+}
+function convertToMarkdown(html){
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const root = doc.body || doc.documentElement;
+  // PRE needs raw text: flag via ctx on children
+  const md = (function walk(){ return inline(root, {pre:false}); })();
+  return md.replace(/[ \t]+\n/g, m => m.includes('  \n') ? m : '\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
+}
+
+/* ---------- UI ---------- */
+const htmlIn = document.getElementById('htmlIn'), mdOut = document.getElementById('mdOut');
+let fileName = 'converted';
+function update(){ mdOut.value = htmlIn.value.trim() ? convertToMarkdown(htmlIn.value) : ''; }
+let timer; htmlIn.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(update, 150); });
+document.getElementById('fileInput').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  fileName = f.name.replace(/\.[^.]+$/, '');
+  const r = new FileReader(); r.onload = () => { htmlIn.value = r.result; update(); }; r.readAsText(f);
+  e.target.value = '';
+});
+document.getElementById('clearBtn').onclick = () => { htmlIn.value = ''; mdOut.value = ''; fileName = 'converted'; };
+document.getElementById('copyBtn').onclick = () => { if (mdOut.value) copyText(mdOut.value); else toast('Nothing to copy'); };
+document.getElementById('exportBtn').onclick = () => { if (mdOut.value) downloadFile(fileName + '.md', mdOut.value, 'text/markdown'); else toast('Nothing to export'); };
+</script>
+</body>
+</html>

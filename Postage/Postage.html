@@ -1,182 +1,198 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title id="pageName"></title>
-  <h1 id="pageName"></h1>
-  <style>
-    :root {
-      --background-color: #f0f0f0;
-      --default-text-color: #414141;
-      --colourful-color: #4bc67c;
-      --form-background-color: #ffffff;
-    }
-    body {
-      font-family: system-ui, sans-serif;
-      color: var(--default-text-color);
-      background-color: var(--background-color);
-      display: flex;
-      justify-content: center;
-      /*align-items: center;*/
-      margin-top: 5em;
-      height: 100vh;
-      font-family: system-ui, sans-serif;
-    }
-    body a:link, body a:visited {
-      color: var(--default-text-color);
-      text-decoration: underline;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    body a:hover {
-      color: var(--colourful-color);
-      text-decoration: none;
-    }
-    textarea {
-      background-color: var(--form-background-color);
-      border-radius: 5px;
-      font-family: Georgia, 'Times New Roman', Times, serif;
-      font-style: italic;
-      padding: 20px;
-      width: 60%;
-      
-    }
-    h1 {
-      position: absolute;
-      top: 0;
-      left: 0;
-      padding-left: 10px;
-      margin-right: 10px;
-      font-family: Georgia, 'Times New Roman', Times, serif;
-      font-style: italic;
-      color: var(--header-text-color);
-    }
-    form {
-      color: var(--header-text-color);
-    }
-    footer {
-      text-align: right;
-      font-size: 0.8em;
-      vertical-align: middle;
-      position: fixed;
-      bottom: 0;
-      width: 95%;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Postage</title>
+<style>
+:root{
+  --text:#333;--bg:#f1f1f1;--field:#fff;--border:#ccc;--muted:#777;
+  --btn:#4bc67c;--btn-hover:#348b57;--btn-text:#fff;--accent:#4bc67c;
+}
+body.dark-mode{
+  --text:#eee;--bg:#222;--field:#333;--border:#555;--muted:#aaa;
+  --btn:#58319f;--btn-hover:#6d45b8;--btn-text:#fff;--accent:#8e6fd6;
+}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text);background:var(--bg);margin:0;padding:0 1rem 4rem;transition:background-color .3s,color .3s;line-height:1.5}
+header.appbar{display:flex;align-items:center;justify-content:space-between;max-width:900px;margin:0 auto;padding:1rem 0}
+h1.appname{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:2.2em;margin:0}
+main{max-width:900px;margin:0 auto}
+button,.btn{font:inherit;cursor:pointer;border:0;border-radius:6px;padding:.55em 1.1em;background:var(--btn);color:var(--btn-text);transition:background-color .2s}
+button:hover:not(:disabled),.btn:hover{background:var(--btn-hover)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+button.secondary:hover:not(:disabled){background:var(--field)}
+textarea,input[type=text],input[type=number],select{font:inherit;color:var(--text);background:var(--field);border:1px solid var(--border);border-radius:6px;padding:.5em .7em;max-width:100%}
+textarea{width:100%}
+a{color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.75rem 0}
+.muted{color:var(--muted);font-size:.9em}
+.toast{position:fixed;left:50%;bottom:2.5rem;transform:translateX(-50%);background:var(--btn);color:var(--btn-text);padding:.6em 1.2em;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .3s}
+.toast.show{opacity:1}
+footer.appfooter{position:fixed;bottom:0;left:0;right:0;text-align:right;font-size:.8em;padding:.4rem 1rem;background:var(--bg);opacity:.85}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+#md{min-height:24em;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9em}
+#preview{min-height:24em;background:var(--field);border:1px solid var(--border);border-radius:6px;padding:.5rem 1rem;overflow:auto}
+.lbl{font-weight:600;display:block;margin-bottom:.25rem}
+/* rendered markdown */
+.md h1,.md h2,.md h3{line-height:1.25}
+.md pre{background:var(--bg);border:1px solid var(--border);padding:.7rem;border-radius:6px;overflow:auto}
+.md code{background:var(--bg);padding:.1em .3em;border-radius:4px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.md pre code{background:none;padding:0}
+.md blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--accent);color:var(--muted)}
+.md table{border-collapse:collapse}.md th,.md td{border:1px solid var(--border);padding:.3rem .6rem}
+.md img{max-width:100%}
+.md ul.todo{list-style:none;padding-left:1.2rem}
+</style>
 </head>
 <body>
-  <form>
-    <textarea id="markdownInput" rows="10" cols="80" oninput="updateHTMLContent()"></textarea>
-    <br>
-    <button type="button" onclick="exportHTML()">Export HTML</button>
-  </form>
+<header class="appbar"><h1 class="appname">Postage</h1><button id="themeBtn" class="secondary" onclick="toggleTheme()">Dark mode</button></header>
+<main>
+  <p class="muted">Write Markdown on the left, see it on the right, export a standalone HTML page.</p>
+  <div class="row">
+    <label class="btn" for="fileIn">Open .md file…</label><input type="file" id="fileIn" accept=".md,.markdown,.txt,text/markdown,text/plain" hidden>
+    <button id="exportBtn">Export HTML</button>
+    <button class="secondary" id="copyBtn">Copy HTML</button>
+    <button class="secondary" id="clearBtn">Clear</button>
+  </div>
+  <div class="cols">
+    <div><label class="lbl" for="md">Markdown</label><textarea id="md" spellcheck="false" placeholder="# Hello&#10;&#10;Write something **bold**…"></textarea></div>
+    <div><span class="lbl">Preview</span><div id="preview" class="md"></div></div>
+  </div>
+</main>
+<footer class="appfooter"><span id="versionNumber"></span> · Postage · <a href="https://caddickbrown.com">Caddick &amp; Brown</a></footer>
+<script>
+const APP_ID = 'postage', appName = 'Postage', versionNumber = 'v2.0.0';
+/* ---- SApps common helpers ---- */
+const SKEY = 'sapps.' + APP_ID + '.';
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(SKEY + k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(SKEY + k, JSON.stringify(v)); } catch(e){} },
+  raw(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+};
+function applyTheme(dark){
+  document.body.classList.toggle('dark-mode', dark);
+  const b = document.getElementById('themeBtn'); if (b) b.textContent = dark ? 'Light mode' : 'Dark mode';
+}
+function toggleTheme(){ const d = !document.body.classList.contains('dark-mode'); applyTheme(d); store.set('theme', d ? 'dark' : 'light'); }
+(function initTheme(){
+  let t = store.get('theme', null);
+  if (!t) t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  applyTheme(t === 'dark');
+})();
+function toast(msg){
+  let t = document.getElementById('toast');
+  if (!t){ t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); }
+  catch(e){ const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(_){} ta.remove(); }
+  toast('Copied to clipboard');
+}
+function downloadFile(name, text, mime){
+  const url = URL.createObjectURL(new Blob([text], {type: (mime || 'text/plain') + ';charset=utf-8'}));
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
-  <script>
-    var versionNumber = "v1.1.1";
-    var appName = "Postage";
+document.getElementById('versionNumber').textContent = versionNumber;
+const $ = id => document.getElementById(id);
 
-    document.querySelectorAll("#pageName").forEach(function(element) {
-      element.innerHTML = appName;
-    });
+/* ---------- Markdown → HTML (block parser + inline pass; raw HTML in the input is escaped) ---------- */
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function inlineMd(s){
+  const stash = [];
+  s = esc(s);
+  s = s.replace(/`([^`]+)`/g, (m, c) => { stash.push('<code>' + c + '</code>'); return '\u0000' + (stash.length - 1) + '\u0000'; });
+  s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+&quot;(.*?)&quot;)?\)/g, (m, alt, src, t) => '<img src="' + safeUrl(src) + '" alt="' + alt + '"' + (t ? ' title="' + t + '"' : '') + '>');
+  s = s.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+&quot;(.*?)&quot;)?\)/g, (m, txt, href, t) => '<a href="' + safeUrl(href) + '"' + (t ? ' title="' + t + '"' : '') + '>' + txt + '</a>');
+  s = s.replace(/(\*\*|__)(?=\S)([\s\S]*?\S)\1/g, '<strong>$2</strong>');
+  s = s.replace(/\*(?=\S)([\s\S]*?\S)\*/g, '<em>$1</em>');
+  s = s.replace(/(^|[^\w])_(?=\S)([\s\S]*?\S)_(?!\w)/g, '$1<em>$2</em>');
+  s = s.replace(/~~(?=\S)([\s\S]*?\S)~~/g, '<del>$1</del>');
+  s = s.replace(/ {2,}\n/g, '<br>\n');
+  return s.replace(/\u0000(\d+)\u0000/g, (m, i) => stash[+i]);
+}
+function safeUrl(u){ return /^\s*(javascript|data):/i.test(u) && !/^data:image\//i.test(u) ? '#' : u; }
 
-    function markdownToHTML(markdown) {
-      // Convert Headers: # Heading => <h1>Heading</h1>
-      markdown = markdown.replace(/(^#{1,6}\s*)(.+)/gm, (match, hashes, headingText) => {
-        const headerLevel = hashes.length - 1;
-        return `<h${headerLevel}>${headingText}</h${headerLevel}>`;
-      });
-
-      // Convert Bold: **text** => <strong>text</strong>
-      markdown = markdown.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-      // Convert Italic: _text_ => <em>text</em>
-      markdown = markdown.replace(/_(.*?)_/g, '<em>$1</em>');
-      markdown = markdown.replace(/\*(.*?)\*/g, '<em>$1</em>');
-
-      // Convert Lists: - item => <ul><li>item</li></ul>
-      markdown = markdown.replace(/^\- (.+)/gm, '<ul><li>$1</li></ul>');
-
-      // Convert Line Breaks: \n => <br>
-      markdown = markdown.replace(/\n/g, '\n<br>\n');
-
-      return markdown;
+function markdownToHTML(src){
+  const lines = src.replace(/\r\n?/g, '\n').split('\n'); const out = []; let i = 0;
+  const isBlank = l => /^\s*$/.test(l);
+  const startsBlock = l => /^(#{1,6}\s|```|>\s?|\s*([-*+]|\d+\.)\s|\s*(---+|\*\*\*+|___+)\s*$|\|)/.test(l);
+  while (i < lines.length) {
+    const l = lines[i];
+    if (isBlank(l)) { i++; continue; }
+    let m;
+    if ((m = l.match(/^```\s*([\w+-]*)/))) {
+      const code = []; i++; while (i < lines.length && !/^```/.test(lines[i])) code.push(lines[i++]); i++;
+      out.push('<pre><code' + (m[1] ? ' class="language-' + m[1] + '"' : '') + '>' + esc(code.join('\n')) + '</code></pre>'); continue;
     }
-
-    function updateHTMLContent() {
-      // Get the input from the textarea
-      const markdownInput = document.getElementById('markdownInput').value;
-
-      // Convert Markdown to HTML using the custom function
-      convertedHTML = markdownToHTML(markdownInput);
+    if ((m = l.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/))) { out.push('<h' + m[1].length + '>' + inlineMd(m[2]) + '</h' + m[1].length + '>'); i++; continue; }
+    if (/^\s*(---+|\*\*\*+|___+)\s*$/.test(l)) { out.push('<hr>'); i++; continue; }
+    if (/^>\s?/.test(l)) { const q = []; while (i < lines.length && /^>\s?/.test(lines[i])) q.push(lines[i++].replace(/^>\s?/, '')); out.push('<blockquote>' + markdownToHTML(q.join('\n')) + '</blockquote>'); continue; }
+    if (/^\|.*\|\s*$/.test(l) && i + 1 < lines.length && /^\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/.test(lines[i + 1])) {
+      const cells = r => r.trim().replace(/^\||\|$/g, '').split(/(?<!\\)\|/).map(c => inlineMd(c.trim().replace(/\\\|/g, '|')));
+      const head = cells(l); i += 2; const body = [];
+      while (i < lines.length && /^\|.*\|\s*$/.test(lines[i])) body.push(cells(lines[i++]));
+      out.push('<table><thead><tr>' + head.map(c => '<th>' + c + '</th>').join('') + '</tr></thead><tbody>' + body.map(r => '<tr>' + r.map(c => '<td>' + c + '</td>').join('') + '</tr>').join('') + '</tbody></table>'); continue;
     }
-
-    function exportHTML() {
-      // Construct the full HTML content
-      const fullHtmlContent = `<!DOCTYPE html>
-      <html>
-      <head>
-        <title>Converted HTML</title>
-        <style>
-          :root {
-            --background-color: #f0f0f0;
-            --default-text-color: #414141;
-            --colourful-color: #4bc67c;
-          }
-          body {
-            font-family: system-ui, sans-serif;
-            color: var(--default-text-color);
-            background-color: var(--background-color);
-            transition: background-color 0.3s ease, color 0.3s ease;
-            margin-bottom: 5em;
-            justify-content: center;
-            width: 60%;
-            display: flex;
-          }
-          body a:link, body a:visited {
-            color: var(--default-text-color);
-            text-decoration: underline;
-          }
-          body a:hover {
-            color: var(--colourful-color);
-            text-decoration: none;
-          }
-          footer {
-            text-align: right;
-            font-size: 0.8em;
-            vertical-align: middle;
-            position: fixed;
-            bottom: 0;
-            width: 95%;
-          }
-        </style>
-      </head>
-      <body>
-        ${convertedHTML}
-      </body>
-      <footer>
-        <p>Created with <a href="https://github.com/Caddickbrown/Postage">Postage</a> ${versionNumber} by <a href="https://caddickbrown.com">Caddick & Brown</a></p>
-      </footer>
-      </html>`;
-
-      // Create a Blob with the full HTML content
-      const blob = new Blob([fullHtmlContent], { type: 'text/html' });
-
-      // Create a temporary anchor element to trigger the download
-      const a = document.createElement('a');
-      a.download = 'converted.html';
-      a.href = URL.createObjectURL(blob);
-
-      // Append the anchor element to the document and click it programmatically
-      document.body.appendChild(a);
-      a.click();
-
-      // Clean up by removing the temporary anchor element
-      document.body.removeChild(a);
+    if (/^\s*([-*+]|\d+\.)\s/.test(l)) {
+      const ordered = /^\s*\d+\./.test(l); const items = [];
+      while (i < lines.length && /^\s*([-*+]|\d+\.)\s/.test(lines[i])) {
+        const mm = lines[i].match(/^(\s*)([-*+]|\d+\.)\s+(.*)$/); items.push({indent: mm[1].replace(/\t/g, '    ').length, text: mm[3]}); i++;
+      }
+      out.push(renderList(items, ordered)); continue;
     }
+    const para = [l]; i++;
+    while (i < lines.length && !isBlank(lines[i]) && !startsBlock(lines[i])) para.push(lines[i++]);
+    out.push('<p>' + inlineMd(para.join('\n')) + '</p>');
+  }
+  return out.join('\n');
+}
+function renderList(items, ordered){
+  // items: flat list with indent; build nested structure by indent depth
+  const tag = ordered ? 'ol' : 'ul'; let html = '', k = 0;
+  (function build(base){
+    const todo = items.slice(k).some(it => it.indent >= base && /^\[[ xX]\]\s/.test(it.text));
+    html += '<' + tag + (todo ? ' class="todo"' : '') + '>';
+    while (k < items.length && items[k].indent >= base) {
+      const it = items[k]; if (it.indent > base) { html += '<li>'; build(it.indent); html += '</li>'; continue; }
+      k++; let t = it.text, box = '';
+      const m = t.match(/^\[([ xX])\]\s+(.*)$/); if (m) { box = '<input type="checkbox" disabled' + (m[1] !== ' ' ? ' checked' : '') + '> '; t = m[2]; }
+      html += '<li>' + box + inlineMd(t);
+      if (k < items.length && items[k].indent > base) build(items[k].indent);
+      html += '</li>';
+    }
+    html += '</' + tag + '>';
+  })(items[0].indent);
+  return html;
+}
 
-    let convertedHTML = ''; // Store the converted HTML here
-  </script>
+/* ---------- UI ---------- */
+const md = $('md'), preview = $('preview');
+function update(){ preview.innerHTML = markdownToHTML(md.value); store.set('draft', md.value); }
+let t; md.addEventListener('input', () => { clearTimeout(t); t = setTimeout(update, 120); });
+$('fileIn').addEventListener('change', e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { md.value = r.result; update(); }; r.readAsText(f); e.target.value = ''; });
+$('clearBtn').onclick = () => { md.value = ''; update(); };
+
+const PAGE_CSS = ':root{--text:#333;--bg:#f1f1f1;--alt:#fff;--accent:#4bc67c}@media(prefers-color-scheme:dark){:root{--text:#eee;--bg:#222;--alt:#333;--accent:#8e6fd6}}'
+ + 'body{font-family:system-ui,sans-serif;color:var(--text);background:var(--bg);max-width:46rem;margin:0 auto;padding:2rem 1rem 5rem;line-height:1.6}a{color:var(--accent)}'
+ + 'pre{background:var(--alt);padding:.8rem;border-radius:6px;overflow:auto}code{background:var(--alt);padding:.1em .3em;border-radius:4px}pre code{padding:0}'
+ + 'blockquote{margin-left:0;padding-left:1rem;border-left:4px solid var(--accent);opacity:.85}table{border-collapse:collapse}th,td{border:1px solid #8888;padding:.3rem .6rem}img{max-width:100%}ul.todo{list-style:none;padding-left:1.2rem}'
+ + 'footer{margin-top:3rem;font-size:.8em;text-align:right;opacity:.7}';
+function fullPage(){
+  const body = markdownToHTML(md.value);
+  const h1 = (body.match(/<h1>(.*?)<\/h1>/) || [])[1];
+  const title = h1 ? h1.replace(/<[^>]+>/g, '') : 'Document';
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>' + esc(title) + '</title>\n<style>' + PAGE_CSS + '</style>\n</head>\n<body>\n' + body + '\n<footer>Created with Postage ' + versionNumber + '</footer>\n</body>\n</html>\n';
+}
+$('exportBtn').onclick = () => md.value.trim() ? downloadFile('converted.html', fullPage(), 'text/html') : toast('Nothing to export');
+$('copyBtn').onclick = () => md.value.trim() ? copyText(markdownToHTML(md.value)) : toast('Nothing to copy');
+md.value = store.get('draft', ''); update();
+</script>
 </body>
-<footer>
-  <p id="versionNumber"></p>
-  <p>Find this project on <a href="https://github.com/Caddickbrown/Postage>">GitHub</a> - Created by <a href="https://caddickbrown.com>">Caddick & Brown</a></p>
-  <script>document.querySelectorAll("#versionNumber").forEach(function(element) {element.innerHTML = versionNumber;});</script>
 </html>

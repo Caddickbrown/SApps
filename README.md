@@ -24,65 +24,59 @@ There is some customisation that can be done - but this should be a one time thi
 
 ## Quick Start
 1. Download the latest release
-2. Open `SApp Home/SApp Home.html` in your browser
-3. Select any app from the launcher
+2. Open `index.html` in your browser
+3. Pick an app
+
+Every app also works on its own: each lives at `<App>/<App>.html`.
 
 ## Features
 ### Core Features
 - 🚀 No installation required
 - 💻 Cross-platform compatibility
 - 🔌 USB drive portable
-- 🌐 Offline-first design
-- 🎨 Unified theme system (Light/Dark/Sepia/Terminal)
-- 💾 Local storage for data persistence
+- 🌐 Offline-first: no fonts, CDNs or network calls
+- 🎨 Light/dark mode, with themes in the larger apps
+- 💾 Local storage for data persistence, keys namespaced `sapps.<app>.*`
 - 📱 Responsive design
-- 🔒 Privacy-focused (all data stored locally)
-
-### Browser Compatibility
-- Chrome (Recommended)
-- Firefox
-- Edge
-- Safari
+- 🔒 Privacy-focused (all data stays in the browser)
 
 ## Applications
 
-### Writing & Documentation
-| App | Description | Status |
-|-----|-------------|---------|
-| [HTMLWriter](HTMLWriter/HTMLWriter - README.md) | Distraction-free writing environment | Stable |
-| [Journaller](Journaller/Journaller - README.md) | Journal entry management and export | Stable |
-| [Postage](Postage/Postage - README.md) | Markdown to HTML converter | Stable |
+| Section | App | What it does | Status |
+|---|---|---|---|
+| Writing | [HTMLWriter](HTMLWriter/README.md) | Distraction-free writing, nine themes | Stable |
+| | [Postage](Postage/README.md) | Markdown to HTML, live preview | Stable |
+| | [HTML2MD](HTML2MD/README.md) | HTML to Markdown | Stable |
+| | [Glossar](Glossar/README.md) | JSON glossary editor and reader | Stable |
+| | [Journl](Journl/README.md) | Encrypted offline journal | Stable |
+| Productivity | [HTMLToDo](HTMLToDo/README.md) | Task management | Stable |
+| | [HTMLKanban](HTMLKanban/README.md) | Kanban board | Beta |
+| | [Scopr](Scopr/README.md) | Scope a project from a checklist template | Stable |
+| | [Formr](Formr/README.md) | Form data to CSV (formerly WT) | Stable |
+| | [Wrkot](Wrkot/README.md) | Workout log | Stable |
+| | [CounTally](CounTally/README.md) | Tally counter | Stable |
+| Creative | [JPrompt](JPrompt/README.md) | Journalling prompts | Stable |
+| | [Algorithmix](Algorithmix/README.md) | Creative challenge generator | Stable |
+| | [OSlogan](OSlogan/README.md) | Slogan generator | Stable |
+| | [HTMLPicker](HTMLPicker/README.md) | Spinning-wheel picker | Stable |
+| Utilities | [TabLite](TabLite/README.md) | CSV viewer and editor | Stable |
+| | [JSON2CSV](JSON2CSV/README.md) | JSON to CSV | Stable |
+| | [JSONGenerator](JSONGenerator/README.md) | JSON record builder | Stable |
+| | [B64](B64/README.md) | Image to Base64 | Stable |
+| | [Galleria](Galleria/README.md) | Base64 image gallery | Stable |
+| | [Recordr](Recordr/README.md) | Microphone recorder | Stable |
 
-### Productivity
-| App | Description | Status |
-|-----|-------------|---------|
-| [HTMLToDo](HTMLToDo/HTMLToDo - README.md) | Task management system | Stable |
-| [HTMLKanban](HTMLKanban/HTMLKanban - README.md) | Visual project management | Beta |
-| [WT](WT/WT - README.md) | Form data to CSV exporter | Stable |
-| [Scopr](Scopr/Scopr - README.md) | Scope tasks using templates | Beta |
-
-### Creative Tools
-| App | Description | Status |
-|-----|-------------|---------|
-| [JPrompt](JPrompt/JPrompt - README.md) | Journal prompt generator | Stable |
-| [OSlogan](OSlogan/OSlogan - README.md) | Random slogan generator | Stable |
-| [Algorithmix](Algorithmix/Algorithmix - README.md) | Creative prompt generator | Beta |
-
-### Utilities
-| App | Description | Status |
-|-----|-------------|---------|
-| [HTML2MD](HTML2MD/HTML2MD - README.md) | HTML to Markdown converter | Stable |
-| [Galleria](Galleria/Galleria - README.md) | Base64 image gallery | Stable |
-| [B64](B64/B64 - README.md) | Image to Base64 converter | Stable |
-| [Recordr](Recordr/Recordr - README.md) | Simple audio recorder | Beta |
+Also in the repo but not on the home page: [Journaller](Journaller/README.md)
+(uses CDN libraries, so not offline) and [ExApps](ExApps/README.md) (Python
+scripts that need a filesystem; see [REVIEW](ExApps/REVIEW.md)).
 
 ## Technical Details
 
 ### Architecture
-- Single HTML file per application
+- Single HTML file per application, named after its folder (`Folder/Folder.html`)
+- Old versions in `Archive/`, experiments in `R&D/`; the version lives in the file, not the filename
 - Inline CSS and JavaScript
 - LocalStorage for data persistence
-- PostMessage API for inter-app communication
 - Standardized theme system across apps
 
 ### Template System
@@ -130,6 +124,22 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - Website: [caddickbrown.com](https://caddickbrown.com)
 
 ## Changelog
+
+### [4.0.0] - 2026-11
+#### Added
+- `index.html` home page (replaces SApp Home): search, light/dark, links to every app
+- HTMLPicker (merged with Batboard), Glossar, Wrkot, Journl, JSON2CSV, CounTally, Algorithmix web app
+- JSONGenerator and TabLite documented and listed
+
+#### Changed
+- Standardised layout: `Folder/Folder.html`, `README.md` per app, `Archive/` for old versions
+- HTMLWriter 4.0.0 merges the Acid themes (system fonts, no Google Fonts)
+- Rewritten: HTML2MD, OSlogan, Postage, Recordr, Scopr, Formr (formerly WT), JPrompt
+- localStorage keys namespaced `sapps.<app>.*`, with migration from the old keys
+- HTMLKanban 3.1.0 (autosave, Enter-to-confirm bug fixed); HTMLToDo 5.7.1
+
+#### Removed
+- SApp Home iframe launcher
 
 ### [1.3.0] - 2023-11-17
 

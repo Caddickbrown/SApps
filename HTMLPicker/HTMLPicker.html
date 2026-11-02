@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A random picker: spin a wheel of your own options.">
+  <title>HTMLPicker</title>
+  <style>
+    :root, :root[data-theme="light"] {
+      --bg:#f0f0f0; --alt:#ffffff; --text:#333333; --muted:#6b6b6b; --border:#d6d6d6;
+      --accent:#4bc67c; --accent-hover:#348b57; --accent-text:#ffffff; --danger:#d64545;
+      --shadow:0 2px 8px rgba(0,0,0,.08);
+    }
+    :root[data-theme="dark"] {
+      --bg:#1d1d1d; --alt:#2d2d2d; --text:#e0e0e0; --muted:#a0a0a0; --border:#444444;
+      --accent:#58319f; --accent-hover:#6d45b8; --accent-text:#ffffff; --danger:#e26a6a;
+      --shadow:0 2px 8px rgba(0,0,0,.4);
+    }
+    :root[data-theme="sepia"] {
+      --bg:#f4ecd8; --alt:#fbf0d9; --text:#5b4636; --muted:#8a7360; --border:#dccfae;
+      --accent:#c19a6b; --accent-hover:#a67c52; --accent-text:#ffffff; --danger:#b5483a;
+      --shadow:0 2px 8px rgba(91,70,54,.12);
+    }
+    :root[data-theme="terminal"] {
+      --bg:#0e290e; --alt:#0c2108; --text:#59b822; --muted:#3f8a18; --border:#1f5a1f;
+      --accent:#13451a; --accent-hover:#186d1d; --accent-text:#59b822; --danger:#c20000;
+      --shadow:none;
+    }
+    * { box-sizing:border-box; }
+    html { color-scheme: light; }
+    :root[data-theme="dark"], :root[data-theme="terminal"] { color-scheme: dark; }
+    body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.45; }
+    :root[data-theme="terminal"] body, :root[data-theme="terminal"] button, :root[data-theme="terminal"] input,
+    :root[data-theme="terminal"] select, :root[data-theme="terminal"] textarea { font-family:ui-monospace,Menlo,Consolas,monospace; }
+    h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-style:italic; font-weight:600; }
+    button, select, input, textarea { font:inherit; color:inherit; }
+    button { background:var(--accent); color:var(--accent-text); border:1px solid transparent; border-radius:6px; padding:.5em .9em; cursor:pointer; transition:background .15s; }
+    :root[data-theme="terminal"] button { border-color:var(--border); }
+    button:hover:not(:disabled) { background:var(--accent-hover); }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    button.secondary { background:transparent; color:var(--text); border-color:var(--border); }
+    button.secondary:hover:not(:disabled) { background:var(--alt); }
+    button.danger { background:transparent; color:var(--danger); border-color:var(--border); }
+    button.danger:hover:not(:disabled) { background:var(--danger); color:#fff; }
+    input[type=text], input[type=number], input[type=search], input[type=date], select, textarea {
+      background:var(--alt); border:1px solid var(--border); border-radius:6px; padding:.5em .65em; max-width:100%;
+    }
+    :focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+    :root[data-theme="dark"] :focus-visible { outline-color:#a98ae6; }
+    a { color:inherit; }
+    .sapp-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; max-width:960px; margin:0 auto; padding:18px 16px 8px; }
+    .sapp-bar .right { display:flex; gap:8px; align-items:center; }
+    .sapp-wrap { max-width:960px; margin:0 auto; padding:8px 16px 64px; }
+    .card { background:var(--alt); border:1px solid var(--border); border-radius:10px; padding:16px; box-shadow:var(--shadow); }
+    .muted { color:var(--muted); }
+    .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+    .sapp-toast { position:fixed; left:50%; bottom:46px; transform:translate(-50%,20px); background:var(--text); color:var(--bg); padding:.55em 1em; border-radius:8px; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:50; max-width:90vw; }
+    .sapp-toast.show { opacity:1; transform:translate(-50%,0); }
+    footer.sapp-foot { position:fixed; bottom:0; right:0; padding:4px 12px; font-size:.8em; color:var(--muted); opacity:.55; transition:opacity .3s; }
+    footer.sapp-foot:hover { opacity:1; }
+    dialog { background:var(--alt); color:var(--text); border:1px solid var(--border); border-radius:12px; padding:20px; width:min(520px,92vw); }
+    dialog::backdrop { background:rgba(0,0,0,.5); }
+    dialog textarea { width:100%; min-height:180px; }
+    dialog .row { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+    @media (prefers-reduced-motion: reduce) { * { transition-duration:.01ms !important; animation-duration:.01ms !important; } }
+
+
+    .picker { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:20px; align-items:start; }
+    @media (max-width:760px) { .picker { grid-template-columns:1fr; } }
+    .stage { text-align:center; }
+    .wheel-box { position:relative; width:min(340px,100%); aspect-ratio:1; margin:14px auto 8px; }
+    #wheel { width:100%; height:100%; border-radius:50%; box-shadow:0 4px 18px rgba(0,0,0,.3); display:block; }
+    .pointer { position:absolute; top:-12px; left:50%; width:30px; height:34px; transform:translateX(-50%); background:var(--danger); clip-path:polygon(50% 100%,0 0,100% 0); z-index:2; filter:drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
+    .hub { position:absolute; inset:calc(50% - 16px); border-radius:50%; background:var(--alt); border:3px solid var(--border); pointer-events:none; }
+    #result { min-height:2.2em; font-size:1.7rem; font-weight:700; margin:10px 0 8px; word-break:break-word; }
+    #result.pop { animation:pop .5s ease-out; }
+    @keyframes pop { 0% { transform:scale(.7); opacity:0; } 60% { transform:scale(1.12); opacity:1; } 100% { transform:scale(1); } }
+    #spin { font-size:1.15rem; padding:.65em 1.8em; }
+    .add { display:flex; gap:8px; margin-bottom:10px; }
+    .add input { flex:1; min-width:0; }
+    .tools { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
+    ul.options { list-style:none; margin:0; padding:0; max-height:340px; overflow:auto; border:1px solid var(--border); border-radius:8px; }
+    ul.options li { display:flex; align-items:center; gap:8px; padding:6px 8px; border-bottom:1px solid var(--border); }
+    ul.options li:last-child { border-bottom:0; }
+    ul.options input[type=color] { width:30px; height:30px; padding:0; border:1px solid var(--border); border-radius:6px; background:none; cursor:pointer; flex:none; }
+    ul.options input[type=text] { flex:1; min-width:0; border-color:transparent; background:transparent; }
+    ul.options input[type=text]:focus { border-color:var(--border); background:var(--alt); }
+    ul.options li button { padding:.2em .6em; }
+    .empty { padding:14px; text-align:center; }
+    label.chk { display:flex; align-items:center; gap:8px; margin:8px 0; cursor:pointer; }
+    .lists { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:6px; }
+    .lists select { flex:1; min-width:140px; }
+    h2 { font-size:1rem; margin:14px 0 6px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+    ol.history { margin:0; padding-left:1.4em; font-size:.95rem; text-align:left; }
+    ol.history li { margin:2px 0; }
+
+  </style>
+</head>
+<body>
+  <header class="sapp-bar">
+    <h1>HTMLPicker</h1>
+    <div class="right"><label class="sr-only" for="themeSelect">Theme</label><select id="themeSelect" aria-label="Theme"><option value="light">Light</option><option value="dark">Dark</option><option value="sepia">Sepia</option><option value="terminal">Terminal</option></select></div>
+  </header>
+
+  <main class="sapp-wrap">
+    <div class="picker">
+      <section class="card stage" aria-label="Wheel">
+        <div class="wheel-box">
+          <div class="pointer" aria-hidden="true"></div>
+          <canvas id="wheel" width="680" height="680" role="img" aria-label="Spinning wheel"></canvas>
+          <div class="hub" aria-hidden="true"></div>
+        </div>
+        <div id="result" aria-live="assertive"></div>
+        <button id="spin" type="button">Spin</button>
+        <p class="muted" style="margin:10px 0 0;font-size:.85rem">Tip: press <kbd>Space</kbd> to spin.</p>
+        <h2>Recent results</h2>
+        <ol id="history" class="history"></ol>
+        <button id="clearHistory" type="button" class="secondary" style="margin-top:8px">Clear history</button>
+      </section>
+
+      <section class="card" aria-label="Options">
+        <form class="add" id="addForm">
+          <label class="sr-only" for="newOption">New option</label>
+          <input type="text" id="newOption" placeholder="Add an option and press Enter" autocomplete="off" maxlength="80">
+          <button type="submit">Add</button>
+        </form>
+        <ul id="options" class="options"></ul>
+        <label class="chk"><input type="checkbox" id="removeWinner"> Remove the winner after each spin</label>
+        <div class="tools">
+          <button type="button" class="secondary" id="importBtn">Import…</button>
+          <button type="button" class="secondary" id="copyBtn">Copy list</button>
+          <button type="button" class="secondary" id="exportBtn">Export .txt</button>
+          <button type="button" class="secondary" id="shuffleBtn">Shuffle</button>
+          <button type="button" class="danger" id="clearBtn">Clear</button>
+        </div>
+        <h2>Lists</h2>
+        <div class="lists">
+          <label class="sr-only" for="listSelect">Saved or template lists</label>
+          <select id="listSelect"></select>
+          <button type="button" class="secondary" id="loadList">Load</button>
+          <button type="button" class="secondary" id="saveList">Save current…</button>
+          <button type="button" class="danger" id="deleteList">Delete</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="importDialog">
+    <form method="dialog" id="importForm">
+      <h2 style="margin-top:0">Import options</h2>
+      <p class="muted" style="margin-top:0">One option per line. Add a colour with a trailing hex code, e.g. <code>Pizza #ff8800</code> or <code>Pizza | #ff8800</code>. Duplicates are ignored.</p>
+      <textarea id="importText" placeholder="Option one&#10;Option two #3366ff&#10;Option three"></textarea>
+      <div class="row">
+        <button type="button" class="secondary" id="importCancel">Cancel</button>
+        <button type="submit" value="ok">Add to wheel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="sapp-toast" role="status" aria-live="polite"></div>
+  <footer class="sapp-foot"><span id="versionNumber"></span></footer>
+  <script>
+    "use strict";
+    const APP_NAME = "HTMLPicker";
+    const APP_VERSION = "2.0.0";
+    const APP_KEY = "sapps.htmlpicker.";
+
+    // ---- shared SApp plumbing -------------------------------------------------
+    const store = {
+      get(key, fallback) { try { const v = localStorage.getItem(APP_KEY + key); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } },
+      set(key, value) { try { localStorage.setItem(APP_KEY + key, JSON.stringify(value)); return true; } catch (e) { return false; } },
+      remove(key) { try { localStorage.removeItem(APP_KEY + key); } catch (e) { /* ignore */ } }
+    };
+    function esc(text) { return String(text).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])); }
+    function toast(message) {
+      const el = document.getElementById('toast'); if (!el) return;
+      el.textContent = message; el.classList.add('show');
+      clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+    function download(filename, text, type) {
+      const url = URL.createObjectURL(new Blob([text], { type: type || 'text/plain' }));
+      const a = document.createElement('a'); a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    function copyText(text) {
+      const fallback = () => { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+        let ok = false; try { ok = document.execCommand('copy'); } catch (e) { /* ignore */ } t.remove(); return ok; };
+      if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text).then(() => true, () => fallback());
+      return Promise.resolve(fallback());
+    }
+    function initTheme() {
+      const sel = document.getElementById('themeSelect');
+      const saved = store.get('theme', null);
+      const theme = saved || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme; sel.value = theme;
+      sel.addEventListener('change', () => { document.documentElement.dataset.theme = sel.value; store.set('theme', sel.value); });
+    }
+    document.getElementById('versionNumber').textContent = APP_NAME + ' v' + APP_VERSION;
+    document.title = APP_NAME;
+    initTheme();
+
+
+    const PALETTE = ['#e6194b','#3cb44b','#f58231','#4363d8','#ffe119','#911eb4','#42d4f4','#f032e6','#bfef45','#469990','#9a6324','#800000'];
+    const TEMPLATES = {
+      'Yes / No': ['Yes', 'No'],
+      'Coin flip': ['Heads', 'Tails'],
+      'Dice (d6)': ['1', '2', '3', '4', '5', '6'],
+      "What's for dinner?": ['Pasta', 'Curry', 'Pizza', 'Stir fry', 'Tacos', 'Soup', 'Salad', 'Takeaway'],
+      'Who goes first?': ['Player 1', 'Player 2', 'Player 3', 'Player 4'],
+      'Rock Paper Scissors': ['Rock', 'Paper', 'Scissors']
+    };
+    const SPIN_SECONDS = 4.5;
+
+    let options = store.get('options', null) || TEMPLATES["What's for dinner?"].map((name, i) => ({ name, color: PALETTE[i % PALETTE.length] }));
+    let userLists = store.get('lists', {});
+    let history = store.get('history', []);
+    let removeWinner = store.get('removeWinner', false);
+    let rotation = 0;           // total clockwise degrees applied to the wheel so far
+    let spinning = false;
+
+    const $ = id => document.getElementById(id);
+    const wheel = $('wheel'), ctx = wheel.getContext('2d');
+
+    function save() { store.set('options', options); store.set('lists', userLists); store.set('history', history); store.set('removeWinner', removeWinner); }
+    function nextColor() { const used = new Set(options.map(o => o.color.toLowerCase())); return PALETTE.find(c => !used.has(c)) || PALETTE[options.length % PALETTE.length]; }
+    function readableOn(hex) {
+      const n = parseInt(hex.slice(1), 16); const r = n >> 16 & 255, g = n >> 8 & 255, b = n & 255;
+      return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#111' : '#fff';
+    }
+    function normHex(h) { return h.length === 4 ? '#' + h.slice(1).split('').map(c => c + c).join('') : h; }
+    function has(name) { return options.some(o => o.name.toLowerCase() === name.toLowerCase()); }
+
+    // ---- drawing -----------------------------------------------------------
+    function drawWheel() {
+      const size = wheel.width, c = size / 2;
+      ctx.clearRect(0, 0, size, size);
+      if (options.length < 2) {
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#ccc';
+        ctx.beginPath(); ctx.arc(c, c, c - 2, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#555';
+        ctx.font = '600 34px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('Add at least two options', c, c); return;
+      }
+      const step = Math.PI * 2 / options.length;
+      options.forEach((o, i) => {
+        const a0 = -Math.PI / 2 + i * step, a1 = a0 + step;     // slice 0 starts at 12 o'clock, runs clockwise
+        ctx.beginPath(); ctx.moveTo(c, c); ctx.arc(c, c, c - 2, a0, a1); ctx.closePath();
+        ctx.fillStyle = o.color; ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 3; ctx.stroke();
+        // label along the slice's centre line
+        ctx.save(); ctx.translate(c, c); ctx.rotate(a0 + step / 2);
+        ctx.fillStyle = readableOn(o.color); ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+        const fontPx = Math.max(16, Math.min(40, 400 / Math.max(options.length, 4) + 8));
+        ctx.font = '600 ' + fontPx + 'px system-ui, sans-serif';
+        const maxW = c - 70; let label = o.name;
+        while (label.length > 1 && ctx.measureText(label).width > maxW) label = label.slice(0, -1);
+        if (label !== o.name) label = label.slice(0, -1) + '…';
+        ctx.fillText(label, c - 22, 0); ctx.restore();
+      });
+    }
+
+    // ---- list rendering ----------------------------------------------------
+    function renderOptions() {
+      const ul = $('options'); ul.textContent = '';
+      if (!options.length) { const li = document.createElement('li'); li.className = 'empty muted'; li.textContent = 'No options yet. Add some above, import a list, or load a template.'; ul.appendChild(li); }
+      options.forEach((o, i) => {
+        const li = document.createElement('li');
+        const col = document.createElement('input'); col.type = 'color'; col.value = o.color; col.setAttribute('aria-label', 'Colour for ' + o.name);
+        col.addEventListener('input', () => { o.color = col.value; drawWheel(); });
+        col.addEventListener('change', save);
+        const txt = document.createElement('input'); txt.type = 'text'; txt.value = o.name; txt.maxLength = 80; txt.setAttribute('aria-label', 'Option ' + (i + 1));
+        txt.addEventListener('change', () => { const v = txt.value.trim(); if (!v || (v.toLowerCase() !== o.name.toLowerCase() && has(v))) { txt.value = o.name; return; } o.name = v; save(); drawWheel(); });
+        const del = document.createElement('button'); del.type = 'button'; del.className = 'danger'; del.textContent = '×'; del.setAttribute('aria-label', 'Remove ' + o.name);
+        del.addEventListener('click', () => { options.splice(i, 1); changed(); });
+        li.append(col, txt, del); ul.appendChild(li);
+      });
+      $('spin').disabled = spinning || options.length < 2;
+    }
+    function renderHistory() {
+      const ol = $('history'); ol.textContent = '';
+      if (!history.length) { const li = document.createElement('li'); li.className = 'muted'; li.style.listStyle = 'none'; li.textContent = 'Nothing yet.'; ol.appendChild(li); }
+      history.slice(0, 10).forEach(h => { const li = document.createElement('li'); li.textContent = h; ol.appendChild(li); });
+    }
+    function renderLists(selected) {
+      const sel = $('listSelect'); sel.textContent = '';
+      const g1 = document.createElement('optgroup'); g1.label = 'Templates';
+      Object.keys(TEMPLATES).forEach(n => { const o = document.createElement('option'); o.value = 't:' + n; o.textContent = n; g1.appendChild(o); });
+      sel.appendChild(g1);
+      const names = Object.keys(userLists);
+      if (names.length) { const g2 = document.createElement('optgroup'); g2.label = 'Your lists';
+        names.forEach(n => { const o = document.createElement('option'); o.value = 'u:' + n; o.textContent = n; g2.appendChild(o); }); sel.appendChild(g2); }
+      if (selected) sel.value = selected;
+    }
+    function changed() { save(); renderOptions(); drawWheel(); }
+
+    // ---- actions -----------------------------------------------------------
+    function addOption(name, color) {
+      name = name.trim(); if (!name || has(name)) return false;
+      options.push({ name: name.slice(0, 80), color: color ? normHex(color) : nextColor() }); return true;
+    }
+    function parseList(text) {
+      return text.split(/\r?\n/).map(l => l.trim()).filter(Boolean).map(l => {
+        const m = l.match(/^(.*?)[\s|,;]*(#[0-9a-f]{6}|#[0-9a-f]{3})$/i);
+        return m && m[1].trim() ? { name: m[1].trim(), color: m[2] } : { name: l, color: null };
+      });
+    }
+    function listAsText() { return options.map(o => o.name + ' ' + o.color).join('\n'); }
+
+    $('addForm').addEventListener('submit', e => { e.preventDefault(); const i = $('newOption'); if (!addOption(i.value)) { if (i.value.trim()) toast('That option is already on the wheel.'); } else changed(); i.value = ''; i.focus(); });
+    $('importBtn').addEventListener('click', () => { $('importText').value = ''; $('importDialog').showModal(); $('importText').focus(); });
+    $('importCancel').addEventListener('click', () => $('importDialog').close());
+    $('importForm').addEventListener('submit', () => { let n = 0; parseList($('importText').value).forEach(p => { if (addOption(p.name, p.color)) n++; }); changed(); toast(n + ' option' + (n === 1 ? '' : 's') + ' added.'); });
+    $('copyBtn').addEventListener('click', () => copyText(listAsText()).then(ok => toast(ok ? 'List copied.' : 'Copy failed.')));
+    $('exportBtn').addEventListener('click', () => { if (!options.length) return toast('Nothing to export.'); download('picker-list.txt', listAsText() + '\n'); });
+    $('shuffleBtn').addEventListener('click', () => { for (let i = options.length - 1; i > 0; i--) { const j = rnd(i + 1); [options[i], options[j]] = [options[j], options[i]]; } changed(); });
+    $('clearBtn').addEventListener('click', () => { if (options.length && confirm('Remove all options from the wheel?')) { options = []; $('result').textContent = ''; changed(); } });
+    $('removeWinner').addEventListener('change', e => { removeWinner = e.target.checked; save(); });
+    $('clearHistory').addEventListener('click', () => { history = []; save(); renderHistory(); });
+    $('loadList').addEventListener('click', () => {
+      const v = $('listSelect').value; if (!v) return;
+      const src = v.startsWith('t:') ? TEMPLATES[v.slice(2)].map((name, i) => ({ name, color: PALETTE[i % PALETTE.length] })) : (userLists[v.slice(2)] || []).map(o => ({ ...o }));
+      options = src; $('result').textContent = ''; changed();
+    });
+    $('saveList').addEventListener('click', () => {
+      if (!options.length) return toast('Add some options first.');
+      const name = (prompt('Name for this list?') || '').trim(); if (!name) return;
+      userLists[name] = options.map(o => ({ ...o })); save(); renderLists('u:' + name); toast('Saved "' + name + '".');
+    });
+    $('deleteList').addEventListener('click', () => {
+      const v = $('listSelect').value;
+      if (!v.startsWith('u:')) return toast('Templates cannot be deleted.');
+      if (confirm('Delete the saved list "' + v.slice(2) + '"?')) { delete userLists[v.slice(2)]; save(); renderLists(); }
+    });
+
+    // ---- spinning ----------------------------------------------------------
+    function rnd(n) { const a = new Uint32Array(1); const limit = Math.floor(4294967296 / n) * n; do { crypto.getRandomValues(a); } while (a[0] >= limit); return a[0] % n; }
+    function spin() {
+      if (spinning || options.length < 2) return;
+      spinning = true; $('spin').disabled = true; $('result').textContent = ''; $('result').classList.remove('pop');
+      const n = options.length, step = 360 / n;
+      const winner = rnd(n);
+      // land on a random point inside the winning slice (not too close to its edges)
+      const within = (0.15 + 0.7 * (rnd(1000) / 1000)) * step;
+      const targetMod = (((-(winner * step + within)) % 360) + 360) % 360;       // rotation (mod 360) that puts that point under the pointer
+      const current = ((rotation % 360) + 360) % 360;
+      const delta = (((targetMod - current) % 360) + 360) % 360;
+      const reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      rotation += (reduced ? 0 : 360 * (5 + rnd(3))) + delta;
+      wheel.style.transition = reduced ? 'none' : 'transform ' + SPIN_SECONDS + 's cubic-bezier(.17,.67,.12,.99)';
+      wheel.style.transform = 'rotate(' + rotation + 'deg)';
+      let done = false;
+      const finish = () => { if (done) return; done = true; wheel.removeEventListener('transitionend', finish); reveal(winner); };
+      wheel.addEventListener('transitionend', finish);
+      setTimeout(finish, reduced ? 20 : SPIN_SECONDS * 1000 + 400);
+    }
+    function reveal(index) {
+      const o = options[index];
+      $('result').textContent = o.name; $('result').style.color = ''; $('result').classList.add('pop');
+      history.unshift(o.name); history = history.slice(0, 50);
+      spinning = false;
+      if (removeWinner) { options.splice(index, 1); rotation = 0; wheel.style.transition = 'none'; wheel.style.transform = 'rotate(0deg)'; }
+      save(); renderHistory(); renderOptions(); drawWheel();
+    }
+    $('spin').addEventListener('click', spin);
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space' && !/^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(document.activeElement.tagName) && !$('importDialog').open) { e.preventDefault(); spin(); }
+    });
+
+    // ---- start -------------------------------------------------------------
+    $('removeWinner').checked = removeWinner;
+    document.getElementById('themeSelect').addEventListener('change', drawWheel);
+    renderLists(); renderOptions(); renderHistory(); drawWheel();
+    // test hook (harmless): lets the page report where the wheel ended up
+    window.__picker = { get rotation() { return rotation; }, get options() { return options; } };
+
+  </script>
+</body>
+</html>

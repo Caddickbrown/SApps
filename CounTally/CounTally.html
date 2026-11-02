@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A tally counter with multiple counters, daily history and reports.">
+  <title>CounTally</title>
+  <style>
+    :root, :root[data-theme="light"] {
+      --bg:#f0f0f0; --alt:#ffffff; --text:#333333; --muted:#6b6b6b; --border:#d6d6d6;
+      --accent:#4bc67c; --accent-hover:#348b57; --accent-text:#ffffff; --danger:#d64545;
+      --shadow:0 2px 8px rgba(0,0,0,.08);
+    }
+    :root[data-theme="dark"] {
+      --bg:#1d1d1d; --alt:#2d2d2d; --text:#e0e0e0; --muted:#a0a0a0; --border:#444444;
+      --accent:#58319f; --accent-hover:#6d45b8; --accent-text:#ffffff; --danger:#e26a6a;
+      --shadow:0 2px 8px rgba(0,0,0,.4);
+    }
+    :root[data-theme="sepia"] {
+      --bg:#f4ecd8; --alt:#fbf0d9; --text:#5b4636; --muted:#8a7360; --border:#dccfae;
+      --accent:#c19a6b; --accent-hover:#a67c52; --accent-text:#ffffff; --danger:#b5483a;
+      --shadow:0 2px 8px rgba(91,70,54,.12);
+    }
+    :root[data-theme="terminal"] {
+      --bg:#0e290e; --alt:#0c2108; --text:#59b822; --muted:#3f8a18; --border:#1f5a1f;
+      --accent:#13451a; --accent-hover:#186d1d; --accent-text:#59b822; --danger:#c20000;
+      --shadow:none;
+    }
+    * { box-sizing:border-box; }
+    html { color-scheme: light; }
+    :root[data-theme="dark"], :root[data-theme="terminal"] { color-scheme: dark; }
+    body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.45; }
+    :root[data-theme="terminal"] body, :root[data-theme="terminal"] button, :root[data-theme="terminal"] input,
+    :root[data-theme="terminal"] select, :root[data-theme="terminal"] textarea { font-family:ui-monospace,Menlo,Consolas,monospace; }
+    h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-style:italic; font-weight:600; }
+    button, select, input, textarea { font:inherit; color:inherit; }
+    button { background:var(--accent); color:var(--accent-text); border:1px solid transparent; border-radius:6px; padding:.5em .9em; cursor:pointer; transition:background .15s; }
+    :root[data-theme="terminal"] button { border-color:var(--border); }
+    button:hover:not(:disabled) { background:var(--accent-hover); }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    button.secondary { background:transparent; color:var(--text); border-color:var(--border); }
+    button.secondary:hover:not(:disabled) { background:var(--alt); }
+    button.danger { background:transparent; color:var(--danger); border-color:var(--border); }
+    button.danger:hover:not(:disabled) { background:var(--danger); color:#fff; }
+    input[type=text], input[type=number], input[type=search], input[type=date], select, textarea {
+      background:var(--alt); border:1px solid var(--border); border-radius:6px; padding:.5em .65em; max-width:100%;
+    }
+    :focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+    :root[data-theme="dark"] :focus-visible { outline-color:#a98ae6; }
+    a { color:inherit; }
+    .sapp-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; max-width:960px; margin:0 auto; padding:18px 16px 8px; }
+    .sapp-bar .right { display:flex; gap:8px; align-items:center; }
+    .sapp-wrap { max-width:960px; margin:0 auto; padding:8px 16px 64px; }
+    .card { background:var(--alt); border:1px solid var(--border); border-radius:10px; padding:16px; box-shadow:var(--shadow); }
+    .muted { color:var(--muted); }
+    .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+    .sapp-toast { position:fixed; left:50%; bottom:46px; transform:translate(-50%,20px); background:var(--text); color:var(--bg); padding:.55em 1em; border-radius:8px; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:50; max-width:90vw; }
+    .sapp-toast.show { opacity:1; transform:translate(-50%,0); }
+    footer.sapp-foot { position:fixed; bottom:0; right:0; padding:4px 12px; font-size:.8em; color:var(--muted); opacity:.55; transition:opacity .3s; }
+    footer.sapp-foot:hover { opacity:1; }
+    dialog { background:var(--alt); color:var(--text); border:1px solid var(--border); border-radius:12px; padding:20px; width:min(520px,92vw); }
+    dialog::backdrop { background:rgba(0,0,0,.5); }
+    dialog textarea { width:100%; min-height:180px; }
+    dialog .row { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+    @media (prefers-reduced-motion: reduce) { * { transition-duration:.01ms !important; animation-duration:.01ms !important; } }
+
+
+    .tabs { display:flex; flex-wrap:wrap; gap:6px; margin:4px 0 14px; align-items:center; }
+    .tab { background:transparent; color:var(--text); border:1px solid var(--border); border-radius:999px; padding:.3em .9em; }
+    .tab:hover:not(:disabled) { background:var(--alt); }
+    .tab[aria-selected="true"] { background:var(--accent); color:var(--accent-text); border-color:transparent; }
+    .counter { text-align:center; padding:22px 16px; }
+    #cname { font-size:1.2rem; font-weight:600; text-align:center; width:min(420px,100%); border-color:transparent; background:transparent; }
+    #cname:hover, #cname:focus { border-color:var(--border); background:var(--alt); }
+    #count { display:block; font-size:clamp(4rem,18vw,8rem); font-weight:700; line-height:1.05; margin:6px auto; min-width:2ch; background:none; border:0; color:inherit; text-align:center; width:100%; font-variant-numeric:tabular-nums; }
+    #count:focus { outline:2px solid var(--accent); border-radius:10px; }
+    .sub { color:var(--muted); margin-bottom:12px; }
+    .pad { display:flex; gap:14px; justify-content:center; align-items:center; margin:14px 0; }
+    .pad button { font-size:2.2rem; width:min(130px,28vw); height:84px; line-height:1; }
+    .pad button.mid { font-size:1rem; width:auto; height:auto; padding:.6em 1em; }
+    .steps { display:flex; gap:6px; justify-content:center; align-items:center; flex-wrap:wrap; font-size:.9rem; }
+    .steps button { padding:.2em .7em; }
+    .steps button.secondary[aria-pressed="true"], .steps button.secondary[aria-pressed="true"]:hover:not(:disabled) { background:var(--accent); color:var(--accent-text); }
+    .steps input { width:5em; }
+    .grid3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin:16px 0; }
+    .stat { background:var(--alt); border:1px solid var(--border); border-radius:10px; padding:10px 12px; text-align:center; }
+    .stat b { display:block; font-size:1.4rem; }
+    .stat span { font-size:.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+    .bars { display:flex; align-items:flex-end; gap:4px; height:110px; margin:10px 0 4px; }
+    .bars div { flex:1; background:var(--accent); border-radius:3px 3px 0 0; min-height:2px; position:relative; }
+    .bars div.neg { background:var(--danger); }
+    :root[data-theme="dark"] .bars div { background:#8a63d8; }
+    .barlabels { display:flex; gap:4px; font-size:.65rem; color:var(--muted); }
+    .barlabels span { flex:1; text-align:center; overflow:hidden; }
+    table { width:100%; border-collapse:collapse; font-size:.92rem; }
+    th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--border); }
+    th { font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+    td.n { text-align:right; font-variant-numeric:tabular-nums; }
+    h2 { font-size:1rem; margin:22px 0 6px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+    .row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:8px 0; }
+    #note { width:100%; }
+    .seg button { border-radius:0; } .seg button:first-child { border-radius:6px 0 0 6px; } .seg button:last-child { border-radius:0 6px 6px 0; }
+    .seg button.secondary[aria-pressed="true"], .seg button.secondary[aria-pressed="true"]:hover:not(:disabled) { background:var(--accent); color:var(--accent-text); }
+
+  </style>
+</head>
+<body>
+  <header class="sapp-bar">
+    <h1>CounTally</h1>
+    <div class="right"><label class="sr-only" for="themeSelect">Theme</label><select id="themeSelect" aria-label="Theme"><option value="light">Light</option><option value="dark">Dark</option><option value="sepia">Sepia</option><option value="terminal">Terminal</option></select></div>
+  </header>
+
+  <main class="sapp-wrap" style="max-width:720px">
+    <div class="tabs" id="tabs" role="tablist" aria-label="Counters"></div>
+    <section class="card counter">
+      <label class="sr-only" for="cname">Counter name</label>
+      <input type="text" id="cname" maxlength="50" autocomplete="off">
+      <div class="sub" id="today">Today</div>
+      <input type="text" id="count" inputmode="numeric" aria-label="Today's count (type to edit)" value="0">
+      <div class="pad">
+        <button type="button" id="minus" aria-label="Subtract">−</button>
+        <button type="button" class="secondary mid" id="undo" disabled>Undo</button>
+        <button type="button" id="plus" aria-label="Add">+</button>
+      </div>
+      <div class="steps" id="steps"><span class="muted">Step:</span></div>
+      <div class="row" style="justify-content:center">
+        <label class="sr-only" for="note">Note for today</label>
+        <input type="text" id="note" placeholder="Note for today (optional)" maxlength="200" style="max-width:420px">
+      </div>
+      <p class="muted" style="font-size:.8rem;margin:10px 0 0">Keys: <kbd>+</kbd>/<kbd>↑</kbd>/<kbd>Space</kbd> add, <kbd>−</kbd>/<kbd>↓</kbd> subtract. Click the number to type a value.</p>
+    </section>
+
+    <div class="grid3" id="stats"></div>
+
+    <h2>Last 14 days</h2>
+    <div class="bars" id="bars" role="img" aria-label="Daily totals, last 14 days"></div>
+    <div class="barlabels" id="barlabels"></div>
+
+    <h2>Totals</h2>
+    <div class="row seg" role="group" aria-label="Group by">
+      <button type="button" class="secondary" data-g="day">Day</button>
+      <button type="button" class="secondary" data-g="week">Week</button>
+      <button type="button" class="secondary" data-g="month">Month</button>
+      <button type="button" class="secondary" data-g="year">Year</button>
+    </div>
+    <table><thead><tr><th id="gh">Day</th><th class="n" style="text-align:right">Total</th><th>Notes</th></tr></thead><tbody id="report"></tbody></table>
+
+    <h2>Manage</h2>
+    <div class="row">
+      <button type="button" class="secondary" id="addCounter">New counter</button>
+      <button type="button" class="secondary" id="resetToday">Reset today</button>
+      <button type="button" class="danger" id="delCounter">Delete counter</button>
+    </div>
+    <div class="row">
+      <button type="button" class="secondary" id="exportCsv">Export CSV</button>
+      <button type="button" class="secondary" id="importBtn">Import CSV…</button>
+      <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
+    </div>
+    <p class="muted" style="font-size:.8rem">Counts are saved in this browser. The CSV (<code>Date, Counter Name, Tally, Notes</code>) is the portable backup; importing overwrites matching days.</p>
+  </main>
+
+  <div id="toast" class="sapp-toast" role="status" aria-live="polite"></div>
+  <footer class="sapp-foot"><span id="versionNumber"></span></footer>
+  <script>
+    "use strict";
+    const APP_NAME = "CounTally";
+    const APP_VERSION = "1.0.0";
+    const APP_KEY = "sapps.countally.";
+
+    // ---- shared SApp plumbing -------------------------------------------------
+    const store = {
+      get(key, fallback) { try { const v = localStorage.getItem(APP_KEY + key); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } },
+      set(key, value) { try { localStorage.setItem(APP_KEY + key, JSON.stringify(value)); return true; } catch (e) { return false; } },
+      remove(key) { try { localStorage.removeItem(APP_KEY + key); } catch (e) { /* ignore */ } }
+    };
+    function esc(text) { return String(text).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])); }
+    function toast(message) {
+      const el = document.getElementById('toast'); if (!el) return;
+      el.textContent = message; el.classList.add('show');
+      clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+    function download(filename, text, type) {
+      const url = URL.createObjectURL(new Blob([text], { type: type || 'text/plain' }));
+      const a = document.createElement('a'); a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    function copyText(text) {
+      const fallback = () => { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+        let ok = false; try { ok = document.execCommand('copy'); } catch (e) { /* ignore */ } t.remove(); return ok; };
+      if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text).then(() => true, () => fallback());
+      return Promise.resolve(fallback());
+    }
+    function initTheme() {
+      const sel = document.getElementById('themeSelect');
+      const saved = store.get('theme', null);
+      const theme = saved || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme; sel.value = theme;
+      sel.addEventListener('change', () => { document.documentElement.dataset.theme = sel.value; store.set('theme', sel.value); });
+    }
+    document.getElementById('versionNumber').textContent = APP_NAME + ' v' + APP_VERSION;
+    document.title = APP_NAME;
+    initTheme();
+
+
+    const $ = id => document.getElementById(id);
+    const STEPS = [1, 5, 10];
+    let state = store.get('state', null) || { counters: [], selected: null, step: 1, group: 'day' };
+    let undoStack = [];
+
+    function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+    function dayStr(d = new Date()) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    function parseDay(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+    function save() { store.set('state', state); }
+    function ensure() {
+      if (!state.counters.length) state.counters.push({ id: uid(), name: 'Counter 1', log: {}, notes: {} });
+      if (!state.counters.some(c => c.id === state.selected)) state.selected = state.counters[0].id;
+      if (!state.step || state.step < 1) state.step = 1;
+    }
+    const cur = () => state.counters.find(c => c.id === state.selected);
+    const today = () => cur().log[dayStr()] || 0;
+
+    function setToday(v, record = true) {
+      const c = cur(), k = dayStr(), before = c.log[k] || 0;
+      v = Math.max(-1e9, Math.min(1e9, Math.round(v)));
+      if (record && v !== before) { undoStack.push({ id: c.id, key: k, before }); if (undoStack.length > 30) undoStack.shift(); }
+      if (v === 0 && !(c.notes && c.notes[k])) delete c.log[k]; else c.log[k] = v;
+      save(); render();
+    }
+    function undo() {
+      const u = undoStack.pop(); if (!u) return;
+      const c = state.counters.find(x => x.id === u.id); if (!c) return render();
+      if (u.before === 0) delete c.log[u.key]; else c.log[u.key] = u.before;
+      state.selected = c.id; save(); render();
+    }
+
+    // ---- reporting ---------------------------------------------------------------
+    function isoWeekKey(d) { const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day);
+      const y = t.getUTCFullYear(), w = Math.ceil(((t - Date.UTC(y, 0, 1)) / 86400000 + 1) / 7); return y + '-W' + String(w).padStart(2, '0'); }
+    function groupKey(day, g) { if (g === 'day') return day; if (g === 'month') return day.slice(0, 7); if (g === 'year') return day.slice(0, 4); return isoWeekKey(parseDay(day)); }
+    function sumRange(c, from, to) { let s = 0; for (const k in c.log) if (k >= from && k <= to) s += c.log[k]; return s; }
+    function render() {
+      ensure(); const c = cur(), now = new Date(), k = dayStr(now);
+      $('tabs').innerHTML = state.counters.map(x => '<button type="button" role="tab" class="tab" aria-selected="' + (x.id === c.id) + '" data-id="' + x.id + '">' + esc(x.name) + '</button>').join('');
+      if (document.activeElement !== $('cname')) $('cname').value = c.name;
+      if (document.activeElement !== $('count')) $('count').value = String(today());
+      if (document.activeElement !== $('note')) $('note').value = (c.notes && c.notes[k]) || '';
+      $('today').textContent = now.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
+      $('undo').disabled = !undoStack.length;
+      $('steps').innerHTML = '<span class="muted">Step:</span>' + STEPS.map(s => '<button type="button" class="secondary" data-step="' + s + '" aria-pressed="' + (state.step === s) + '">' + s + '</button>').join('') +
+        '<input type="number" id="customStep" min="1" max="100000" placeholder="other" value="' + (STEPS.includes(state.step) ? '' : state.step) + '" aria-label="Custom step">';
+
+      const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+      const wk = sumRange(c, dayStr(mon), k), mo = sumRange(c, k.slice(0, 8) + '01', k), yr = sumRange(c, k.slice(0, 5) + '01-01', k);
+      const all = Object.values(c.log), total = all.reduce((a, b) => a + b, 0), active = all.filter(v => v !== 0).length;
+      const best = all.length ? Math.max(...all) : 0;
+      const st = (v, l) => '<div class="stat"><b>' + v + '</b><span>' + l + '</span></div>';
+      $('stats').innerHTML = st(wk, 'This week') + st(mo, 'This month') + st(yr, 'This year') + st(total, 'All time') + st(active ? (total / active).toFixed(1).replace(/\.0$/, '') : 0, 'Avg / active day') + st(best, 'Best day');
+
+      const days = []; for (let i = 13; i >= 0; i--) { const d = new Date(now); d.setDate(now.getDate() - i); days.push(d); }
+      const vals = days.map(d => c.log[dayStr(d)] || 0), max = Math.max(1, ...vals.map(Math.abs));
+      $('bars').innerHTML = vals.map((v, i) => '<div class="' + (v < 0 ? 'neg' : '') + '" style="height:' + Math.max(2, Math.abs(v) / max * 100) + '%" title="' + dayStr(days[i]) + ': ' + v + '"></div>').join('');
+      $('barlabels').innerHTML = days.map(d => '<span>' + d.getDate() + '</span>').join('');
+
+      document.querySelectorAll('[data-g]').forEach(b => b.setAttribute('aria-pressed', b.dataset.g === state.group));
+      $('gh').textContent = { day: 'Day', week: 'Week', month: 'Month', year: 'Year' }[state.group];
+      const groups = {}, notes = {};
+      Object.keys(c.log).forEach(d => { const g = groupKey(d, state.group); groups[g] = (groups[g] || 0) + c.log[d]; });
+      Object.keys(c.notes || {}).forEach(d => { if (c.notes[d]) { const g = groupKey(d, state.group); if (!(g in groups)) groups[g] = 0; (notes[g] = notes[g] || []).push(state.group === 'day' ? c.notes[d] : d.slice(5) + ' ' + c.notes[d]); } });
+      const keys = Object.keys(groups).sort().reverse().slice(0, state.group === 'day' ? 60 : 36);
+      $('report').innerHTML = keys.length ? keys.map(g => '<tr><td>' + esc(g) + '</td><td class="n">' + groups[g] + '</td><td class="muted">' + esc((notes[g] || []).join(' · ')) + '</td></tr>').join('') : '<tr><td colspan="3" class="muted">Nothing counted yet — press + to start.</td></tr>';
+    }
+
+    // ---- events ------------------------------------------------------------------
+    $('plus').addEventListener('click', () => { setToday(today() + state.step); if (navigator.vibrate) navigator.vibrate(8); });
+    $('minus').addEventListener('click', () => { setToday(today() - state.step); if (navigator.vibrate) navigator.vibrate(8); });
+    $('undo').addEventListener('click', undo);
+    $('count').addEventListener('focus', e => e.target.select());
+    $('count').addEventListener('change', e => { const v = Number(e.target.value.replace(/[^\d.\-]/g, '')); if (isNaN(v)) { e.target.value = String(today()); return toast('Numbers only, please.'); } setToday(v); });
+    $('count').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+    $('cname').addEventListener('change', e => { const v = e.target.value.trim(); if (v) { cur().name = v.slice(0, 50); save(); } render(); });
+    $('note').addEventListener('change', e => { const c = cur(), k = dayStr(), v = e.target.value.trim(); c.notes = c.notes || {}; if (v) c.notes[k] = v; else delete c.notes[k]; if (!(k in c.log) && v) c.log[k] = 0; save(); render(); });
+    $('tabs').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) { state.selected = b.dataset.id; save(); render(); } });
+    $('steps').addEventListener('click', e => { const b = e.target.closest('[data-step]'); if (b) { state.step = +b.dataset.step; save(); render(); } });
+    $('steps').addEventListener('change', e => { if (e.target.id === 'customStep') { const v = Math.round(Number(e.target.value)); state.step = v >= 1 ? v : 1; save(); render(); } });
+    document.querySelectorAll('[data-g]').forEach(b => b.addEventListener('click', () => { state.group = b.dataset.g; save(); render(); }));
+    $('addCounter').addEventListener('click', () => { const name = (prompt('Name for the new counter?', 'Counter ' + (state.counters.length + 1)) || '').trim(); if (!name) return; const c = { id: uid(), name: name.slice(0, 50), log: {}, notes: {} }; state.counters.push(c); state.selected = c.id; save(); render(); });
+    $('delCounter').addEventListener('click', () => { const c = cur(); if (!confirm('Delete “' + c.name + '” and all its history?')) return; state.counters = state.counters.filter(x => x.id !== c.id); undoStack = undoStack.filter(u => u.id !== c.id); save(); render(); });
+    $('resetToday').addEventListener('click', () => { if (today() !== 0 && confirm('Set today’s count for “' + cur().name + '” back to 0?')) setToday(0); });
+    document.addEventListener('keydown', e => {
+      if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.key === '+' || e.key === '=' || e.key === 'ArrowUp' || (e.code === 'Space' && document.activeElement.tagName !== 'BUTTON')) { e.preventDefault(); $('plus').click(); }
+      else if (e.key === '-' || e.key === 'ArrowDown') { e.preventDefault(); $('minus').click(); }
+      else if (e.key === 'z') undo();
+    });
+
+    // ---- CSV ---------------------------------------------------------------------
+    const q = v => { let s = String(v); if (/^[=+@]/.test(s)) s = "'" + s; return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+    function toCsv() {
+      const rows = ['Date,Counter Name,Tally,Notes'];
+      state.counters.forEach(c => { const days = new Set([...Object.keys(c.log), ...Object.keys(c.notes || {})]); [...days].sort().forEach(d => rows.push([d, c.name, c.log[d] || 0, (c.notes || {})[d] || ''].map(q).join(','))); });
+      return rows.join('\r\n');
+    }
+    function parseCsv(text) {
+      text = text.replace(/^﻿/, ''); const rows = []; let row = [], cell = '', inq = false;
+      for (let i = 0; i < text.length; i++) { const ch = text[i];
+        if (inq) { if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else inq = false; } else cell += ch; }
+        else if (ch === '"') inq = true; else if (ch === ',') { row.push(cell); cell = ''; }
+        else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; } else cell += ch; }
+      if (cell !== '' || row.length) { row.push(cell); rows.push(row); } return rows.filter(r => r.some(x => x.trim()));
+    }
+    $('exportCsv').addEventListener('click', () => download('countally-' + dayStr() + '.csv', toCsv() + '\r\n', 'text/csv'));
+    $('importBtn').addEventListener('click', () => $('csvFile').click());
+    $('csvFile').addEventListener('change', e => {
+      const f = e.target.files[0]; if (!f) return;
+      f.text().then(t => {
+        const rows = parseCsv(t); if (rows.length && /^date$/i.test(rows[0][0].trim())) rows.shift();
+        let n = 0;
+        rows.forEach(r => {
+          const d = (r[0] || '').trim(), name = (r[1] || '').trim(), v = Number(r[2]), note = (r[4 - 1] || '').replace(/^'(?=[=+@])/, '').trim();
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(d) || !name || isNaN(v)) return;
+          let c = state.counters.find(x => x.name.toLowerCase() === name.toLowerCase());
+          if (!c) { c = { id: uid(), name: name.slice(0, 50), log: {}, notes: {} }; state.counters.push(c); }
+          if (v !== 0 || note) c.log[d] = Math.round(v); else delete c.log[d];
+          c.notes = c.notes || {}; if (note) c.notes[d] = note.slice(0, 200); n++;
+        });
+        if (state.counters.length > 1 && state.counters[0].name === 'Counter 1' && !Object.keys(state.counters[0].log).length) state.counters.shift();
+        save(); render(); toast(n ? 'Imported ' + n + ' day' + (n === 1 ? '' : 's') + '.' : 'No valid rows found.');
+      });
+      e.target.value = '';
+    });
+
+    render();
+    window.__ct = { get state() { return state; }, toCsv };
+
+  </script>
+</body>
+</html>

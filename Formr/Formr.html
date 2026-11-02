@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formr</title>
+<style>
+:root{
+  --text:#333;--bg:#f1f1f1;--field:#fff;--border:#ccc;--muted:#777;
+  --btn:#4bc67c;--btn-hover:#348b57;--btn-text:#fff;--accent:#4bc67c;
+}
+body.dark-mode{
+  --text:#eee;--bg:#222;--field:#333;--border:#555;--muted:#aaa;
+  --btn:#58319f;--btn-hover:#6d45b8;--btn-text:#fff;--accent:#8e6fd6;
+}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text);background:var(--bg);margin:0;padding:0 1rem 4rem;transition:background-color .3s,color .3s;line-height:1.5}
+header.appbar{display:flex;align-items:center;justify-content:space-between;max-width:900px;margin:0 auto;padding:1rem 0}
+h1.appname{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:2.2em;margin:0}
+main{max-width:900px;margin:0 auto}
+button,.btn{font:inherit;cursor:pointer;border:0;border-radius:6px;padding:.55em 1.1em;background:var(--btn);color:var(--btn-text);transition:background-color .2s}
+button:hover:not(:disabled),.btn:hover{background:var(--btn-hover)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+button.secondary:hover:not(:disabled){background:var(--field)}
+textarea,input[type=text],input[type=number],select{font:inherit;color:var(--text);background:var(--field);border:1px solid var(--border);border-radius:6px;padding:.5em .7em;max-width:100%}
+textarea{width:100%}
+a{color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.75rem 0}
+.muted{color:var(--muted);font-size:.9em}
+.toast{position:fixed;left:50%;bottom:2.5rem;transform:translateX(-50%);background:var(--btn);color:var(--btn-text);padding:.6em 1.2em;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .3s}
+.toast.show{opacity:1}
+footer.appfooter{position:fixed;bottom:0;left:0;right:0;text-align:right;font-size:.8em;padding:.4rem 1rem;background:var(--bg);opacity:.85}
+
+.panel{background:var(--field);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1.25rem}
+.panel h2{margin:.1rem 0 .7rem;font-size:1.1rem}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:.9rem}
+.fields label{display:block;font-weight:600;margin-bottom:.2rem}
+.fields input{width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0}
+.chip{display:inline-flex;gap:.4rem;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:.15em .3em .15em .8em}
+.chip button{padding:0 .5em;border-radius:99px;background:transparent;color:var(--muted);font-size:1.1em;line-height:1.4}
+.chip button:hover:not(:disabled){background:var(--border);color:var(--text)}
+table{border-collapse:collapse;width:100%;font-size:.95em}
+th,td{border-bottom:1px solid var(--border);padding:.35rem .5rem;text-align:left}
+.tablewrap{overflow-x:auto}
+</style>
+</head>
+<body>
+<header class="appbar"><h1 class="appname">Formr</h1><button id="themeBtn" class="secondary" onclick="toggleTheme()">Dark mode</button></header>
+<main>
+  <p class="muted">Build a quick data-entry form, fill it in, export it as CSV. <span title="Formr was previously called WT">(Formerly WT.)</span></p>
+
+  <section class="panel">
+    <h2>Fields</h2>
+    <div class="row">
+      <input type="text" id="newName" placeholder="Field name, e.g. Weight" aria-label="New field name" style="flex:1;min-width:10em">
+      <select id="newType" aria-label="Field type"><option value="number">Number</option><option value="text">Text</option></select>
+      <button id="addField">Add field</button>
+    </div>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Entry</h2>
+    <form id="entryForm" autocomplete="off"><div class="fields" id="fields"></div>
+      <div class="row"><button type="submit" id="addRow">Add entry</button><button type="button" class="secondary" id="clearForm">Clear form</button></div>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Entries <span class="muted" id="rowCount"></span></h2>
+    <div class="tablewrap"><table id="tbl"></table></div>
+    <div class="row">
+      <button id="csvBtn">Export CSV</button>
+      <button class="secondary" id="clearRows">Remove all entries</button>
+      <label class="muted">File name <input type="text" id="fileName" style="width:10em"></label>
+    </div>
+  </section>
+</main>
+<footer class="appfooter"><span id="versionNumber"></span> · Formr · <a href="https://caddickbrown.com">Caddick &amp; Brown</a></footer>
+<script>
+const APP_ID = 'formr', appName = 'Formr', versionNumber = 'v3.0.0';
+/* ---- SApps common helpers ---- */
+const SKEY = 'sapps.' + APP_ID + '.';
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(SKEY + k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(SKEY + k, JSON.stringify(v)); } catch(e){} },
+  raw(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+};
+function applyTheme(dark){
+  document.body.classList.toggle('dark-mode', dark);
+  const b = document.getElementById('themeBtn'); if (b) b.textContent = dark ? 'Light mode' : 'Dark mode';
+}
+function toggleTheme(){ const d = !document.body.classList.contains('dark-mode'); applyTheme(d); store.set('theme', d ? 'dark' : 'light'); }
+(function initTheme(){
+  let t = store.get('theme', null);
+  if (!t) t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  applyTheme(t === 'dark');
+})();
+function toast(msg){
+  let t = document.getElementById('toast');
+  if (!t){ t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); }
+  catch(e){ const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(_){} ta.remove(); }
+  toast('Copied to clipboard');
+}
+function downloadFile(name, text, mime){
+  const url = URL.createObjectURL(new Blob([text], {type: (mime || 'text/plain') + ';charset=utf-8'}));
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.getElementById('versionNumber').textContent = versionNumber;
+const $ = id => document.getElementById(id);
+
+let fields = store.get('fields', [{name: 'Field 1', type: 'number'}, {name: 'Field 2', type: 'number'}, {name: 'Field 3', type: 'number'}]);
+let rows = store.get('rows', []);
+let fileName = store.get('fileName', 'Formr');
+let draft = {};
+
+function save(){ store.set('fields', fields); store.set('rows', rows); }
+function renderChips(){
+  const c = $('chips'); c.innerHTML = '';
+  fields.forEach((f, i) => {
+    const s = document.createElement('span'); s.className = 'chip'; s.textContent = f.name + (f.type === 'text' ? ' (text)' : '');
+    const x = document.createElement('button'); x.type = 'button'; x.textContent = '×'; x.title = 'Remove ' + f.name;
+    x.onclick = () => {
+      if (rows.length && !confirm('Removing a field drops its values from existing entries. Continue?')) return;
+      fields.splice(i, 1); rows = rows.map(r => { r = r.slice(); r.splice(i, 1); return r; }); draft = {}; save(); renderAll();
+    };
+    s.appendChild(x); c.appendChild(s);
+  });
+}
+function renderForm(){
+  const box = $('fields'); box.innerHTML = '';
+  fields.forEach((f, i) => {
+    const d = document.createElement('div'); const l = document.createElement('label'); l.textContent = f.name; l.htmlFor = 'f' + i;
+    const inp = document.createElement('input'); inp.id = 'f' + i; inp.type = f.type === 'number' ? 'number' : 'text'; if (f.type === 'number') inp.step = 'any';
+    inp.value = draft[i] ?? ''; inp.oninput = () => { draft[i] = inp.value; };
+    d.append(l, inp); box.appendChild(d);
+  });
+  $('addRow').disabled = !fields.length;
+}
+function renderTable(){
+  const t = $('tbl'); t.innerHTML = '';
+  $('rowCount').textContent = rows.length ? '(' + rows.length + ')' : '';
+  if (!rows.length) { t.innerHTML = '<tr><td class="muted">No entries yet.</td></tr>'; return; }
+  const head = t.insertRow(); head.insertCell(); fields.forEach(f => { const th = document.createElement('th'); th.textContent = f.name; head.appendChild(th); });
+  head.firstChild.outerHTML = '<th>#</th>'; head.appendChild(document.createElement('th'));
+  rows.forEach((r, i) => {
+    const tr = t.insertRow(); tr.insertCell().textContent = i + 1;
+    fields.forEach((f, j) => { tr.insertCell().textContent = r[j] ?? ''; });
+    const del = document.createElement('button'); del.className = 'secondary'; del.textContent = 'Remove'; del.style.padding = '.1em .6em';
+    del.onclick = () => { rows.splice(i, 1); save(); renderTable(); };
+    tr.insertCell().appendChild(del);
+  });
+}
+function renderAll(){ renderChips(); renderForm(); renderTable(); }
+
+$('addField').onclick = addField;
+$('newName').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addField(); } });
+function addField(){
+  const name = $('newName').value.trim(); if (!name) return;
+  if (fields.some(f => f.name.toLowerCase() === name.toLowerCase())) return toast('That field already exists');
+  fields.push({name, type: $('newType').value}); rows = rows.map(r => [...r, '']); $('newName').value = ''; save(); renderAll();
+}
+$('entryForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const vals = fields.map((f, i) => (draft[i] ?? '').toString().trim());
+  if (vals.every(v => v === '')) return toast('Fill in at least one field');
+  rows.push(vals); draft = {}; save(); renderAll();
+});
+$('clearForm').onclick = () => { draft = {}; renderForm(); };
+$('clearRows').onclick = () => { if (rows.length && confirm('Remove all ' + rows.length + ' entries?')) { rows = []; save(); renderTable(); } };
+$('fileName').value = fileName;
+$('fileName').addEventListener('input', () => { fileName = $('fileName').value.trim() || 'Formr'; store.set('fileName', fileName); });
+
+function csvCell(v){ v = String(v ?? ''); return /[",\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+function buildCSV(){
+  const lines = [fields.map(f => csvCell(f.name)).join(',')];
+  rows.forEach(r => lines.push(fields.map((f, i) => csvCell(r[i])).join(',')));
+  return lines.join('\r\n') + '\r\n';
+}
+$('csvBtn').onclick = () => {
+  if (!fields.length) return toast('Add a field first');
+  // include a half-filled form if there are no saved entries
+  if (!rows.length) { const vals = fields.map((f, i) => (draft[i] ?? '').toString().trim()); if (vals.some(v => v !== '')) { rows.push(vals); draft = {}; save(); renderAll(); } else return toast('No entries to export'); }
+  const day = new Date().toISOString().slice(0, 10);
+  downloadFile(`${day}-${(fileName || 'Formr').replace(/[^\w\- ]+/g, '')}.csv`, buildCSV(), 'text/csv');
+};
+renderAll();
+</script>
+</body>
+</html>

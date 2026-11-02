@@ -1,119 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task List Exporter</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .subtask {
-            margin-left: 20px;
-        }
-        #output {
-            margin-top: 20px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            display: none;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scopr</title>
+<style>
+:root{
+  --text:#333;--bg:#f1f1f1;--field:#fff;--border:#ccc;--muted:#777;
+  --btn:#4bc67c;--btn-hover:#348b57;--btn-text:#fff;--accent:#4bc67c;
+}
+body.dark-mode{
+  --text:#eee;--bg:#222;--field:#333;--border:#555;--muted:#aaa;
+  --btn:#58319f;--btn-hover:#6d45b8;--btn-text:#fff;--accent:#8e6fd6;
+}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text);background:var(--bg);margin:0;padding:0 1rem 4rem;transition:background-color .3s,color .3s;line-height:1.5}
+header.appbar{display:flex;align-items:center;justify-content:space-between;max-width:900px;margin:0 auto;padding:1rem 0}
+h1.appname{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:2.2em;margin:0}
+main{max-width:900px;margin:0 auto}
+button,.btn{font:inherit;cursor:pointer;border:0;border-radius:6px;padding:.55em 1.1em;background:var(--btn);color:var(--btn-text);transition:background-color .2s}
+button:hover:not(:disabled),.btn:hover{background:var(--btn-hover)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+button.secondary:hover:not(:disabled){background:var(--field)}
+textarea,input[type=text],input[type=number],select{font:inherit;color:var(--text);background:var(--field);border:1px solid var(--border);border-radius:6px;padding:.5em .7em;max-width:100%}
+textarea{width:100%}
+a{color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.75rem 0}
+.muted{color:var(--muted);font-size:.9em}
+.toast{position:fixed;left:50%;bottom:2.5rem;transform:translateX(-50%);background:var(--btn);color:var(--btn-text);padding:.6em 1.2em;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .3s}
+.toast.show{opacity:1}
+footer.appfooter{position:fixed;bottom:0;left:0;right:0;text-align:right;font-size:.8em;padding:.4rem 1rem;background:var(--bg);opacity:.85}
+
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media (max-width:760px){.layout{grid-template-columns:1fr}}
+.panel{background:var(--field);border:1px solid var(--border);border-radius:10px;padding:1rem}
+.panel h2{margin:.1rem 0 .6rem;font-size:1.1rem}
+details.sec{border-top:1px solid var(--border);padding:.4rem 0}
+details.sec:first-of-type{border-top:0}
+details.sec summary{cursor:pointer;display:flex;gap:.5rem;align-items:center;font-weight:600;list-style:none}
+details.sec summary::-webkit-details-marker{display:none}
+details.sec summary::before{content:"▸";color:var(--muted)}
+details.sec[open] summary::before{content:"▾"}
+.sec .tot{margin-left:auto;font-weight:400;color:var(--muted);font-size:.85em}
+label.item{display:flex;gap:.5rem;align-items:baseline;padding:.15rem 0 .15rem 1.2rem;cursor:pointer}
+label.item .h{margin-left:auto;color:var(--muted);font-size:.85em;white-space:nowrap}
+label.item input:checked + span{color:var(--accent)}
+#tplEdit{min-height:16em;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9em}
+#total{font-size:1.2rem;font-weight:700}
+#out{min-height:12em;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9em}
+.tools{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
+.tools button{padding:.3em .8em;font-size:.85em}
+input#title{width:100%;font-size:1.1rem;margin-bottom:.75rem}
+</style>
 </head>
 <body>
-
-    <h1>Task List Exporter</h1>
-
-    <form id="taskForm">
-        <!-- Use a JavaScript array for tasks and subtasks -->
-        <script>
-            var tasks = [
-                {
-                    name: 'Task 1',
-                    subtasks: ['Subtask 1.1', 'Subtask 1.2', 'Subtask 1.3']
-                },
-                {
-                    name: 'Task 2',
-                    subtasks: ['Subtask 2.1', 'Subtask 2.2']
-                },
-                {
-                    name: 'Task 3',
-                    subtasks: ['Subtask 3.1', 'Subtask 3.2', 'Subtask 3.3']
-                }
-            ];
-        </script>
-
-        <!-- Dynamically generate checkboxes based on the array -->
-        <script>
-            for (var i = 0; i < tasks.length; i++) {
-                document.write('<label><input type="checkbox" name="task' + (i + 1) + '" class="main-task"> ' + tasks[i].name + '</label>');
-
-                // Check if there are subtasks
-                if (tasks[i].subtasks && tasks[i].subtasks.length > 0) {
-                    for (var j = 0; j < tasks[i].subtasks.length; j++) {
-                        document.write('<label class="subtask"><input type="checkbox" name="subtask' + (i + 1) + '_' + (j + 1) + '" class="subtask-checkbox"> ' + tasks[i].subtasks[j] + '</label>');
-                    }
-                }
-            }
-        </script>
-
-        <!-- Add more checkboxes as needed -->
-
-        <button type="button" onclick="exportTasks()">Export Tasks</button>
-    </form>
-
-    <div id="output">
-        <h2>Selected Tasks (Markdown):</h2>
-        <pre id="taskList"></pre>
+<header class="appbar"><h1 class="appname">Scopr</h1><button id="themeBtn" class="secondary" onclick="toggleTheme()">Dark mode</button></header>
+<main>
+  <p class="muted">Tick the work that's in scope, get an estimate and a ready-made to-do list. Everything saves in your browser.</p>
+  <div class="layout">
+    <section class="panel">
+      <h2>Scope</h2>
+      <input type="text" id="title" placeholder="Project name" aria-label="Project name">
+      <div class="tools">
+        <button class="secondary" id="allBtn">Tick all</button>
+        <button class="secondary" id="noneBtn">Clear ticks</button>
+        <button class="secondary" id="editBtn">Edit template</button>
+      </div>
+      <div id="sections"></div>
+      <p>Estimated total: <span id="total">0h</span> <span class="muted" id="count"></span></p>
+    </section>
+    <section class="panel">
+      <h2>To-do list (Markdown)</h2>
+      <textarea id="out" readonly placeholder="Tick some items to build your list…"></textarea>
+      <div class="row">
+        <button id="copyBtn">Copy</button>
+        <button id="dlBtn">Download .md</button>
+      </div>
+    </section>
+  </div>
+  <section class="panel" id="editor" hidden style="margin-top:1.5rem">
+    <h2>Template</h2>
+    <p class="muted">One <code>#</code> line per section; one <code>-</code> line per task. Add an estimate in hours after a <code>|</code>, e.g. <code>- Write copy | 3</code>.</p>
+    <textarea id="tplEdit" spellcheck="false"></textarea>
+    <div class="row">
+      <button id="applyBtn">Apply</button>
+      <button class="secondary" id="resetBtn">Reset to default</button>
+      <button class="secondary" id="closeBtn">Close</button>
     </div>
+  </section>
+</main>
+<footer class="appfooter"><span id="versionNumber"></span> · Scopr · <a href="https://caddickbrown.com">Caddick &amp; Brown</a></footer>
+<script>
+const APP_ID = 'scopr', appName = 'Scopr', versionNumber = 'v1.0.0';
+/* ---- SApps common helpers ---- */
+const SKEY = 'sapps.' + APP_ID + '.';
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(SKEY + k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(SKEY + k, JSON.stringify(v)); } catch(e){} },
+  raw(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+};
+function applyTheme(dark){
+  document.body.classList.toggle('dark-mode', dark);
+  const b = document.getElementById('themeBtn'); if (b) b.textContent = dark ? 'Light mode' : 'Dark mode';
+}
+function toggleTheme(){ const d = !document.body.classList.contains('dark-mode'); applyTheme(d); store.set('theme', d ? 'dark' : 'light'); }
+(function initTheme(){
+  let t = store.get('theme', null);
+  if (!t) t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  applyTheme(t === 'dark');
+})();
+function toast(msg){
+  let t = document.getElementById('toast');
+  if (!t){ t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); }
+  catch(e){ const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(_){} ta.remove(); }
+  toast('Copied to clipboard');
+}
+function downloadFile(name, text, mime){
+  const url = URL.createObjectURL(new Blob([text], {type: (mime || 'text/plain') + ';charset=utf-8'}));
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
-    <script>
-        function exportTasks() {
-            var selectedTasks = [];
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+document.getElementById('versionNumber').textContent = versionNumber;
 
-            checkboxes.forEach(function(checkbox) {
-                selectedTasks.push('- ' + checkbox.name);
-            });
+const DEFAULT_TEMPLATE = `# Discovery
+- Kick-off & requirements | 4
+- Stakeholder interviews | 6
+- Research existing solutions | 3
 
-            if (selectedTasks.length > 0) {
-                // Display the selected tasks in Markdown format
-                var outputDiv = document.getElementById('output');
-                var taskListPre = document.getElementById('taskList');
+# Design
+- Wireframes | 8
+- Visual design | 12
+- Review & sign-off | 2
 
-                // Clear previous content
-                taskListPre.textContent = '';
+# Build
+- Set up project & tooling | 3
+- Core functionality | 24
+- Edge cases & error handling | 8
 
-                // Populate the list
-                selectedTasks.forEach(function(task) {
-                    taskListPre.textContent += task + '\n';
-                });
+# Launch
+- Testing | 8
+- Documentation | 4
+- Deploy & hand-over | 3`;
 
-                // Show the output
-                outputDiv.style.display = 'block';
-            } else {
-                // No tasks selected
-                alert('Please select at least one task.');
-            }
-        }
+const $ = id => document.getElementById(id);
+let templateText = store.get('template', DEFAULT_TEMPLATE);
+let checked = new Set(store.get('checked', []));
+let openSecs = new Set(store.get('open', null) || []);
+let model = [];
 
-        // Add event listener to subtask checkboxes to automatically select their main task
-        var subtaskCheckboxes = document.querySelectorAll('.subtask-checkbox');
+function parse(text){
+  const secs = []; let cur = null;
+  text.split(/\r?\n/).forEach(raw => {
+    const line = raw.trim(); if (!line) return;
+    if (/^#+\s*/.test(line)) { cur = {name: line.replace(/^#+\s*/, ''), items: []}; secs.push(cur); return; }
+    if (/^[-*]\s*/.test(line)) {
+      if (!cur) { cur = {name: 'Tasks', items: []}; secs.push(cur); }
+      const body = line.replace(/^[-*]\s*(\[.?\]\s*)?/, '');
+      const [name, h] = body.split('|').map(s => s.trim());
+      const hours = parseFloat(h); cur.items.push({name, hours: isNaN(hours) ? 0 : hours});
+    }
+  });
+  secs.forEach((s, i) => s.items.forEach((it, j) => it.id = s.name + '::' + it.name));
+  return secs;
+}
+const fmt = h => (Math.round(h * 100) / 100) + 'h';
+function persist(){ store.set('checked', [...checked]); store.set('open', [...openSecs]); }
 
-        subtaskCheckboxes.forEach(function(subtaskCheckbox) {
-            subtaskCheckbox.addEventListener('change', function() {
-                var mainTaskCheckbox = this.closest('.subtask').previousElementSibling.querySelector('.main-task');
-                var subtaskCheckboxes = this.closest('.subtask').querySelectorAll('.subtask-checkbox');
-                var isSubtaskSelected = Array.from(subtaskCheckboxes).some(function(checkbox) {
-                    return checkbox.checked;
-                });
-                mainTaskCheckbox.checked = isSubtaskSelected;
-            });
-        });
-    </script>
-
+function render(){
+  model = parse(templateText);
+  if (!openSecs.size) model.forEach(s => openSecs.add(s.name));
+  const box = $('sections'); box.innerHTML = '';
+  model.forEach(sec => {
+    const d = document.createElement('details'); d.className = 'sec'; d.open = openSecs.has(sec.name);
+    d.addEventListener('toggle', () => { d.open ? openSecs.add(sec.name) : openSecs.delete(sec.name); persist(); });
+    const sum = document.createElement('summary');
+    const cb = document.createElement('input'); cb.type = 'checkbox'; cb.title = 'Tick / untick whole section';
+    cb.onclick = e => e.stopPropagation();
+    cb.onchange = () => { sec.items.forEach(it => cb.checked ? checked.add(it.id) : checked.delete(it.id)); persist(); render(); };
+    const nm = document.createElement('span'); nm.textContent = sec.name;
+    const tot = document.createElement('span'); tot.className = 'tot';
+    sum.append(cb, nm, tot); d.appendChild(sum);
+    let n = 0, h = 0;
+    sec.items.forEach(it => {
+      const l = document.createElement('label'); l.className = 'item';
+      const c = document.createElement('input'); c.type = 'checkbox'; c.checked = checked.has(it.id);
+      c.onchange = () => { c.checked ? checked.add(it.id) : checked.delete(it.id); persist(); renderOutput(); updateSectionState(); };
+      const t = document.createElement('span'); t.textContent = it.name;
+      const hh = document.createElement('span'); hh.className = 'h'; hh.textContent = it.hours ? fmt(it.hours) : '';
+      l.append(c, t, hh); d.appendChild(l);
+    });
+    box.appendChild(d);
+    sec._cb = cb; sec._tot = tot;
+  });
+  updateSectionState(); renderOutput();
+}
+function updateSectionState(){
+  model.forEach(sec => {
+    const sel = sec.items.filter(i => checked.has(i.id));
+    sec._cb.checked = sel.length === sec.items.length && sel.length > 0;
+    sec._cb.indeterminate = sel.length > 0 && sel.length < sec.items.length;
+    sec._tot.textContent = sel.length + '/' + sec.items.length + (sel.length ? ' · ' + fmt(sel.reduce((a, i) => a + i.hours, 0)) : '');
+  });
+}
+function markdown(){
+  const title = $('title').value.trim() || 'Scope';
+  let out = '# ' + title + '\n', total = 0, n = 0;
+  model.forEach(sec => {
+    const sel = sec.items.filter(i => checked.has(i.id)); if (!sel.length) return;
+    out += '\n## ' + sec.name + '\n\n';
+    sel.forEach(i => { out += '- [ ] ' + i.name + (i.hours ? ' (' + fmt(i.hours) + ')' : '') + '\n'; total += i.hours; n++; });
+  });
+  if (!n) return '';
+  return out + '\n**Estimated total: ' + fmt(total) + ' across ' + n + ' task' + (n === 1 ? '' : 's') + '**\n';
+}
+function renderOutput(){
+  const sel = model.flatMap(s => s.items).filter(i => checked.has(i.id));
+  $('total').textContent = fmt(sel.reduce((a, i) => a + i.hours, 0));
+  $('count').textContent = '(' + sel.length + ' of ' + model.flatMap(s => s.items).length + ' tasks)';
+  $('out').value = markdown();
+}
+$('title').value = store.get('title', '');
+$('title').addEventListener('input', () => { store.set('title', $('title').value); renderOutput(); });
+$('allBtn').onclick = () => { model.forEach(s => s.items.forEach(i => checked.add(i.id))); persist(); render(); };
+$('noneBtn').onclick = () => { checked.clear(); persist(); render(); };
+$('copyBtn').onclick = () => $('out').value ? copyText($('out').value) : toast('Nothing ticked yet');
+$('dlBtn').onclick = () => { if (!$('out').value) return toast('Nothing ticked yet'); downloadFile(($('title').value.trim() || 'scope').replace(/[^\w\- ]+/g, '').replace(/\s+/g, '-').toLowerCase() + '.md', $('out').value, 'text/markdown'); };
+$('editBtn').onclick = () => { $('tplEdit').value = templateText; $('editor').hidden = false; $('editor').scrollIntoView({behavior: 'smooth'}); };
+$('closeBtn').onclick = () => $('editor').hidden = true;
+$('applyBtn').onclick = () => {
+  const t = $('tplEdit').value; if (!parse(t).length) return toast('Template needs at least one section');
+  templateText = t; store.set('template', t);
+  const valid = new Set(parse(t).flatMap(s => s.items.map(i => i.id))); checked = new Set([...checked].filter(id => valid.has(id)));
+  openSecs.clear(); persist(); render(); toast('Template applied');
+};
+$('resetBtn').onclick = () => { $('tplEdit').value = DEFAULT_TEMPLATE; };
+render();
+</script>
 </body>
 </html>

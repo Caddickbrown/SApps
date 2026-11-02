@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A daily workout log with weekly stats and CSV import/export.">
+  <title>Wrkot</title>
+  <style>
+    :root, :root[data-theme="light"] {
+      --bg:#f0f0f0; --alt:#ffffff; --text:#333333; --muted:#6b6b6b; --border:#d6d6d6;
+      --accent:#4bc67c; --accent-hover:#348b57; --accent-text:#ffffff; --danger:#d64545;
+      --shadow:0 2px 8px rgba(0,0,0,.08);
+    }
+    :root[data-theme="dark"] {
+      --bg:#1d1d1d; --alt:#2d2d2d; --text:#e0e0e0; --muted:#a0a0a0; --border:#444444;
+      --accent:#58319f; --accent-hover:#6d45b8; --accent-text:#ffffff; --danger:#e26a6a;
+      --shadow:0 2px 8px rgba(0,0,0,.4);
+    }
+    :root[data-theme="sepia"] {
+      --bg:#f4ecd8; --alt:#fbf0d9; --text:#5b4636; --muted:#8a7360; --border:#dccfae;
+      --accent:#c19a6b; --accent-hover:#a67c52; --accent-text:#ffffff; --danger:#b5483a;
+      --shadow:0 2px 8px rgba(91,70,54,.12);
+    }
+    :root[data-theme="terminal"] {
+      --bg:#0e290e; --alt:#0c2108; --text:#59b822; --muted:#3f8a18; --border:#1f5a1f;
+      --accent:#13451a; --accent-hover:#186d1d; --accent-text:#59b822; --danger:#c20000;
+      --shadow:none;
+    }
+    * { box-sizing:border-box; }
+    html { color-scheme: light; }
+    :root[data-theme="dark"], :root[data-theme="terminal"] { color-scheme: dark; }
+    body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.45; }
+    :root[data-theme="terminal"] body, :root[data-theme="terminal"] button, :root[data-theme="terminal"] input,
+    :root[data-theme="terminal"] select, :root[data-theme="terminal"] textarea { font-family:ui-monospace,Menlo,Consolas,monospace; }
+    h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-style:italic; font-weight:600; }
+    button, select, input, textarea { font:inherit; color:inherit; }
+    button { background:var(--accent); color:var(--accent-text); border:1px solid transparent; border-radius:6px; padding:.5em .9em; cursor:pointer; transition:background .15s; }
+    :root[data-theme="terminal"] button { border-color:var(--border); }
+    button:hover:not(:disabled) { background:var(--accent-hover); }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    button.secondary { background:transparent; color:var(--text); border-color:var(--border); }
+    button.secondary:hover:not(:disabled) { background:var(--alt); }
+    button.danger { background:transparent; color:var(--danger); border-color:var(--border); }
+    button.danger:hover:not(:disabled) { background:var(--danger); color:#fff; }
+    input[type=text], input[type=number], input[type=search], input[type=date], select, textarea {
+      background:var(--alt); border:1px solid var(--border); border-radius:6px; padding:.5em .65em; max-width:100%;
+    }
+    :focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+    :root[data-theme="dark"] :focus-visible { outline-color:#a98ae6; }
+    a { color:inherit; }
+    .sapp-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; max-width:960px; margin:0 auto; padding:18px 16px 8px; }
+    .sapp-bar .right { display:flex; gap:8px; align-items:center; }
+    .sapp-wrap { max-width:960px; margin:0 auto; padding:8px 16px 64px; }
+    .card { background:var(--alt); border:1px solid var(--border); border-radius:10px; padding:16px; box-shadow:var(--shadow); }
+    .muted { color:var(--muted); }
+    .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+    .sapp-toast { position:fixed; left:50%; bottom:46px; transform:translate(-50%,20px); background:var(--text); color:var(--bg); padding:.55em 1em; border-radius:8px; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:50; max-width:90vw; }
+    .sapp-toast.show { opacity:1; transform:translate(-50%,0); }
+    footer.sapp-foot { position:fixed; bottom:0; right:0; padding:4px 12px; font-size:.8em; color:var(--muted); opacity:.55; transition:opacity .3s; }
+    footer.sapp-foot:hover { opacity:1; }
+    dialog { background:var(--alt); color:var(--text); border:1px solid var(--border); border-radius:12px; padding:20px; width:min(520px,92vw); }
+    dialog::backdrop { background:rgba(0,0,0,.5); }
+    dialog textarea { width:100%; min-height:180px; }
+    dialog .row { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+    @media (prefers-reduced-motion: reduce) { * { transition-duration:.01ms !important; animation-duration:.01ms !important; } }
+
+
+    .grid { display:grid; grid-template-columns:minmax(0,320px) minmax(0,1fr); gap:20px; align-items:start; }
+    @media (max-width:820px) { .grid { grid-template-columns:1fr; } }
+    form.log label { display:block; font-size:.85rem; color:var(--muted); margin:10px 0 3px; }
+    form.log input, form.log textarea { width:100%; }
+    form.log textarea { min-height:70px; resize:vertical; }
+    .actions { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-bottom:16px; }
+    .stat { background:var(--alt); border:1px solid var(--border); border-radius:10px; padding:10px 12px; }
+    .stat b { display:block; font-size:1.5rem; }
+    .stat span { font-size:.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+    .bars { margin:6px 0 16px; }
+    .bar { display:grid; grid-template-columns:110px 1fr 64px; gap:8px; align-items:center; font-size:.9rem; margin:3px 0; }
+    .bar i { display:block; height:10px; border-radius:5px; background:var(--accent); }
+    :root[data-theme="dark"] .bar i { background:#8a63d8; }
+    .filters { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+    .filters input, .filters select { flex:1; min-width:130px; }
+    table { width:100%; border-collapse:collapse; background:var(--alt); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    th, td { padding:8px 10px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top; }
+    th { font-size:.8rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+    td.num { white-space:nowrap; }
+    td.notes { max-width:260px; color:var(--muted); word-break:break-word; }
+    td.act { white-space:nowrap; text-align:right; }
+    td.act button { padding:.15em .55em; }
+    h2 { font-size:1rem; margin:0 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+    .empty { padding:22px; text-align:center; }
+    .tablewrap { overflow-x:auto; }
+
+  </style>
+</head>
+<body>
+  <header class="sapp-bar">
+    <h1>Wrkot</h1>
+    <div class="right"><label class="sr-only" for="themeSelect">Theme</label><select id="themeSelect" aria-label="Theme"><option value="light">Light</option><option value="dark">Dark</option><option value="sepia">Sepia</option><option value="terminal">Terminal</option></select></div>
+  </header>
+
+  <main class="sapp-wrap">
+    <div class="stats" id="stats" aria-label="Summary"></div>
+    <div class="grid">
+      <section class="card">
+        <form class="log" id="form" autocomplete="off">
+          <h2 id="formTitle">Log a workout</h2>
+          <label for="date">Date</label>
+          <input type="date" id="date" required>
+          <label for="type">Workout type</label>
+          <input type="text" id="type" list="types" required maxlength="60" placeholder="Run, Yoga, Weights…">
+          <datalist id="types"></datalist>
+          <label for="duration">Duration (minutes)</label>
+          <input type="number" id="duration" min="1" max="1440" step="1" required inputmode="numeric">
+          <label for="notes">Notes</label>
+          <textarea id="notes" maxlength="1000"></textarea>
+          <div class="actions">
+            <button type="submit" id="saveBtn">Save workout</button>
+            <button type="button" class="secondary" id="cancelEdit" hidden>Cancel edit</button>
+          </div>
+        </form>
+        <h2 style="margin-top:22px">Data</h2>
+        <div class="actions" style="margin-top:6px">
+          <button type="button" class="secondary" id="exportCsv">Download CSV</button>
+          <button type="button" class="secondary" id="copyCsv">Copy CSV</button>
+          <button type="button" class="secondary" id="copyCsvNoHeader">Copy without header</button>
+          <button type="button" class="secondary" id="importBtn">Import CSV…</button>
+          <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
+        </div>
+        <p class="muted" style="font-size:.8rem">Everything is stored in this browser only. Download a CSV now and then as a backup.</p>
+      </section>
+
+      <section>
+        <div id="breakdown" class="bars" aria-label="Minutes by type"></div>
+        <div class="filters">
+          <input type="search" id="search" placeholder="Search type or notes" aria-label="Search">
+          <select id="range" aria-label="Date range">
+            <option value="all">All time</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="365">Last year</option>
+          </select>
+        </div>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Date</th><th>Type</th><th>Min</th><th>Notes</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="toast" class="sapp-toast" role="status" aria-live="polite"></div>
+  <footer class="sapp-foot"><span id="versionNumber"></span></footer>
+  <script>
+    "use strict";
+    const APP_NAME = "Wrkot";
+    const APP_VERSION = "2.0.0";
+    const APP_KEY = "sapps.wrkot.";
+
+    // ---- shared SApp plumbing -------------------------------------------------
+    const store = {
+      get(key, fallback) { try { const v = localStorage.getItem(APP_KEY + key); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } },
+      set(key, value) { try { localStorage.setItem(APP_KEY + key, JSON.stringify(value)); return true; } catch (e) { return false; } },
+      remove(key) { try { localStorage.removeItem(APP_KEY + key); } catch (e) { /* ignore */ } }
+    };
+    function esc(text) { return String(text).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])); }
+    function toast(message) {
+      const el = document.getElementById('toast'); if (!el) return;
+      el.textContent = message; el.classList.add('show');
+      clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+    function download(filename, text, type) {
+      const url = URL.createObjectURL(new Blob([text], { type: type || 'text/plain' }));
+      const a = document.createElement('a'); a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    function copyText(text) {
+      const fallback = () => { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+        let ok = false; try { ok = document.execCommand('copy'); } catch (e) { /* ignore */ } t.remove(); return ok; };
+      if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text).then(() => true, () => fallback());
+      return Promise.resolve(fallback());
+    }
+    function initTheme() {
+      const sel = document.getElementById('themeSelect');
+      const saved = store.get('theme', null);
+      const theme = saved || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme; sel.value = theme;
+      sel.addEventListener('change', () => { document.documentElement.dataset.theme = sel.value; store.set('theme', sel.value); });
+    }
+    document.getElementById('versionNumber').textContent = APP_NAME + ' v' + APP_VERSION;
+    document.title = APP_NAME;
+    initTheme();
+
+
+    const LEGACY_KEY = 'workoutData';           // pre-2.0: a single object holding only the last workout
+    let workouts = store.get('data', []);
+    let editingId = null;
+    const $ = id => document.getElementById(id);
+
+    function save() { store.set('data', workouts); }
+    function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+    function todayStr(d = new Date()) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    function parseDay(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+    function validDay(s) { return /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(parseDay(s)); }
+    function daysAgo(s) { return Math.round((parseDay(todayStr()) - parseDay(s)) / 86400000); }
+
+    // One-time migration of the old single-record key
+    (function migrate() {
+      try {
+        const old = localStorage.getItem(LEGACY_KEY);
+        if (old === null) return;
+        const w = JSON.parse(old);
+        if (w && w.workoutType && Number(w.duration) > 0) {
+          workouts.push({ id: uid(), date: todayStr(), type: String(w.workoutType), minutes: Math.round(Number(w.duration)), notes: String(w.notes || '') });
+          save();
+        }
+        localStorage.removeItem(LEGACY_KEY);
+      } catch (e) { /* ignore unreadable legacy data */ }
+    })();
+
+    // ---- CSV ------------------------------------------------------------------
+    function csvCell(v) {
+      let s = String(v);
+      if (/^[=+\-@]/.test(s) && isNaN(Number(s))) s = "'" + s;       // stop spreadsheets running notes as formulas
+      return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    }
+    function toCsv(rows, header) {
+      const lines = rows.map(w => [w.date, w.type, w.minutes, w.notes].map(csvCell).join(','));
+      return (header ? 'Date,Workout Type,Duration (minutes),Notes\n' : '') + lines.join('\n');
+    }
+    function parseCsv(text) {
+      text = text.replace(/^﻿/, '');
+      const rows = []; let row = [], cell = '', q = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (q) {
+          if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c;
+        } else if (c === '"') q = true;
+        else if (c === ',') { row.push(cell); cell = ''; }
+        else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+        else cell += c;
+      }
+      if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+      return rows.filter(r => r.some(x => x.trim() !== ''));
+    }
+    function unguard(s) { return /^'[=+\-@]/.test(s) ? s.slice(1) : s; }
+    function rowsToWorkouts(rows) {
+      if (!rows.length) return [];
+      let idx = { date: 0, type: 1, minutes: 2, notes: 3 }, start = 0;
+      const h = rows[0].map(x => x.trim().toLowerCase());
+      if (h.some(x => /date|type|duration|notes|workout/.test(x))) {
+        start = 1;
+        const find = re => h.findIndex(x => re.test(x));
+        idx = { date: find(/date|day/), type: find(/type|workout|activity/), minutes: find(/dur|min/), notes: find(/note/) };
+        if (idx.type === idx.date) idx.type = -1;
+        if (idx.type === -1) idx.type = h.findIndex((x, i) => i !== idx.date && /workout/.test(x));
+      } else if (rows[0].length === 3) idx = { date: -1, type: 0, minutes: 1, notes: 2 };    // old 3-column export
+      const out = [];
+      rows.slice(start).forEach(r => {
+        const get = i => (i >= 0 && r[i] !== undefined ? unguard(r[i].trim()) : '');
+        const minutes = Math.round(Number(get(idx.minutes)));
+        const type = get(idx.type);
+        let date = get(idx.date);
+        if (!date) date = todayStr();
+        if (!validDay(date)) { const d = new Date(date); date = isNaN(d) ? '' : todayStr(d); }
+        if (type && minutes > 0 && date) out.push({ id: uid(), date, type: type.slice(0, 60), minutes, notes: get(idx.notes) });
+      });
+      return out;
+    }
+
+    // ---- rendering ------------------------------------------------------------
+    function filtered() {
+      const q = $('search').value.trim().toLowerCase(), range = $('range').value;
+      return workouts.filter(w => (!q || (w.type + ' ' + w.notes).toLowerCase().includes(q)) && (range === 'all' || daysAgo(w.date) < Number(range)))
+        .sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+    }
+    function streak() {
+      const days = new Set(workouts.map(w => w.date)); let n = 0, d = new Date();
+      if (!days.has(todayStr(d))) d.setDate(d.getDate() - 1);      // today not logged yet doesn't break a streak
+      while (days.has(todayStr(d))) { n++; d.setDate(d.getDate() - 1); }
+      return n;
+    }
+    function render() {
+      const week = workouts.filter(w => daysAgo(w.date) < 7);
+      const stat = (v, l) => '<div class="stat"><b>' + v + '</b><span>' + l + '</span></div>';
+      $('stats').innerHTML = stat(week.length, 'Sessions, 7 days') + stat(week.reduce((a, w) => a + w.minutes, 0), 'Minutes, 7 days') + stat(streak(), 'Day streak') + stat(workouts.length, 'Total sessions');
+
+      const byType = {}; workouts.forEach(w => { const k = w.type.toLowerCase(); (byType[k] = byType[k] || { name: w.type, min: 0 }).min += w.minutes; });
+      const list = Object.values(byType).sort((a, b) => b.min - a.min).slice(0, 6), max = list.length ? list[0].min : 1;
+      $('breakdown').innerHTML = list.length ? '<h2>Minutes by type</h2>' + list.map(t => '<div class="bar"><span>' + esc(t.name) + '</span><span><i style="width:' + Math.max(3, t.min / max * 100) + '%"></i></span><span>' + t.min + '</span></div>').join('') : '';
+
+      const types = [...new Set(workouts.map(w => w.type))].sort(); $('types').innerHTML = types.map(t => '<option value="' + esc(t) + '">').join('');
+
+      const rows = filtered(), tb = $('rows');
+      if (!rows.length) { tb.innerHTML = '<tr><td colspan="5" class="empty muted">' + (workouts.length ? 'Nothing matches those filters.' : 'No workouts yet. Log your first one on the left.') + '</td></tr>'; return; }
+      tb.innerHTML = rows.map(w => '<tr><td class="num">' + esc(w.date) + '</td><td>' + esc(w.type) + '</td><td class="num">' + w.minutes + '</td><td class="notes">' + esc(w.notes) + '</td><td class="act"><button type="button" class="secondary" data-edit="' + w.id + '" aria-label="Edit">✎</button> <button type="button" class="danger" data-del="' + w.id + '" aria-label="Delete">×</button></td></tr>').join('');
+    }
+
+    // ---- form -----------------------------------------------------------------
+    function resetForm() {
+      editingId = null; $('form').reset(); $('date').value = todayStr();
+      $('formTitle').textContent = 'Log a workout'; $('saveBtn').textContent = 'Save workout'; $('cancelEdit').hidden = true;
+    }
+    $('form').addEventListener('submit', e => {
+      e.preventDefault();
+      const entry = { date: $('date').value, type: $('type').value.trim(), minutes: Math.round(Number($('duration').value)), notes: $('notes').value.trim() };
+      if (!validDay(entry.date) || !entry.type || !(entry.minutes > 0)) return toast('Date, type and a duration above zero are required.');
+      if (editingId) { Object.assign(workouts.find(w => w.id === editingId), entry); toast('Workout updated.'); }
+      else { workouts.push({ id: uid(), ...entry }); toast('Workout saved.'); }
+      save(); resetForm(); render(); $('type').focus();
+    });
+    $('cancelEdit').addEventListener('click', resetForm);
+    $('rows').addEventListener('click', e => {
+      const ed = e.target.closest('[data-edit]'), del = e.target.closest('[data-del]');
+      if (ed) {
+        const w = workouts.find(x => x.id === ed.dataset.edit); if (!w) return;
+        editingId = w.id; $('date').value = w.date; $('type').value = w.type; $('duration').value = w.minutes; $('notes').value = w.notes;
+        $('formTitle').textContent = 'Edit workout'; $('saveBtn').textContent = 'Update workout'; $('cancelEdit').hidden = false; $('type').focus();
+      } else if (del && confirm('Delete this workout?')) { workouts = workouts.filter(x => x.id !== del.dataset.del); if (editingId === del.dataset.del) resetForm(); save(); render(); }
+    });
+    $('search').addEventListener('input', render); $('range').addEventListener('change', render);
+
+    // ---- data buttons ---------------------------------------------------------
+    const sorted = () => [...workouts].sort((a, b) => a.date.localeCompare(b.date));
+    $('exportCsv').addEventListener('click', () => workouts.length ? download('wrkot-' + todayStr() + '.csv', toCsv(sorted(), true) + '\n', 'text/csv') : toast('No workouts to export.'));
+    $('copyCsv').addEventListener('click', () => workouts.length ? copyText(toCsv(sorted(), true)).then(ok => toast(ok ? 'CSV copied (with header).' : 'Copy failed.')) : toast('No workouts to copy.'));
+    $('copyCsvNoHeader').addEventListener('click', () => workouts.length ? copyText(toCsv(sorted(), false)).then(ok => toast(ok ? 'CSV copied (no header).' : 'Copy failed.')) : toast('No workouts to copy.'));
+    $('importBtn').addEventListener('click', () => $('csvFile').click());
+    $('csvFile').addEventListener('change', e => {
+      const file = e.target.files[0]; if (!file) return;
+      file.text().then(text => {
+        const incoming = rowsToWorkouts(parseCsv(text));
+        if (!incoming.length) return toast('No valid workouts found in that file.');
+        const key = w => [w.date, w.type.toLowerCase(), w.minutes, w.notes].join('\u0000');
+        const seen = new Set(workouts.map(key)); let added = 0;
+        incoming.forEach(w => { if (!seen.has(key(w))) { seen.add(key(w)); workouts.push(w); added++; } });
+        save(); render(); toast('Imported ' + added + ' workout' + (added === 1 ? '' : 's') + (incoming.length - added ? ', ' + (incoming.length - added) + ' duplicate(s) skipped.' : '.'));
+      });
+      e.target.value = '';
+    });
+
+    resetForm(); render();
+    window.__wrkot = { parseCsv, rowsToWorkouts, toCsv };
+
+  </script>
+</body>
+</html>
